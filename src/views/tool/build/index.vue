@@ -1,11 +1,6 @@
 <template>
   <div class="container">
     <div class="left-board">
-      <div class="logo-wrapper">
-        <div class="logo">
-          <img :src="logo" alt="logo"> Form Generator
-        </div>
-      </div>
       <el-scrollbar class="left-scrollbar">
         <div class="components-list">
           <div class="components-title">
@@ -99,7 +94,6 @@
 import draggable from "vuedraggable/dist/vuedraggable.common"
 import ClipboardJS from 'clipboard'
 import beautifier from 'js-beautify'
-import logo from '@/assets/logo/logo.png'
 import { inputComponents, selectComponents, layoutComponents, formConf as formConfData } from '@/utils/generator/config'
 import { beautifierConf } from '@/utils/index'
 import { drawingDefaultValue, initDrawingDefaultValue, cleanDrawingDefaultValue } from '@/utils/generator/drawingDefault'
