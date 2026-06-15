@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import Cookies from 'js-cookie'
 
 import ElementPlus from 'element-plus'
+import { ElDialog } from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import locale from 'element-plus/es/locale/lang/zh-cn'
@@ -81,5 +82,10 @@ app.use(ElementPlus, {
   // 支持 large、default、small
   size: Cookies.get('size') || 'small'
 })
+
+// 全局设置：是否可以通过点击 modal 关闭 Dialog
+ElDialog.props.closeOnClickModal.default = false
+// 全局设置：是否可以通过按下 ESC 关闭 Dialog
+ElDialog.props.closeOnPressEscape.default = false
 
 app.mount('#app')

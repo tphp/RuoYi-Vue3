@@ -41,6 +41,7 @@ export default defineConfig(({ mode, command }) => {
     // vite 相关配置
     server: {
       port: VITE_APP_SERVER_PORT,
+      allowedHosts: true,
       host: true,
       open: true,
       proxy: {
