@@ -8,6 +8,8 @@
       @opened="onDialogOpened"
       :show-close="false"
       append-to-body
+      :close-on-click-modal="true"
+      :close-on-press-escape="true"
     >
       <el-input
         v-model="search"

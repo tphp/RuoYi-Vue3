@@ -38,7 +38,7 @@ import { useRouter } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import useLockStore from '@/store/modules/lock'
 import { unlockScreen } from '@/api/login'
-import defAva from '@/assets/images/profile.jpg'
+import male from '@/assets/images/male.png'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -58,7 +58,7 @@ let animationId: any  = null
 let particles: any = []
 
 const onAvatarError = (e: Event) => {
-  (e.target as HTMLImageElement).src = defAva
+  (e.target as HTMLImageElement).src = male
 }
 
 const startClock = () => {

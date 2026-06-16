@@ -5,7 +5,8 @@ import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { isHttp, isEmpty } from "@/utils/validate"
 import useLockStore from '@/store/modules/lock'
-import defAva from '@/assets/images/profile.jpg'
+import male from '@/assets/images/male.png'
+import female from '@/assets/images/female.png'
 
 interface UserState {
   token: string | undefined
@@ -54,7 +55,11 @@ const useUserStore = defineStore(
             const user = res.user
             let avatar = user.avatar || ''
             if (!isHttp(avatar)) {
-              avatar = (isEmpty(avatar)) ? defAva : import.meta.env.VITE_APP_BASE_API + avatar
+              if (isEmpty(avatar)) {
+                avatar = user?.sex == "0" ? male : female
+              } else {
+                avatar = import.meta.env.VITE_APP_BASE_API + avatar
+              }
             }
             if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
               this.roles = res.roles

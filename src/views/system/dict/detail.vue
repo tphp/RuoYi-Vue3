@@ -1,5 +1,5 @@
 <template>
-  <el-drawer :model-value="visible" direction="rtl" size="700px" append-to-body @update:model-value="$emit('update:visible', $event)">
+  <el-drawer :model-value="visible" direction="rtl" size="700px" append-to-body @update:model-value="$emit('update:visible', $event)" :close-on-click-modal="true" :close-on-press-escape="true">
     <!-- 自定义标题 -->
     <template #header>
       <div class="drawer-head">
