@@ -3,7 +3,7 @@
     <el-checkbox
       v-model="checkAll"
       :indeterminate="isIndeterminate"
-      @change="handleCheckAllChange"
+      @change="changeAll"
       class="css_checkbox_list"
       style="height: 50px;"
       v-if="emitList.length > 0"
@@ -13,11 +13,11 @@
     <div v-else class="css_checkbox_list" style="color: #999">没有找到数据</div>
     <div style="overflow-y: auto;" :style="{height: (emitHeight - 90) + 'px'}">
       <el-checkbox-group
-        v-model="checkedCities"
-        @change="handleCheckedCitiesChange"
+        v-model="userCheckList"
+        @change="changeChild"
       > 
-        <div v-for="(e, index) in emitList">
-          <el-checkbox :key="e.userId" :label="e.userId" :value="e.userId" class="css_checkbox_list" :class="index % 2 == 0 ? 'css_checkbox_brack' : ''">
+        <div :class="{css_split: emitSplit}" v-for="(e, index) in emitList">
+          <el-checkbox :key="e.userId" :label="e.userId" :value="e.userId" class="css_checkbox_list" :class="getClass(index)">
             <div class="css_div">
               <el-avatar :src="getAvatar(e)" />
               <span class="css_user">{{ e?.nickName && e.nickName.length > 0 ? e.nickName :e.userName }}</span>
@@ -28,7 +28,7 @@
       </el-checkbox-group>
     </div>
   </div>
-</template>
+</template>userCheck
 
 <script setup lang="ts">
 import emitRef from "@/utils/emit_ref"
@@ -36,12 +36,11 @@ import male from "@/assets/images/male.png"
 import female from "@/assets/images/female.png"
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
-const checkedCities = ref(['Shanghai', 'Beijing'])
-const cities = ['Shanghai', 'Beijing', 'Guangzhou', 'Shenzhen']
+const userCheckList = ref([] as any)
 
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: Object,
   },
   list: {
     type: Array
@@ -52,7 +51,13 @@ const props = defineProps({
   height: {
     type: Number,
     default: 400
-  }
+  },
+  userDict: {
+    type: Object
+  },
+  split: {
+    type: Boolean
+  },
 })
 
 const emit = defineEmits<{
@@ -60,12 +65,16 @@ const emit = defineEmits<{
   (e: "update:list", value: any): void;
   (e: "update:loading", value: boolean): void;
   (e: "update:height", value: number): void;
+  (e: "update:userDict", value: Object): void;
+  (e: "update:split", value: boolean): void;
 }>();
 
 const emitValue = emitRef(props, emit, "modelValue")
 const emitList = emitRef(props, emit, "list")
 const emitLoading = emitRef(props, emit, "loading")
 const emitHeight = emitRef(props, emit, "height")
+const emitUserDict = emitRef(props, emit, "userDict")
+const emitSplit = emitRef(props, emit, "split")
 
 const getAvatar = (row: any) => {
   if (row?.avatar) {
@@ -77,15 +86,67 @@ const getAvatar = (row: any) => {
   return female
 }
 
-const handleCheckAllChange = (val: any) => {
-  checkedCities.value = val ? cities : []
-  isIndeterminate.value = false
+const getClass = (index: any) => {
+  if (emitSplit.value) {
+    return '';
+  }
+  return index % 2 == 0 ? 'css_checkbox_brack' : ''
 }
-const handleCheckedCitiesChange = (value: any[]) => {
+
+const getChangeAll = () => {
+  const list: any = [];
+  emitList.value.forEach((e: any) => {
+    list.push(e?.userId);
+  })
+  return list;
+}
+
+const updateChild = (value: any[]) => {
   const checkedCount = value.length
-  checkAll.value = checkedCount === cities.length
-  isIndeterminate.value = checkedCount > 0 && checkedCount < cities.length
+  checkAll.value = checkedCount === emitList.value.length
+  isIndeterminate.value = checkedCount > 0 && checkedCount < emitList.value.length
 }
+
+const updateUserList = () => {
+  emitList.value.forEach((e: any) => {
+    const key = e?.userId
+    const uKey = `U${key}`
+    if (userCheckList.value.includes(key)) {
+      if (!emitValue.value[uKey] && emitUserDict.value[key]) {
+        emitValue.value[uKey] = emitUserDict.value[key]
+      }
+    } else {
+      delete emitValue.value[uKey]
+    }
+  })
+}
+
+const changeAll = (val: any) => {
+  userCheckList.value = val ? getChangeAll() : []
+  isIndeterminate.value = false
+  updateUserList()
+}
+
+const changeChild = (value: any[]) => {
+  updateChild(value)
+  updateUserList()
+}
+
+const updateChange = () => {
+  userCheckList.value.length = 0
+  const all = getChangeAll();
+  Object.keys(emitValue.value).forEach((e: any) => {
+    const eInt = emitValue.value[e]?.userId
+    if (all.includes(eInt)) {
+      userCheckList.value.push(eInt)
+    }
+  })
+  updateChild(userCheckList.value);
+}
+
+watch(emitList, updateChange)
+watch(emitValue.value, updateChange)
+onMounted(updateChange)
 </script>
 
 <style lang='scss' scoped>
@@ -113,5 +174,9 @@ const handleCheckedCitiesChange = (value: any[]) => {
 }
 .css_checkbox_list:hover {
   background-color: #eee;
+}
+.css_split {
+  width: 50%;
+  display: inline-block;
 }
 </style>

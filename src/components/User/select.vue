@@ -1,21 +1,40 @@
 <template>
   <el-dialog :title="emitTitle" v-model="dialogUserShow" width="1024px" append-to-body>
-    <div class="css_dialog_user_select">
+    <div class="css_dialog_user_select" :style="{height: boxHeight + 136 + 'px'}">
       <el-tabs v-model="tagName" type="border-card">
         <el-tab-pane label="最近" name="recently">
-          <div>
-            用户选择:
-            <!-- <el-input v-model="emitValue"></el-input> -->
-            {{ emitValue }}
+          <div style="margin: -15px;">
+            <div
+              class="app-container tree-sidebar-manage-wrap"
+              style="min-height: 0px; transition: height 0.25s ease;"
+              :style="{height: collapsed ? '0px' : boxHeight + 'px'}"
+            >
+              <div class="tree-sidebar-content">
+                <div class="tree-header">
+                  <el-input v-model="userName" style="width: 200px;" placeholder="请输入用户名" clearable>
+                    <template #append>
+                      <el-button :icon="Search" />
+                    </template>
+                  </el-input>
+                </div>
+                <user-table
+                  v-model="userCheck"
+                  :list="userList"
+                  :loading="loading"
+                  :height="boxHeight"
+                  :user-dict="userDict"
+                  :split="true"
+                ></user-table>
+              </div>
+            </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="组织架构" name="organization">
           <div style="margin: -15px;">
             <div
-              class="app-container
-              tree-sidebar-manage-wrap"
-              style="min-height: 0px; height: 400px;"
-              :style="{height: boxHeight + 'px'}"
+              class="app-container tree-sidebar-manage-wrap"
+              style="min-height: 0px; transition: height 0.25s ease;"
+              :style="{height: collapsed ? '0px' : boxHeight + 'px'}"
             >
               <tree-panel
                 title="组织机构"
@@ -35,20 +54,44 @@
                     </template>
                   </el-input>
                 </div>
-                <user-table v-model="emitValue" :list="userList" :loading="loading" :height="boxHeight"></user-table>
+                <user-table v-model="userCheck" :list="userList" :loading="loading" :height="boxHeight" :user-dict="userDict"></user-table>
               </div>
             </div>
           </div>
         </el-tab-pane>
       </el-tabs>
-      <div class="selected">
-        abc
+      <!-- 侧边栏展开/收起按钮 -->
+      <div class="collapse-button-container">
+        <el-tooltip :content="collapsed ? '展开' : '收起'" placement="right">
+          <el-icon class="collapse-button" @click="collapsed = !collapsed">
+            <DArrowRight v-if="collapsed" />
+            <DArrowLeft v-else />
+          </el-icon>
+        </el-tooltip>
+      </div>
+      <div class="selected" :style="{height: collapsed ? boxHeight + 66 + 'px' : '96px'}">
+        <div v-for="(e, index) in userCheck" class="css_avatar">
+          <div class="css_icon" @click="delete userCheck[index]">
+            <el-icon :size="20">
+              <CircleCloseFilled />
+            </el-icon>
+          </div>
+          <div><el-avatar :src="getAvatar(e)" /></div>
+          <div class="css_user">{{ e?.nickName && e.nickName.length > 0 ? e.nickName :e.userName }}</div>
+        </div>
       </div>
     </div>
     <template #footer>
       <div class="dialog-footer">
+        <el-button @click="clearUserCheck" style="float: left;">清空</el-button>
         <el-button type="primary" @click="dialogUserShow = false">
           确定
+          <span
+            v-if="Object.keys(userCheck).length > 0"
+            style="margin-left: 5px"
+          >
+            ( {{ Object.keys(userCheck).length }} )
+          </span>
         </el-button>
         <el-button @click="dialogUserShow = false">取消</el-button>
       </div>
@@ -67,9 +110,12 @@ import TreePanel from "@/components/TreePanel/index.vue"
 import UserTable from "@/components/User/table.vue"
 import request from '@/utils/request'
 import emitRef from "@/utils/emit_ref";
-import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from "@/api/system/user"
-import type { TreeSelect, TableShowColumns, AjaxResult } from '@/types/api/common'
-import type { SysUser, UserQueryParams, UserFormDataResult } from '@/types/api/system/user'
+import { listUser, deptTreeSelect } from "@/api/system/user"
+import type { TreeSelect } from '@/types/api/common'
+import type { SysUser, UserQueryParams } from '@/types/api/system/user'
+import male from "@/assets/images/male.png"
+import female from "@/assets/images/female.png"
+const collapsed = ref<boolean>(false)
 
 const props = defineProps({
   modelValue: {
@@ -97,25 +143,33 @@ const loading = ref<boolean>(true)
 const { proxy } = getCurrentInstance()
 const dateRange = ref<string[]>([])
 const userList = ref<SysUser[]>([])
+const userCheck = ref({} as any)
 const boxHeight = ref(500)
+const userDict = ref({} as any)
 const queryParams = ref({
   pageNum: 1,
   pageSize: 10000,
   userName: undefined,
   phonenumber: undefined,
-  status: undefined,
+  status: "0",
   deptId: undefined
 } as UserQueryParams)
 
+const queryParamsDefault = ref({
+  pageNum: 1,
+  pageSize: 10000,
+  status: "0",
+} as UserQueryParams)
+
 const clickOpen = () => {
-  request({
-    url: '/tool/gen/db/list',
-    method: 'get',
-    params: {"abc": "ddd"}
-  }).then((res: any) => {
-    dialogUserShow.value = true
-    console.log(res)
-  })
+  // request({
+  //   url: '/tool/gen/db/list',
+  //   method: 'get',
+  //   params: {"abc": "ddd"}
+  // }).then((res: any) => {
+  dialogUserShow.value = true
+    // console.log(res)
+  // })
 }
 
 /** 过滤禁用的部门 */
@@ -150,14 +204,47 @@ function getList() {
 
 /** 节点单击事件 */
 function handleNodeClick(data: any) {
-  console.log(data)
   queryParams.value.deptId = data.id
   getList()
+}
+
+const getAvatar = (row: any) => {
+  if (row?.avatar) {
+    return row.avatar
+  }
+  if (row?.sex == "0") {
+    return male
+  }
+  return female
+}
+
+const clearUserCheck = () => {
+  const keys = Object.keys(userCheck.value)
+  keys.forEach((e: any) => {
+    delete userCheck.value[e]
+  })
 }
 
 onMounted(() => {
   getDeptTree()
   getList()
+  listUser(proxy.addDateRange(queryParamsDefault.value, dateRange.value)).then(res => {
+    const rows = res?.rows
+    if (!(rows instanceof Array)) {
+      return
+    }
+
+    rows.forEach((e: any) => {
+      userDict.value[e?.userId] = {
+        userId: e?.userId,
+        userName: e?.userName,
+        nickName: e?.nickName,
+        deptName: e?.dept?.deptName,
+        avatar: e?.avatar,
+        sex: e?.sex,
+      }
+    })
+  })
 })
 </script>
 
@@ -165,9 +252,55 @@ onMounted(() => {
 
 .css_dialog_user_select {
   margin: 0px -16px;
+  border-bottom: 1px #ddd solid;
   .selected {
-    padding: 16px;
-    border-bottom: 1px #ddd solid;
+    height: 96px;
+    overflow-y: auto;
+    transition: height 0.25s ease;
+    .css_avatar {
+      margin: 16px;
+    }
+
+  }
+
+  .collapse-button-container {
+    cursor: pointer;
+    position: absolute;
+    right: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 20px;
+    background: #fff;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    
+    .tree-sidebar.collapsed & {
+      right: 0;
+      background: #f7f8fa;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    .tree-sidebar.resizing & {
+      pointer-events: none;
+    }
+  }
+  .collapse-button {
+    font-size: 20px;
+    color: #909399;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    
+    &:hover {
+      color: #409eff;
+      background: #ecf5ff;
+    }
   }
 }
 
@@ -186,4 +319,32 @@ onMounted(() => {
   background: #f7f8fa;
   flex-shrink: 0;
 }
+
+.css_avatar {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  margin: 0px 20px;
+  .css_user {
+    color: #999;
+  }
+  .css_icon {
+    position: absolute;
+    float: right;
+    top: -5px;
+    right: -5px;
+    color: #ccc;
+    display: none;
+  }
+  .css_icon:hover {
+    color: #f33;
+  }
+}
+.css_avatar:hover {
+  .css_icon {
+    display: inline-block;
+  }
+}
+
 </style>
