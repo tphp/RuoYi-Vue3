@@ -72,6 +72,8 @@
 </template>
 
 <script setup lang="ts">
+import useUserStore from '@/store/modules/user'
+
 const props = defineProps({
   // 树形数据
   treeData: {
@@ -175,7 +177,12 @@ const props = defineProps({
   filterMethod: {
     type: Function,
     default: null
-  }
+  },
+  // 参数传递
+  invoke: {
+    type: Object,
+    default: null
+  },
 })
 
 const emit = defineEmits([
@@ -202,6 +209,7 @@ const saveWidthTimer = ref<NodeJS.Timeout | null>(null)
 const rafId = ref<number | null>(null)
 const isLoadingFromStorage = ref<boolean>(false)
 const expandedAll = ref<boolean>(props.defaultExpandAll)
+const userStore = useUserStore()
 
 // 计算属性
 const isExpandedAll = computed<boolean>({
@@ -505,6 +513,27 @@ const setWidth = (width: number): void => {
     if (!collapsed.value) {
       saveWidthToStorage()
     }
+  }
+}
+
+if (props.invoke instanceof Object) {
+  props.invoke.checkNode = (deptId: any = undefined) => {
+    if (typeof deptId != "number") {
+      deptId = userStore?.deptId
+    }
+    if (typeof deptId != "number") {
+      return
+    }
+    const tree = treeRef.value
+    if (!tree) {
+      return
+    }
+    tree.setCurrentKey(deptId)
+    const node = tree.getNode(deptId)
+    if (!node) {
+      return
+    }
+    emit('node-click', node.data, node)
   }
 }
 

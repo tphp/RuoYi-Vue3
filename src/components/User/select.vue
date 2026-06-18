@@ -12,9 +12,6 @@
               <div class="tree-sidebar-content">
                 <div class="tree-header">
                   <el-input v-model="userName" style="width: 200px;" placeholder="请输入用户名" clearable>
-                    <template #append>
-                      <el-button :icon="Search" />
-                    </template>
                   </el-input>
                 </div>
                 <user-table
@@ -37,20 +34,21 @@
               :style="{height: collapsed ? '0px' : boxHeight + 'px'}"
             >
               <tree-panel
-                title="组织机构"
+                title="组织架构"
                 :tree-data="deptOptions"
                 search-placeholder="请输入部门名称"
                 storage-key="dept-sidebar-width"
                 :defaultExpandAll="true"
                 @node-click="handleNodeClick"
                 @refresh="getDeptTree"
+                :invoke="treeInvoke"
                 ref="deptTreeRef"
               />
               <div class="tree-sidebar-content">
                 <div class="tree-header">
-                  <el-input v-model="userName" style="width: 200px;" placeholder="请输入用户名" clearable>
+                  <el-input v-model="userName" style="width: 200px;" placeholder="请输入用户名" clearable @keyup.enter="searchList">
                     <template #append>
-                      <el-button :icon="Search" />
+                      <el-button @click="searchList" :icon="Search" />
                     </template>
                   </el-input>
                 </div>
@@ -110,7 +108,7 @@ import TreePanel from "@/components/TreePanel/index.vue"
 import UserTable from "@/components/User/table.vue"
 import request from '@/utils/request'
 import emitRef from "@/utils/emit_ref";
-import { listUser, deptTreeSelect } from "@/api/system/user"
+import { listUserTop, deptTreeSelect } from "@/api/system/user"
 import type { TreeSelect } from '@/types/api/common'
 import type { SysUser, UserQueryParams } from '@/types/api/system/user'
 import male from "@/assets/images/male.png"
@@ -139,28 +137,22 @@ const tagName = ref('recently')
 const userName = ref('')
 const deptOptions = ref<TreeSelect[] | undefined>(undefined)
 const enabledDeptOptions = ref<TreeSelect[] | undefined>(undefined)
-const loading = ref<boolean>(true)
+const loading = ref<boolean>(false)
 const { proxy } = getCurrentInstance()
-const dateRange = ref<string[]>([])
 const userList = ref<SysUser[]>([])
+const userListCache = ref<string>("")
 const userCheck = ref({} as any)
+const treeInvoke = ref({} as any)
 const boxHeight = ref(500)
 const userDict = ref({} as any)
 const queryParams = ref({
-  pageNum: 1,
-  pageSize: 10000,
   userName: undefined,
   phonenumber: undefined,
   status: "0",
   deptId: undefined
 } as UserQueryParams)
 
-const queryParamsDefault = ref({
-  pageNum: 1,
-  pageSize: 10000,
-  status: "0",
-} as UserQueryParams)
-
+const queryParamsDefault = ref({status: "0"} as UserQueryParams)
 const clickOpen = () => {
   // request({
   //   url: '/tool/gen/db/list',
@@ -170,6 +162,12 @@ const clickOpen = () => {
   dialogUserShow.value = true
     // console.log(res)
   // })
+  setTimeout(() => {
+    const checkNode = treeInvoke.value?.checkNode
+    if (checkNode instanceof Function) {
+      checkNode()
+    }
+  })
 }
 
 /** 过滤禁用的部门 */
@@ -196,7 +194,24 @@ function getDeptTree() {
 /** 查询用户列表 */
 function getList() {
   loading.value = true
-  listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
+  listUserTop(proxy.addDateRange(queryParams.value)).then(res => {
+    loading.value = false
+    userList.value = res.rows
+    userListCache.value = JSON.stringify(res.rows)
+  })
+}
+
+/** 查询所有用户信息 **/
+function searchList() {
+  const uName = userName.value.trim()
+  if (uName.length == 0) {
+    return
+  }
+  loading.value = true
+  listUserTop(proxy.addDateRange({
+    userName: uName,
+    status: "0"
+  })).then(res => {
     loading.value = false
     userList.value = res.rows
   })
@@ -225,10 +240,17 @@ const clearUserCheck = () => {
   })
 }
 
+watch(userName, () => {
+  const uName = userName.value.trim()
+  if (uName.length > 0) {
+    return
+  }
+  userList.value = JSON.parse(userListCache.value)
+})
+
 onMounted(() => {
   getDeptTree()
-  getList()
-  listUser(proxy.addDateRange(queryParamsDefault.value, dateRange.value)).then(res => {
+  listUserTop(proxy.addDateRange(queryParamsDefault.value)).then(res => {
     const rows = res?.rows
     if (!(rows instanceof Array)) {
       return

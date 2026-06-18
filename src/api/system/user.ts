@@ -11,6 +11,15 @@ export function listUser(query: UserQueryParams): Promise<TableDataInfo<SysUser[
   })
 }
 
+// 查询用户列表
+export function listUserTop(query: UserQueryParams): Promise<TableDataInfo<SysUser[]>> {
+  return request({
+    url: '/system/user/listTop',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询用户详细
 export function getUser(userId?: number): Promise<UserFormDataResult> {
   return request({
