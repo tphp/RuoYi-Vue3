@@ -50,7 +50,7 @@ export function createTable(data: any): Promise<AjaxResult> {
   return request({
     url: '/tool/gen/createTable',
     method: 'post',
-    params: data
+    data
   })
 }
 

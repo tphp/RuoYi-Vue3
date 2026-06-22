@@ -103,7 +103,7 @@ const getChangeAll = () => {
 
 const updateChild = (value: any[]) => {
   const checkedCount = value.length
-  checkAll.value = checkedCount === emitList.value.length
+  checkAll.value = checkedCount === emitList.value.length && checkedCount > 0
   isIndeterminate.value = checkedCount > 0 && checkedCount < emitList.value.length
 }
 

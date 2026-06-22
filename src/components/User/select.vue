@@ -2,7 +2,7 @@
   <el-dialog :title="emitTitle" v-model="dialogUserShow" width="1024px" append-to-body>
     <div class="css_dialog_user_select" :style="{height: boxHeight + 136 + 'px'}">
       <el-tabs v-model="tagName" type="border-card">
-        <el-tab-pane label="最近" name="recently">
+        <el-tab-pane label="最近联系人" name="recently">
           <div style="margin: -15px;">
             <div
               class="app-container tree-sidebar-manage-wrap"
@@ -11,12 +11,19 @@
             >
               <div class="tree-sidebar-content">
                 <div class="tree-header">
-                  <el-input v-model="userName" style="width: 200px;" placeholder="请输入用户名" clearable>
+                  <el-button
+                    @click="clearRecently"
+                    style="position: absolute; left: 10px"
+                    v-if="userRecentlyList.length > 0 && !collapsed"
+                  >
+                    清空最近联系人
+                  </el-button>
+                  <el-input v-model="recentlyUserName" style="width: 200px;" placeholder="请输入用户名" clearable>
                   </el-input>
                 </div>
                 <user-table
                   v-model="userCheck"
-                  :list="userList"
+                  :list="userRecentlyList"
                   :loading="loading"
                   :height="boxHeight"
                   :user-dict="userDict"
@@ -82,7 +89,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="clearUserCheck" style="float: left;">清空</el-button>
-        <el-button type="primary" @click="dialogUserShow = false">
+        <el-button type="primary" @click="confirmClick()">
           确定
           <span
             v-if="Object.keys(userCheck).length > 0"
@@ -96,6 +103,14 @@
     </template>
   </el-dialog>
   <el-input-tag v-model="emitValue" trigger="Space" class="css_user_select">
+    <template #tag="{ value }">
+      <span v-if="userDict[value]">
+        {{ userDict[value]?.nickName ?? userDict[value]?.userName ?? value }}
+      </span>
+      <span v-else style="color: #f33;">
+        {{ value }}
+      </span>
+    </template>
     <template #suffix>
       <el-icon @click="clickOpen"><User /></el-icon>
     </template>
@@ -122,29 +137,39 @@ const props = defineProps({
   title: {
     type: String,
     default: "请选择人员"
+  },
+  multiple: {
+    type: Boolean,
+    default: true
   }
 })
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: string): void;
+  (e: "update:modelValue", value: any): void;
   (e: "update:title", value: string): void;
+  (e: "update:multiple", value: boolean): void;
 }>();
 
 const emitValue = emitRef(props, emit, "modelValue")
 const emitTitle = emitRef(props, emit, "title")
+const emitMultiple = emitRef(props, emit, "multiple")
 const dialogUserShow = ref<boolean>(false)
 const tagName = ref('recently')
 const userName = ref('')
+const recentlyUserName = ref('')
 const deptOptions = ref<TreeSelect[] | undefined>(undefined)
 const enabledDeptOptions = ref<TreeSelect[] | undefined>(undefined)
 const loading = ref<boolean>(false)
 const { proxy } = getCurrentInstance()
 const userList = ref<SysUser[]>([])
 const userListCache = ref<string>("")
+const userRecentlyList = ref<SysUser[]>([])
+const userRecentlyListCache = ref<string>("")
 const userCheck = ref({} as any)
 const treeInvoke = ref({} as any)
 const boxHeight = ref(500)
 const userDict = ref({} as any)
+const dataType = emitMultiple.value ? 0 : 1
 const queryParams = ref({
   userName: undefined,
   phonenumber: undefined,
@@ -152,20 +177,80 @@ const queryParams = ref({
   deptId: undefined
 } as UserQueryParams)
 
+if (!(emitValue.value instanceof Array)) {
+  emitValue.value = []
+}
+
 const queryParamsDefault = ref({status: "0"} as UserQueryParams)
+const setUserCheck = () => {
+  clearUserCheck()
+  for (const i in emitValue.value) {
+    const userId = emitValue.value[i]
+    const ud = userDict.value[userId]
+    if (ud) {
+      userCheck.value[`U${userId}`] = ud
+    }
+  }
+}
 const clickOpen = () => {
-  // request({
-  //   url: '/tool/gen/db/list',
-  //   method: 'get',
-  //   params: {"abc": "ddd"}
-  // }).then((res: any) => {
+  userName.value = ""
+  recentlyUserName.value = ""
   dialogUserShow.value = true
-    // console.log(res)
-  // })
-  setTimeout(() => {
+  request({
+    url: `/system/recently/list/${dataType}`,
+    method: 'get'
+  }).then((res: any) => {
+    userRecentlyList.value.length = 0
+    setUserCheck()
     const checkNode = treeInvoke.value?.checkNode
     if (checkNode instanceof Function) {
       checkNode()
+    }
+    const rows = res?.rows
+    if (!rows) {
+      return
+    }
+    rows.forEach((e: any) => {
+      const userInfo = userDict.value[e?.selectId]
+      if (userInfo) {
+        userRecentlyList.value.push(userInfo)
+      }
+    })
+    userRecentlyListCache.value = JSON.stringify(userRecentlyList.value)
+  })
+}
+
+const confirmClick = () => {
+  emitValue.value.length = 0
+  for (const i in userCheck.value) {
+    const userId = userCheck.value[i]?.userId
+    if (userId) {
+      emitValue.value.push(userId)
+    }
+  }
+  request({
+    url: `/system/recently/update/${dataType}`,
+    method: 'post',
+    data: {
+      userIds: emitValue.value
+    }
+  }).then((res: any) => {
+    dialogUserShow.value = false
+  })
+}
+
+const setUserDict = (rows: any) => {
+  if (!(rows instanceof Array)) {
+    return
+  }
+  rows.forEach((e: any) => {
+    userDict.value[e?.userId] = {
+      userId: e?.userId,
+      userName: e?.userName,
+      nickName: e?.nickName,
+      deptName: e?.dept?.deptName,
+      avatar: e?.avatar,
+      sex: e?.sex,
     }
   })
 }
@@ -198,6 +283,7 @@ function getList() {
     loading.value = false
     userList.value = res.rows
     userListCache.value = JSON.stringify(res.rows)
+    setUserDict(res?.rows)
   })
 }
 
@@ -214,6 +300,7 @@ function searchList() {
   })).then(res => {
     loading.value = false
     userList.value = res.rows
+    setUserDict(res?.rows)
   })
 }
 
@@ -240,6 +327,15 @@ const clearUserCheck = () => {
   })
 }
 
+const clearRecently = () => {
+  request({
+    url: `/system/recently/clear/${dataType}`,
+    method: 'delete'
+  }).then(() => {
+    userRecentlyList.value = []
+  })
+}
+
 watch(userName, () => {
   const uName = userName.value.trim()
   if (uName.length > 0) {
@@ -248,24 +344,33 @@ watch(userName, () => {
   userList.value = JSON.parse(userListCache.value)
 })
 
+watch(recentlyUserName, () => {
+  const uName = recentlyUserName.value.trim()
+  const list = JSON.parse(userRecentlyListCache.value)
+  if (uName.length == 0) {
+    userRecentlyList.value = list
+    return
+  }
+  userRecentlyList.value = []
+  for (const i in list) {
+    const iv = list[i]
+    const un = iv?.userName
+    if (typeof un == "string" && un.includes(uName)) {
+      userRecentlyList.value.push(iv)
+      continue
+    }
+    const nn = iv?.nickName
+    if (typeof nn == "string" && nn.includes(uName)) {
+      userRecentlyList.value.push(iv)
+      continue
+    }
+  }
+})
+
 onMounted(() => {
   getDeptTree()
   listUserTop(proxy.addDateRange(queryParamsDefault.value)).then(res => {
-    const rows = res?.rows
-    if (!(rows instanceof Array)) {
-      return
-    }
-
-    rows.forEach((e: any) => {
-      userDict.value[e?.userId] = {
-        userId: e?.userId,
-        userName: e?.userName,
-        nickName: e?.nickName,
-        deptName: e?.dept?.deptName,
-        avatar: e?.avatar,
-        sex: e?.sex,
-      }
-    })
+    setUserDict(res?.rows)
   })
 })
 </script>

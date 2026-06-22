@@ -6,5 +6,5 @@
 
 <script setup lang="ts" name="Dept">
 import UserSelect from "@/components/User/select.vue";
-const value = ref(["abc"]);
+const value = ref([1, 4]);
 </script>
