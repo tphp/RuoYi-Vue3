@@ -4,20 +4,21 @@
       v-model="checkAll"
       :indeterminate="isIndeterminate"
       @change="changeAll"
-      class="css_checkbox_list"
+      class="css_select_list"
       style="height: 50px;"
-      v-if="emitList.length > 0"
+      v-if="emitList.length > 0 && emitMultiple"
     >
       全选
     </el-checkbox>
-    <div v-else class="css_checkbox_list" style="color: #999">没有找到数据</div>
+    <div v-else-if="emitList.length == 0" class="css_select_list" style="color: #999">没有找到数据</div>
     <div style="overflow-y: auto;" :style="{height: (emitHeight - 90) + 'px'}">
       <el-checkbox-group
         v-model="userCheckList"
         @change="changeChild"
+        v-if="emitMultiple"
       > 
         <div :class="{css_split: emitSplit}" v-for="(e, index) in emitList">
-          <el-checkbox :key="e.userId" :label="e.userId" :value="e.userId" class="css_checkbox_list" :class="getClass(index)">
+          <el-checkbox :key="e.userId" :label="e.userId" :value="e.userId" class="css_select_list" :class="getClass(index)">
             <div class="css_div">
               <el-avatar :src="getAvatar(e)" />
               <span class="css_user">{{ e?.nickName && e.nickName.length > 0 ? e.nickName :e.userName }}</span>
@@ -26,17 +27,30 @@
           </el-checkbox>
         </div>
       </el-checkbox-group>
+      <el-radio-group v-model="userCheckRadio" v-else style="display: inherit;">
+        <div :class="{css_split: emitSplit}" v-for="(e, index) in emitList" @click="radioClick">
+          <el-radio :key="e.userId" :label="e.userId" :value="e.userId" class="css_select_list" :class="getClass(index)">
+            <div class="css_div">
+              <el-avatar :src="getAvatar(e)" />
+              <span class="css_user">{{ e?.nickName && e.nickName.length > 0 ? e.nickName :e.userName }}</span>
+              <span class="css_dept">{{ e?.dept?.deptName }}</span>
+            </div>
+          </el-radio>
+        </div>
+      </el-radio-group>
     </div>
   </div>
-</template>userCheck
+</template>
 
 <script setup lang="ts">
 import emitRef from "@/utils/emit_ref"
 import male from "@/assets/images/male.png"
 import female from "@/assets/images/female.png"
+import dept from "@/assets/images/dept.png"
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
 const userCheckList = ref([] as any)
+const userCheckRadio = ref(0 as any)
 
 const props = defineProps({
   modelValue: {
@@ -58,6 +72,17 @@ const props = defineProps({
   split: {
     type: Boolean
   },
+  multiple: {
+    type: Boolean,
+    default: true
+  },
+  department: {
+    type: Boolean,
+    default: false
+  },
+  invoke: {
+    type: Object
+  },
 })
 
 const emit = defineEmits<{
@@ -67,6 +92,9 @@ const emit = defineEmits<{
   (e: "update:height", value: number): void;
   (e: "update:userDict", value: Object): void;
   (e: "update:split", value: boolean): void;
+  (e: "update:multiple", value: boolean): void;
+  (e: "update:department", value: boolean): void;
+  (e: "update:invoke", value: any): void;
 }>();
 
 const emitValue = emitRef(props, emit, "modelValue")
@@ -75,8 +103,14 @@ const emitLoading = emitRef(props, emit, "loading")
 const emitHeight = emitRef(props, emit, "height")
 const emitUserDict = emitRef(props, emit, "userDict")
 const emitSplit = emitRef(props, emit, "split")
+const emitMultiple = emitRef(props, emit, "multiple")
+const emitDepartment = emitRef(props, emit, "department")
+const emitInvoke = emitRef(props, emit, "invoke")
 
 const getAvatar = (row: any) => {
+  if (emitDepartment.value) {
+    return dept
+  }
   if (row?.avatar) {
     return row.avatar
   }
@@ -144,16 +178,61 @@ const updateChange = () => {
   updateChild(userCheckList.value);
 }
 
-watch(emitList, updateChange)
-watch(emitValue.value, updateChange)
-onMounted(updateChange)
+const updateRadio = () => {
+  const keys = Object.keys(emitValue.value)
+  for (const k in keys) {
+    delete emitValue.value[keys[k]]
+  }
+  const key = userCheckRadio.value
+  if (!key) {
+    return
+  }
+  const uKey = `U${key}`
+  if (!emitValue.value[uKey]) {
+    emitValue.value[uKey] = emitUserDict.value[key]
+  }
+  updateChange()
+}
+
+const updateChangeForData = () => {
+  if (!emitMultiple.value) {
+    let isSet = false;
+    for (const i in emitValue.value) {
+      userCheckRadio.value = emitValue.value[i]?.userId
+      isSet = true;
+      break
+    }
+    if (!isSet) {
+      userCheckRadio.value = 0
+    }
+  }
+  updateChange()
+}
+
+const radioClick = () => {
+  const confirm = emitInvoke.value?.confirm
+  if (confirm instanceof Function) {
+    setTimeout(confirm)
+  }
+}
+
+watch(emitList, updateChangeForData)
+watch(emitValue.value, updateChangeForData)
+watch(userCheckRadio, updateRadio)
+onMounted(() => {
+  if (emitMultiple.value) {
+    updateChange()
+  } else {
+    updateRadio()
+  }
+})
 </script>
 
 <style lang='scss' scoped>
 .css_checkbox_brack {
   background-color: #f8f8f8;;
 }
-.css_checkbox_list {
+.css_select_list {
   padding: 10px;
   width: 100%;
   height: 60px;
@@ -172,7 +251,7 @@ onMounted(updateChange)
     }
   }
 }
-.css_checkbox_list:hover {
+.css_select_list:hover {
   background-color: #eee;
 }
 .css_split {
