@@ -4,8 +4,8 @@
     <sidebar v-if="!sidebar.hide" class="sidebar-container" />
     <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
-        <navbar @setLayout="setLayout" />
-        <tags-view v-if="needTagsView" />
+        <navbar v-if="!sidebar.hide" @setLayout="setLayout" />
+        <tags-view v-if="needTagsView && !sidebar.hide" />
       </div>
       <app-main />
       <settings ref="settingRef" />
@@ -20,12 +20,27 @@ import { AppMain, Navbar, Settings, TagsView } from './components'
 import useAppStore from '@/store/modules/app'
 import useSettingsStore from '@/store/modules/settings'
 
+const route = useRoute()
 const settingsStore = useSettingsStore()
 const theme = computed(() => settingsStore.theme)
 const sidebar = computed(() => useAppStore().sidebar)
 const device = computed(() => useAppStore().device)
 const needTagsView = computed(() => settingsStore.tagsView)
 const fixedHeader = computed(() => settingsStore.fixedHeader)
+
+// 监听 URL 参数控制侧边栏显示/隐藏（使用环境变量定义的参数名，避免与 MDM 冲突）
+const sidebarParam = import.meta.env.VITE_APP_SIDEBAR_PARAM || 'crmSidebar'
+
+watch(() => route.query[sidebarParam], (val) => {
+  useAppStore().toggleSideBarHide(val === 'hidden')
+}, { immediate: true })
+
+// 页面加载时立即检查 URL 参数
+onMounted(() => {
+  if (route.query[sidebarParam] === 'hidden') {
+    useAppStore().toggleSideBarHide(true)
+  }
+})
 
 const classObj = computed(() => ({
   hideSidebar: !sidebar.value.opened,
@@ -108,6 +123,19 @@ function setLayout() {
 
 .sidebarHide .fixed-header {
   width: 100%;
+}
+
+// 隐藏侧边栏时，移除顶部空白
+.sidebarHide .app-main {
+  margin-top: 0 !important;
+  min-height: 100vh !important;
+  height: 100vh !important;
+}
+
+.sidebarHide .fixed-header + .app-main {
+  margin-top: 0 !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
 }
 
 .mobile .fixed-header {
