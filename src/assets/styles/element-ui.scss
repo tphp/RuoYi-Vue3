@@ -94,3 +94,14 @@
 .el-dropdown .el-dropdown-link{
   color: var(--el-color-primary) !important;
 }
+
+.css_user_select {
+  .el-select__selection {
+    .el-select__selected-item:first-child {
+      margin-left: -10px;
+    }
+    .el-select__input-wrapper {
+      margin-left: 0px !important;
+    }
+  }
+}

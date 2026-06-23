@@ -114,22 +114,34 @@
       </div>
     </template>
   </el-dialog>
-  <el-input-tag
+  <el-select
     v-model="updateValue"
-    trigger="Space"
     class="css_user_select"
+    multiple
+    filterable
+    remote
+    reserve-keyword
+    :remote-method="remoteMethod"
     :collapse-tags="emitMaxCollapseTags > 0"
     collapse-tags-tooltip
     :max-collapse-tags="emitMaxCollapseTags"
   >
-    <template #tag="{ value }">
+    <template #label="{ value }">
       <span v-if="getTagName(value)">{{ getTagName(value) }}</span>
-      <span v-else style="color: #f33">{{ value }}</span>
+      <span v-else :style="{color: isOpened ? '#f33' : 'inherit'}">{{ value }}</span>
     </template>
-    <template #suffix>
-      <el-icon @click="clickOpen"><User /></el-icon>
+    <el-option
+      v-for="e in optionValue"
+      :key="e?.userId"
+      :label="e?.nickName ?? e?.userName "
+      :value="e?.userId"
+    />
+    <template #prefix>
+      <el-icon @click="clickOpen">
+         <User />
+      </el-icon>
     </template>
-  </el-input-tag>
+  </el-select>
 </template>
 
 <script setup lang="ts">
@@ -160,7 +172,7 @@ const props = defineProps({
   },
   quick: {
     type: Boolean,
-    default: false
+    default: true
   },
   department: {
     type: Boolean,
@@ -195,6 +207,8 @@ const recentlyUserName = ref('')
 const deptOptions = ref<TreeSelect[] | undefined>(undefined)
 const enabledDeptOptions = ref<TreeSelect[] | undefined>(undefined)
 const loading = ref<boolean>(false)
+const isOpened = ref<boolean>(false)
+const optionValue = ref([] as any)
 const { proxy } = getCurrentInstance()
 const userList = ref<SysUser[]>([])
 const userListCache = ref<string>("")
@@ -231,11 +245,37 @@ const onOpen = () => {
   if (emitMultiple.value) {
     if (emitValue.value instanceof Array) {
       for (const i in emitValue.value) {
+        const ev = emitValue.value[i]
+        if (typeof ev == "string") {
+          emitValue.value[i] = getInt(emitValue.value[i])
+        }
         updateValue.value.push(emitValue.value[i])
       }
     }
-  } else if (typeof emitValue.value == "number") {
-    updateValue.value.push(emitValue.value)
+  } else {
+    if (typeof emitValue.value == "string") {
+      emitValue.value = getInt(emitValue.value)
+    }
+    if (typeof emitValue.value == "number") {
+      updateValue.value.push(emitValue.value)
+    }
+  }
+}
+const remoteMethod = (query: string) => {
+  if (query) {
+    const list = Object.values(emitDepartment.value ? deptDict.value : userDict.value)
+    optionValue.value = list.filter((item: any) => {
+      const listFor = ["userName", "nickName"]
+      for (const i in listFor) {
+        const v = item[listFor[i]]
+        if (v && v.toLowerCase().includes(query.toLowerCase())) {
+          return true
+        }
+      }
+      return false
+    })
+  } else {
+    optionValue.value = []
   }
 }
 
@@ -509,7 +549,6 @@ const emitValueRefresh = () => {
     }
     return
   }
-  console.log("sss")
   if (!emitValue.value) {
     return
   }
@@ -552,7 +591,7 @@ watch(updateValue, updateValueRefresh)
 watch(emitValue, emitValueRefresh)
 watch(emitValue.value, emitValueRefresh)
 
-if (emitQuick && !emitMultiple.value) {
+if (emitQuick.value && !emitMultiple.value) {
   tableInvoke.value.confirm = confirmClick
 }
 
@@ -561,6 +600,7 @@ onMounted(() => {
   getDeptTree()
   listUserTop(proxy.addDateRange(queryParamsDefault.value)).then(res => {
     setUserDict(res?.rows)
+    isOpened.value = true
   })
 })
 </script>
@@ -622,6 +662,12 @@ onMounted(() => {
 }
 
 .css_user_select {
+  .el-icon {
+    position:absolute;
+    right:10px;
+    cursor:pointer;
+    z-index:2;
+  }
   .el-icon:hover {
     color: #333;
   }
