@@ -11,7 +11,7 @@
       全选
     </el-checkbox>
     <div v-else-if="emitList.length == 0" class="css_select_list" style="color: #999">没有找到数据</div>
-    <div style="overflow-y: auto;" :style="{height: (emitHeight - 90) + 'px'}">
+    <div style="overflow-y: auto;" :style="{height: (emitHeight - 40) + 'px'}">
       <el-checkbox-group
         v-model="userCheckList"
         @change="changeChild"
