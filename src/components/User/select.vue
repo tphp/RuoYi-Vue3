@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :title="emitTitle" v-model="dialogUserShow" width="1024px" append-to-body>
+  <el-dialog
+    :title="emitTitle"
+    v-model="dialogUserShow"
+    width="1024px"
+    append-to-body
+    style="max-width: 80%; min-width: 600px;"
+  >
     <div class="css_dialog_user_select" :style="{height: boxHeight + 136 + 'px'}">
       <el-tabs v-model="tagName" type="border-card">
         <el-tab-pane label="最近联系人" name="recently">
@@ -219,7 +225,9 @@ const userRecentlyListCache = ref<string>("")
 const userCheck = ref({} as any)
 const treeInvoke = ref({} as any)
 const tableInvoke = ref({} as any)
-const boxHeight = ref(500)
+const boxHeightMin = 200
+const boxHeightMax = 500
+const boxHeight = ref(boxHeightMax as any)
 const userDict = ref({} as any)
 const deptDict = ref({} as any)
 const dataType = emitDepartment.value ? 1 : 0
@@ -230,6 +238,29 @@ const queryParams = ref({
   phonenumber: undefined,
   deptId: undefined
 } as UserQueryParams)
+
+const onWindowResize = () => {
+  const bHeight = window.innerHeight - 360
+  if (bHeight > boxHeightMax) {
+    boxHeight.value = boxHeightMax
+  } else if (bHeight < boxHeightMin) {
+    boxHeight.value = boxHeightMin
+  } else {
+    boxHeight.value = bHeight
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', onWindowResize)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onWindowResize)
+})
+
+onMounted(() => {
+  onWindowResize()
+})
 
 const setUserCheck = () => {
   clearUserCheck()
