@@ -28,8 +28,8 @@ const device = computed(() => useAppStore().device)
 const needTagsView = computed(() => settingsStore.tagsView)
 const fixedHeader = computed(() => settingsStore.fixedHeader)
 
-// 监听 URL 参数控制侧边栏显示/隐藏（使用环境变量定义的参数名，避免与 MDM 冲突）
-const sidebarParam = import.meta.env.VITE_APP_SIDEBAR_PARAM || 'crmSidebar'
+// 监听 URL 参数控制侧边栏显示/隐藏（使用环境变量定义的参数名）
+const sidebarParam = import.meta.env.VITE_APP_SIDEBAR_PARAM
 
 watch(() => route.query[sidebarParam], (val) => {
   useAppStore().toggleSideBarHide(val === 'hidden')
