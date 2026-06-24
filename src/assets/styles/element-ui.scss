@@ -96,12 +96,15 @@
 }
 
 .css_user_select {
+  .el-select__prefix {
+    margin-left: -10px;
+  }
+}
+.css_user_select_null {
   .el-select__selection {
-    .el-select__selected-item:first-child {
-      margin-left: -10px;
-    }
-    .el-select__input-wrapper {
-      margin-left: 0px !important;
+    .el-select__input-wrapper,
+    .el-select__placeholder {
+      margin-left: 10px;
     }
   }
 }

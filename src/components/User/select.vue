@@ -117,6 +117,7 @@
   <el-select
     v-model="updateValue"
     class="css_user_select"
+    :class="{css_user_select_null: updateValue.length == 0}"
     multiple
     filterable
     remote
@@ -156,6 +157,7 @@ import type { SysUser, UserQueryParams } from '@/types/api/system/user'
 import male from "@/assets/images/male.png"
 import female from "@/assets/images/female.png"
 import dept from "@/assets/images/dept.png"
+import cache from "@/utils/cache"
 const collapsed = ref<boolean>(false)
 
 const props = defineProps({
@@ -221,14 +223,14 @@ const boxHeight = ref(500)
 const userDict = ref({} as any)
 const deptDict = ref({} as any)
 const dataType = emitDepartment.value ? 1 : 0
+const userCacheId = "USER_SELECT_USER"
+const deptCacheId = "USER_SELECT_DEPT"
 const queryParams = ref({
   userName: undefined,
   phonenumber: undefined,
-  status: "0",
   deptId: undefined
 } as UserQueryParams)
 
-const queryParamsDefault = ref({status: "0"} as UserQueryParams)
 const setUserCheck = () => {
   clearUserCheck()
   for (const i in updateValue.value) {
@@ -262,13 +264,14 @@ const onOpen = () => {
   }
 }
 const remoteMethod = (query: string) => {
+  query = query.trim().toLowerCase()
   if (query) {
     const list = Object.values(emitDepartment.value ? deptDict.value : userDict.value)
     optionValue.value = list.filter((item: any) => {
       const listFor = ["userName", "nickName"]
       for (const i in listFor) {
         const v = item[listFor[i]]
-        if (v && v.toLowerCase().includes(query.toLowerCase())) {
+        if (v && v.toLowerCase().includes(query)) {
           return true
         }
       }
@@ -369,7 +372,7 @@ function filterDisabledDept(deptList: TreeSelect[]) {
 
 /** 查询部门下拉树结构 */
 function getDeptTree() {
-  deptTreeSelect().then(response => {
+  cache(deptCacheId, deptTreeSelect).then(response => {
     deptOptions.value = response.data
     enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(response.data)))
     getListDept()
@@ -441,8 +444,7 @@ function getList() {
 function searchUserList(uName: any) {
   loading.value = true
   listUserTop(proxy.addDateRange({
-    userName: uName,
-    status: "0"
+    userName: uName
   })).then(res => {
     loading.value = false
     userList.value = res.rows
@@ -454,8 +456,7 @@ function searchUserList(uName: any) {
 function searchDeptList(uName: any) {
   loading.value = true
   listUserTop(proxy.addDateRange({
-    userName: uName,
-    status: "0"
+    userName: uName
   })).then(res => {
     loading.value = false
     userList.value = res.rows
@@ -598,7 +599,7 @@ if (emitQuick.value && !emitMultiple.value) {
 onMounted(() => {
   onOpen()
   getDeptTree()
-  listUserTop(proxy.addDateRange(queryParamsDefault.value)).then(res => {
+  cache(userCacheId, listUserTop, {}).then(res => {
     setUserDict(res?.rows)
     isOpened.value = true
   })

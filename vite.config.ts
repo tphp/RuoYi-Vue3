@@ -43,8 +43,7 @@ export default defineConfig(({ mode, command }) => {
       port: VITE_APP_SERVER_PORT,
       allowedHosts: true,
       host: true,
-      allowedHosts: true,
-      open: true,
+      // open: true, // 打开浏览器
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
         '/dev-api': {
