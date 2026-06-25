@@ -144,3 +144,11 @@ export function deptTreeSelect(): Promise<AjaxResult<TreeSelect>> {
     method: 'get'
   })
 }
+
+// 查询所有部门下拉树结构
+export function deptTreeSelectAll(): Promise<AjaxResult<TreeSelect>> {
+  return request({
+    url: '/system/user/deptTreeAll',
+    method: 'get'
+  })
+}

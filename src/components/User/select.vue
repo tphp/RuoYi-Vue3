@@ -157,7 +157,7 @@ import TreePanel from "@/components/TreePanel/index.vue"
 import UserTable from "@/components/User/table.vue"
 import request from '@/utils/request'
 import emitRef from "@/utils/emit_ref";
-import { listUserTop, deptTreeSelect } from "@/api/system/user"
+import { listUserTop, deptTreeSelectAll } from "@/api/system/user"
 import type { TreeSelect } from '@/types/api/common'
 import type { SysUser, UserQueryParams } from '@/types/api/system/user'
 import male from "@/assets/images/male.png"
@@ -403,7 +403,7 @@ function filterDisabledDept(deptList: TreeSelect[]) {
 
 /** 查询部门下拉树结构 */
 function getDeptTree() {
-  cache(deptCacheId, deptTreeSelect).then(response => {
+  cache(deptCacheId, deptTreeSelectAll).then(response => {
     deptOptions.value = response.data
     enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(response.data)))
     getListDept()
