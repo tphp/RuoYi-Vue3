@@ -23,3 +23,6 @@ package-lock.json
 yarn.lock
 .env
 pnpm-lock.yaml
+
+# unplugin-auto-import 自动生成类型文件，本地产物不上传
+auto-imports.d.ts
