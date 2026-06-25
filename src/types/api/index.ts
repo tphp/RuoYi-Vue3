@@ -15,6 +15,7 @@ export * from "./system/dept";
 export * from "./system/post";
 export * from "./system/dict";
 export * from "./system/config";
+export * from "./system/apiKey";
 export * from "./system/notice";
 
 // monitor 模块
