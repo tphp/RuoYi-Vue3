@@ -43,6 +43,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/sso',
+    component: () => import('@/views/sso.vue'),
+    hidden: true
+  },
+  {
     path: '/register',
     component: () => import('@/views/register.vue'),
     hidden: true
