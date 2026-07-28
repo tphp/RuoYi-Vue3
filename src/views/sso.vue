@@ -66,10 +66,13 @@ async function doSsoLogin(): Promise<void> {
       statusIcon.value = 'CircleCheck'
       message.value = '登录成功，正在跳转...'
       errorMsg.value = ''
-      // 跳转到首页（保留其它 query 参数）
+      // 跳转到指定 redirect 路径，未指定则进入首页（保留其它 query 参数）
       const query = { ...route.query }
       delete query.token
-      router.replace({ path: '/', query })
+      delete query.redirect
+      const redirect = (route.query?.redirect as string) || '/'
+      const target = isSafeRedirect(redirect) ? redirect : '/'
+      router.replace({ path: target, query })
     } else {
       setErrorState(res?.msg || '登录失败')
     }
@@ -81,6 +84,22 @@ async function doSsoLogin(): Promise<void> {
 
 function goLogin(): void {
   router.replace({ path: '/login' })
+}
+
+/**
+ * 校验 redirect 路径是否为同源内部路径
+ * - 必须以 `/` 开头
+ * - 不能是 `//` 开头（避免被解析为协议相对 URL 跳出站点）
+ * - 不能包含协议头（如 http://、javascript:）
+ */
+function isSafeRedirect(value: string): boolean {
+  if (!value || typeof value !== 'string') {
+    return false
+  }
+  if (!value.startsWith('/') || value.startsWith('//')) {
+    return false
+  }
+  return !/[\x00-\x1f]/.test(value)
 }
 
 onMounted(() => {
