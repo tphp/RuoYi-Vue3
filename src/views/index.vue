@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container home">
+<!--  <div class="app-container home">
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>若依后台管理框架</h2>
@@ -1126,7 +1126,7 @@
         </el-card>
       </el-col>
     </el-row>
-  </div>
+  </div>-->
 </template>
 
 <script setup lang="ts" name="Index">
