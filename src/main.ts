@@ -44,6 +44,8 @@ import ImageUpload from "@/components/ImageUpload/index.vue"
 import ImagePreview from "@/components/ImagePreview/index.vue"
 // 字典标签组件
 import DictTag from '@/components/DictTag/index.vue'
+// 通用选择文本框组件
+import RemoteSelect from '@/components/RemoteSelect/index.vue'
 
 const app = createApp(App)
 
@@ -60,6 +62,7 @@ app.config.globalProperties.selectDictLabels = selectDictLabels
 
 // 全局组件挂载
 app.component('DictTag', DictTag)
+app.component('RemoteSelect', RemoteSelect)
 app.component('Pagination', Pagination)
 app.component('FileUpload', FileUpload)
 app.component('ImageUpload', ImageUpload)
