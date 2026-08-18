@@ -16,6 +16,7 @@ export * from "./system/post";
 export * from "./system/dict";
 export * from "./system/config";
 export * from "./system/apiKey";
+export * from "./system/commonApi";
 export * from "./system/numberRule";
 export * from "./system/notice";
 
