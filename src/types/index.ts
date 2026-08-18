@@ -3,3 +3,9 @@
  */
 
 export * from "./api";
+
+export class SysCommonApi {
+}
+
+export class CommonApiQueryParams {
+}
