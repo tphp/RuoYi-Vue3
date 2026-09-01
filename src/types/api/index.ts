@@ -19,6 +19,7 @@ export * from "./system/apiKey";
 export * from "./system/commonApi";
 export * from "./system/numberRule";
 export * from "./system/notice";
+export * from "./system/datadict";
 
 // monitor 模块
 export * from "./monitor/cache";
