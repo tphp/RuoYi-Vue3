@@ -248,7 +248,10 @@ const { queryParams, form, rules } = toRefs(data)
 /** 查询用户列表 */
 function getList() {
   loading.value = true
-  listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
+  const params = proxy.addDateRange(queryParams.value, dateRange.value)
+  // 按用户名称搜索时忽略当前选中部门，改为搜索所有员工
+  const searchParams = params.userName ? { ...params, deptId: undefined } : params
+  listUser(searchParams).then(res => {
     loading.value = false
     userList.value = res.rows
     total.value = res.total

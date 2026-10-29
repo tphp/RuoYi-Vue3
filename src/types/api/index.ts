@@ -31,3 +31,6 @@ export * from "./monitor/online";
 
 // 代码生成模块
 export * from "./tool/gen";
+
+// 接口日志模块
+export * from "./apilog/interfaceLog";
