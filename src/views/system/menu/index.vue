@@ -443,13 +443,13 @@ function submitForm() {
     if (valid) {
       if (form.value.menuId != undefined) {
         updateMenu(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addMenu(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -485,11 +485,11 @@ function handleSaveSort() {
   }
   collectChanged(menuList.value)
   if (changedMenuIds.length === 0) {
-   proxy.$modal.msgWarning(this.$t('common.sortNoChange'))
+   proxy.$modal.msgWarning(proxy.$t('common.sortNoChange'))
     return
   }
   updateMenuSort({ menuIds: changedMenuIds.join(","), orderNums: changedOrderNums.join(",") }).then(() => {
-   proxy.$modal.msgSuccess(this.$t('common.sortSuccess'))
+   proxy.$modal.msgSuccess(proxy.$t('common.sortSuccess'))
     recordOriginalOrders(menuList.value)
   })
 }
@@ -500,7 +500,7 @@ function handleDelete(row: SysMenu) {
     return delMenu(row.menuId!)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

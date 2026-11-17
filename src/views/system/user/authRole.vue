@@ -103,7 +103,7 @@ function submitForm() {
   const userId = form.value.userId
   const rIds = roleIds.value.join(",")
   updateAuthRole({ userId: userId!, roleIds: rIds }).then(() => {
-    proxy.$modal.msgSuccess(this.$t('role.authSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('role.authSuccess'))
     close()
   })
 }

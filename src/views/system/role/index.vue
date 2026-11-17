@@ -1,6 +1,6 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" label-width="68px">
+      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true">
          <el-form-item :label="$t('role.roleName')" prop="roleName">
             <el-input
                v-model="queryParams.roleName"
@@ -330,7 +330,7 @@ function handleDelete(row?: SysRole) {
     return delRole(roleIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 
@@ -517,14 +517,14 @@ function submitForm() {
       if (form.value.roleId != undefined) {
         form.value.menuIds = getMenuAllCheckedKeys()
         updateRole(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         form.value.menuIds = getMenuAllCheckedKeys()
         addRole(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -571,7 +571,7 @@ function submitDataScope() {
   if (form.value.roleId != undefined) {
     form.value.deptIds = getDeptAllCheckedKeys()
     dataScope(form.value).then(() => {
-      proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+      proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
       openDataScope.value = false
       getList()
     })

@@ -328,14 +328,14 @@ function submitForm() {
       if (form.value.dictCode != undefined) {
         updateData(form.value).then(() => {
           useDictStore().removeDict(queryParams.value.dictType!)
-          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addData(form.value).then(() => {
           useDictStore().removeDict(queryParams.value.dictType!)
-          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -351,7 +351,7 @@ function handleDelete(row?: SysDictData) {
     return delData(dictCodes)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
     useDictStore().removeDict(queryParams.value.dictType!)
   }).catch(() => {})
 }

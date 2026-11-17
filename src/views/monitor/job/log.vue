@@ -1,6 +1,6 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
          <el-form-item :label="$t('job.jobName')" prop="jobName">
             <el-input
                v-model="queryParams.jobName"
@@ -217,7 +217,7 @@ function handleDelete() {
     return delJobLog(ids.value)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

@@ -3,7 +3,7 @@
     <tree-panel :title="$t('dept.organization')" :tree-data="deptOptions" search-:placeholder="$t('dept.deptNamePlaceholder')" storage-key="dept-sidebar-width" :defaultExpandAll="true" @node-click="handleNodeClick" @refresh="getDeptTree" ref="deptTreeRef" />
     <div class="tree-sidebar-content">
       <div class="content-inner">
-        <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
           <el-form-item :label="$t('user.userName')" prop="userName">
             <el-input v-model="queryParams.userName" :placeholder="$t('user.userNamePlaceholder')" clearable style="width: 240px" @keyup.enter="handleQuery" />
           </el-form-item>
@@ -216,13 +216,13 @@ const postOptions = ref<SysPost[]>([])
 const roleOptions = ref<SysRole[]>([])
 // 列显隐信息
 const columns = ref<Record<string, TableShowColumns>>({
-  userId: { label: this.$t('user.userId'), visible: true },
-  userName: { label: this.$t('user.userName'), visible: true },
-  nickName: { label: this.$t('user.nickName'), visible: true },
-  deptName: { label: this.$t('user.deptName'), visible: true },
-  phonenumber: { label: this.$t('user.phonenumber'), visible: true },
-  status: { label: this.$t('common.status'), visible: true },
-  createTime: { label: this.$t('common.createTime'), visible: true }
+  userId: { label: proxy.$t('user.userId'), visible: true },
+  userName: { label: proxy.$t('user.userName'), visible: true },
+  nickName: { label: proxy.$t('user.nickName'), visible: true },
+  deptName: { label: proxy.$t('user.deptName'), visible: true },
+  phonenumber: { label: proxy.$t('user.phonenumber'), visible: true },
+  status: { label: proxy.$t('common.status'), visible: true },
+  createTime: { label: proxy.$t('common.createTime'), visible: true }
 })
 
 const data = reactive({
@@ -304,7 +304,7 @@ function handleDelete(row?: SysUser) {
     return delUser(userIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 
@@ -437,13 +437,13 @@ function submitForm() {
     if (valid) {
       if (form.value.userId != undefined) {
         updateUser(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addUser(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.addSuccess'))
           open.value = false
           getList()
         })

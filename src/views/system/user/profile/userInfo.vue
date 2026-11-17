@@ -46,7 +46,7 @@ function submit() {
   proxy.$refs.userRef.validate((valid: boolean) => {
     if (valid) {
       updateUserProfile(form.value).then(() => {
-        proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+        proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
         if (props.user) {
           props.user.phonenumber = form.value.phonenumber
           props.user.email = form.value.email

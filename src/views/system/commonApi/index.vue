@@ -244,13 +244,13 @@ function submitForm() {
     if (valid) {
       if (form.value.id != undefined) {
         updateCommonApi(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addCommonApi(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -266,7 +266,7 @@ function handleDelete(row: SysCommonApi) {
     return delCommonApi(apiIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

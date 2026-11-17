@@ -271,13 +271,13 @@ function submitForm() {
     if (valid) {
       if (form.value.deptId != undefined) {
         updateDept(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addDept(form.value).then(() => {
-          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
+          proxy.$modal.msgSuccess(proxy.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -313,11 +313,11 @@ function handleSaveSort() {
   }
   collectChanged(deptList.value)
   if (changedDeptIds.length === 0) {
-   proxy.$modal.msgWarning(this.$t('common.sortNoChange'))
+   proxy.$modal.msgWarning(proxy.$t('common.sortNoChange'))
     return
   }
   updateDeptSort({ deptIds: changedDeptIds.join(","), orderNums: changedOrderNums.join(",") }).then(() => {
-   proxy.$modal.msgSuccess(this.$t('common.sortSuccess'))
+   proxy.$modal.msgSuccess(proxy.$t('common.sortSuccess'))
     recordOriginalOrders(deptList.value)
   })
 }
@@ -328,7 +328,7 @@ function handleDelete(row: SysDept) {
     return delDept(row.deptId!)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

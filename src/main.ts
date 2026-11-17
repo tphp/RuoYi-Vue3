@@ -8,14 +8,12 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
 // i18n 国际化
-import i18n from '@/locales'
+import i18n, { elementLocales } from '@/locales'
 
 // 根据 Cookie 获取当前语言
 const currentLocale = Cookies.get('locale') || 'zh-cn'
-// 动态加载 Element Plus 语言包
-const elementLocale = currentLocale === 'en' 
-  ? await import('element-plus/es/locale/lang/en').then(m => m.default) 
-  : (await import('element-plus/es/locale/lang/zh-cn')).default
+// Element Plus 语言包
+const elementLocale = elementLocales[currentLocale] || elementLocales['zh-cn']
 
 import '@/assets/styles/index.scss' // global css
 

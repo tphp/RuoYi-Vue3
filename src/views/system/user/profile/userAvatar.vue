@@ -115,7 +115,7 @@ function changeScale(num: number) {
 /** 上传预处理 */
 function beforeUpload(file: File) {
   if (file.type.indexOf("image/") == -1) {
-    proxy.$modal.msgError(this.$t('user.avatarFormatError'))
+    proxy.$modal.msgError(proxy.$t('user.avatarFormatError'))
   } else {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -135,7 +135,7 @@ function uploadImg() {
       open.value = false
       options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl
       userStore.avatar = options.img
-      proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
+      proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
       visible.value = false
     })
   })

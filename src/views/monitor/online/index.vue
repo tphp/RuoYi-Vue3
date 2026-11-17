@@ -102,7 +102,7 @@ function handleForceLogout(row: SysUserOnline) {
     return forceLogout(row.tokenId!)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 
