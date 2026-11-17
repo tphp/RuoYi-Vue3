@@ -99,7 +99,7 @@
               <CircleCloseFilled />
             </el-icon>
           </div>
-          <div><el-avatar :src="getAvatar(e)" /></div>
+          <div><el-avatar :src="getAvatar(e)" /</div>
           <div class="css_user">{{ e?.nickName && e?.nickName.length > 0 ? e?.nickName : e?.userName }}</div>
         </div>
       </div>

@@ -72,16 +72,16 @@
           <el-table-column :label="$t('common.action')" align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
               <el-tooltip :content="$t('common.edit')" placement="top" v-if="scope.row.userId !== 1">
-                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']"</el-button>
               </el-tooltip>
               <el-tooltip :content="$t('common.delete')" placement="top" v-if="scope.row.userId !== 1">
-                <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']"></el-button>
+                <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']"</el-button>
               </el-tooltip>
               <el-tooltip :content="$t('common.resetPassword')" placement="top" v-if="scope.row.userId !== 1">
-                <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']"></el-button>
+                <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']"</el-button>
               </el-tooltip>
               <el-tooltip :content="$t('role.assignUser')" placement="top" v-if="scope.row.userId !== 1">
-                <el-button link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                <el-button link type="primary" icon="CircleCheck" @click="handleAuthRole(scope.row)" v-hasPermi="['system:user:edit']"</el-button>
               </el-tooltip>
             </template>
           </el-table-column>

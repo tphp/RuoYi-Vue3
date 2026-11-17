@@ -14,7 +14,7 @@
         <div class="lock-icon">🔒</div>
       </div>
       <div class="lock-username">{{ userStore.nickName }}</div>
-      <div class="lock-hint">{{ $t('lock.hint') }}/div>
+      <div class="lock-hint">{{ $t('lock.hint') }}</div>
 
       <div class="input-wrap" :class="{ shake: isShaking }">
         <input ref="passwordInput" v-model="password" type="password" :placeholder="$t('lock.passwordPlaceholder')" class="lock-input" @keydown.enter="handleUnlock" autocomplete="off" />
@@ -27,7 +27,7 @@
       <div v-if="errorMsg" class="error-msg">{{ errorMsg }}</div>
 
       <div class="lock-footer">
-        <a href="javascript:;" @click="goLogin">{{ $t('lock.relogin') }}/a>
+        <a href="javascript:;" @click="goLogin">{{ $t('lock.relogin') }}</a>
       </div>
     </div>
   </div>

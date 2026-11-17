@@ -40,7 +40,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{ $t('login.remember') }}/el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{ $t('login.remember') }}</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -49,11 +49,11 @@
           style="width:100%;"
           @click.prevent="handleLogin"
         >
-          <span v-if="!loading">{{ $t('login.loginBtn') }}/span>
-          <span v-else>{{ $t('login.loggingIn') }}/span>
+          <span v-if="!loading">{{ $t('login.loginBtn') }}</span>
+          <span v-else>{{ $t('login.loggingIn') }}</span>
         </el-button>
         <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">{{ $t('login.register') }}/router-link>
+          <router-link class="link-type" :to="'/register'">{{ $t('login.register') }}</router-link>
         </div>
       </el-form-item>
     </el-form>

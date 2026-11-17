@@ -3,7 +3,7 @@
     <!-- 自定义标题 -->
     <template #header>
       <div class="drawer-head">
-        <el-icon style="color:#5b9bd5;margin-right:8px;"><List /></el-icon>
+        <el-icon style="color:#5b9bd5;margin-right:8px;"><List /><</el-icon>
         <span class="drawer-head-name">{{ row.dictName }}</span>
         <span class="drawer-head-type">{{ row.dictType }}</span>
       </div>
@@ -12,13 +12,13 @@
     <div class="drawer-wrap">
       <!-- 加载中 -->
       <div v-if="loading" class="drawer-loading">
-        <el-icon class="is-loading"><Loading /></el-icon>
+        <el-icon class="is-loading"><Loading /><</el-icon>
         <span>加载中...</span>
       </div>
 
       <!-- 空数据 -->
       <div v-else-if="!dataList.length" class="drawer-empty">
-        <el-icon style="font-size:36px;"><Document /></el-icon>
+        <el-icon style="font-size:36px;"><Document /><</el-icon>
         <div>暂无字典数据</div>
       </div>
 
@@ -34,7 +34,7 @@
           <el-col :span="disabledCount > 0 ? 8 : 12">
             <div class="stat-card">
               <div class="stat-num success">{{ normalCount }}</div>
-              <div class="stat-label">{{ $t('user.normal') }}/div>
+              <div class="stat-label">{{ $t('user.normal') }}</div>
             </div>
           </el-col>
           <el-col v-if="disabledCount > 0" :span="8">

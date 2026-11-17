@@ -30,15 +30,15 @@
             <span>{{ detail.createTime || '—' }}</span>
           </span>
           <span class="meta-item">
-            <span :class="['status-dot', isStatusNormal ? 'status-ok' : 'status-off']"></span>
+            <span :class="['status-dot', isStatusNormal ? 'status-ok' : 'status-off']"</span>
             <span>{{ isStatusNormal ? '正常' : '已关闭' }}</span>
           </span>
         </div>
 
         <div class="notice-divider">
-          <span class="notice-divider-dot"></span>
-          <span class="notice-divider-dot"></span>
-          <span class="notice-divider-dot"></span>
+          <span class="notice-divider-dot"</span>
+          <span class="notice-divider-dot"</span>
+          <span class="notice-divider-dot"</span>
         </div>
 
         <div class="notice-body">

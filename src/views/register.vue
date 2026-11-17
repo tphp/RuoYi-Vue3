@@ -60,11 +60,11 @@
           style="width:100%;"
           @click.prevent="handleRegister"
         >
-          <span v-if="!loading">{{ $t('login.registerBtn') }}/span>
-          <span v-else>{{ $t('login.registering') }}/span>
+          <span v-if="!loading">{{ $t('login.registerBtn') }}</span>
+          <span v-else>{{ $t('login.registering') }}</span>
         </el-button>
         <div style="float: right;">
-          <router-link class="link-type" :to="'/login'">{{ $t('login.alreadyHaveAccount') }}/router-link>
+          <router-link class="link-type" :to="'/login'">{{ $t('login.alreadyHaveAccount') }}</router-link>
         </div>
       </el-form-item>
     </el-form>

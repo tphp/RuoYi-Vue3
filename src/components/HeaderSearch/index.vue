@@ -47,8 +47,8 @@
                 <svg-icon class="menu-icon" :icon-class="item.icon" />
               </div>
               <div class="search-info" @click="change(item)">
-                <div class="menu-title" v-html="highlightText(item.title.join(' / '))"></div>
-                <div class="menu-path" v-html="highlightText(item.path)"></div>
+                <div class="menu-title" v-html="highlightText(item.title.join(' / '))"</div>
+                <div class="menu-path" v-html="highlightText(item.path)"</div>
               </div>
               <svg-icon icon-class="enter" v-show="index === activeIndex" />
             </div>

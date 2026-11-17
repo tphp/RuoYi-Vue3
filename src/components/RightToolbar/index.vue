@@ -17,7 +17,7 @@
               <el-dropdown-item>
                 <el-checkbox :indeterminate="isIndeterminate" v-model="isChecked" @change="toggleCheckAll"> 列展示 </el-checkbox>
               </el-dropdown-item>
-              <div class="check-line"></div>
+              <div class="check-line"</div>
               <template v-for="(item, key) in columns" :key="item.key">
                 <el-dropdown-item>
                   <el-checkbox v-model="item.visible" @change="checkboxChange($event, key)" :label="item.label" />

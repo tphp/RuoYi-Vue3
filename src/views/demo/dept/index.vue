@@ -2,22 +2,22 @@
    <div style="margin: 20px;">
       <el-form label-width="180px">
          <el-form-item label="单选 - 用户">
-            <div style="width: 400px;"><user-select v-model="value1" :quick="false"></user-select></div>
+            <div style="width: 400px;"><user-select v-model="value1" :quick="false"></user-select</div>
          </el-form-item>
          <el-form-item label="多选 - 用户">
-            <div style="width: 400px;"><user-select v-model="value2" multiple></user-select></div>
+            <div style="width: 400px;"><user-select v-model="value2" multiple></user-select</div>
          </el-form-item>
          <el-form-item label="单选 - 部门">
-            <div style="width: 400px;"><user-select v-model="value3" department :quick="false"></user-select></div>
+            <div style="width: 400px;"><user-select v-model="value3" department :quick="false"></user-select</div>
          </el-form-item>
          <el-form-item label="快速选择(默认) - 单选 - 部门">
-            <div style="width: 400px;"><user-select v-model="value3" department></user-select></div>
+            <div style="width: 400px;"><user-select v-model="value3" department></user-select</div>
          </el-form-item>
          <el-form-item label="多选 - 部门">
-            <div style="width: 400px;"><user-select v-model="value4" department multiple></user-select></div>
+            <div style="width: 400px;"><user-select v-model="value4" department multiple></user-select</div>
          </el-form-item>
          <el-form-item label="限制个数 - 多选 - 部门">
-            <div style="width: 400px;"><user-select v-model="value4" department multiple :max-collapse-tags="2"></user-select></div>
+            <div style="width: 400px;"><user-select v-model="value4" department multiple :max-collapse-tags="2"></user-select</div>
          </el-form-item>
       </el-form>
    </div>

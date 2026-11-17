@@ -87,7 +87,6 @@ export default {
     remember: '记住我',
     forgotPassword: '忘记密码',
     register: '注册账号',
-    loginBtn: '登 录',
     logoutBtn: '退 出',
     loginSuccess: '登录成功',
     loginFail: '登录失败',
@@ -103,6 +102,15 @@ export default {
     noAccount: '没有账号？去注册',
     phoneLogin: '手机验证码登录',
     passwordLogin: '账号密码登录',
+    accountRequired: '请输入您的账号',
+    passwordRequired: '请输入您的密码',
+    captchaRequired: '请输入验证码',
+    usernameLength: '用户账号长度必须介于 2 和 20 之间',
+    registerSuccess: '恭喜你，账号 {username} 注册成功！',
+    registerBtn: '注 册',
+    registering: '注 册 中...',
+    loginBtn: '登 录',
+    loggingIn: '登 录 中...',
   },
   // 用户管理
   user: {
@@ -511,6 +519,12 @@ export default {
     page401: '抱歉，您无权访问此页面',
     page404: '抱歉，您访问的页面不存在',
     backHome: '返回首页',
+  },
+  lock: {
+    hint: '系统已锁定，请输入密码解锁',
+    passwordPlaceholder: '请输入登录密码',
+    passwordRequired: '请输入密码',
+    relogin: '退出重新登录',
   },
   // Profile
   profile: {
