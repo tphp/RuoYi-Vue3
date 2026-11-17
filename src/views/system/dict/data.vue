@@ -126,7 +126,7 @@
 
       <!-- 添加或修改参数配置对话框 -->
       <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-         <el-form ref="dataRef" :model="form" :rules="rules" label-width="80px">
+         <el-form ref="dataRef" :model="form" :rules="rules" label-width="100px">
             <el-form-item :label="$t('dict.dictType')">
                <el-input v-model="form.dictType" :disabled="true" />
             </el-form-item>

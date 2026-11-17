@@ -197,7 +197,7 @@
 
       <!-- 分配角色数据权限对话框 -->
       <el-dialog :title="title" v-model="openDataScope" width="500px" append-to-body>
-         <el-form :model="form" label-width="80px">
+         <el-form :model="form" label-width="100px">
             <el-form-item :label="$t('role.roleName')">
                <el-input v-model="form.roleName" :disabled="true" />
             </el-form-item>

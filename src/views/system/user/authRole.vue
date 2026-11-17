@@ -1,7 +1,7 @@
 <template>
    <div class="app-container">
       <h4 class="form-header h4">{{ $t('common.basicInfo') }}</h4>
-      <el-form :model="form" label-width="80px">
+      <el-form :model="form" label-width="100px">
          <el-row>
             <el-col :span="8" :offset="2">
                <el-form-item :label="$t('user.nickName')" prop="nickName">

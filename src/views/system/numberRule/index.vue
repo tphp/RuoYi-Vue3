@@ -139,7 +139,7 @@
 
     <!-- 添加/修改对话框 -->
     <el-dialog :title="title" v-model="open" width="720px" append-to-body>
-      <el-form ref="ruleRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="ruleRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="12">
             <el-form-item :label="$t('numberRule.ruleName')" prop="ruleName">

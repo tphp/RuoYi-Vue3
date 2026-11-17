@@ -111,7 +111,7 @@
 
       <!-- 添加或修改岗位对话框 -->
       <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-         <el-form ref="postRef" :model="form" :rules="rules" label-width="80px">
+         <el-form ref="postRef" :model="form" :rules="rules" label-width="100px">
             <el-form-item :label="$t('post.postName')" prop="postName">
                <el-input v-model="form.postName" :placeholder="$t('post.postNamePlaceholder')" />
             </el-form-item>

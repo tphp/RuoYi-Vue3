@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="pwdRef" :model="user" :rules="rules" label-width="80px">
+  <el-form ref="pwdRef" :model="user" :rules="rules" label-width="100px">
     <el-form-item :label="$t('profile.oldPassword')" prop="oldPassword">
       <el-input v-model="user.oldPassword" :placeholder="$t('profile.oldPasswordPlaceholder')" type="password" show-password />
     </el-form-item>

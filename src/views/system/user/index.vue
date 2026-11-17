@@ -91,7 +91,7 @@
     </div>
     <!-- 添加或修改用户配置对话框 -->
     <el-dialog :title="title" v-model="open" width="600px" append-to-body>
-      <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
+      <el-form :model="form" :rules="rules" ref="userRef" label-width="100px">
         <el-row>
           <el-col :span="12">
             <el-form-item :label="$t('user.nickName')" prop="nickName">

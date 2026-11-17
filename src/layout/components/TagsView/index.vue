@@ -491,7 +491,7 @@ $tags-bar-height: 34px;
   }
 
   .tags-refresh-btn {
-    width: 60px;
+    width: 80px;
   }
 
   .contextmenu {
