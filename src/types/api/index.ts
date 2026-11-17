@@ -34,3 +34,6 @@ export * from "./tool/gen";
 
 // 接口日志模块
 export * from "./apilog/interfaceLog";
+
+// 业务级权限模块
+export * from "./bizperm";
