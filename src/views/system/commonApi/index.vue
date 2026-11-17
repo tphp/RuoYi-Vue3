@@ -168,9 +168,9 @@ const data = reactive({
     apiKey: undefined
   } as CommonApiQueryParams,
   rules: {
-    apiName: [{ required: true, message: proxy.$t('commonApi.nameRequired'), trigger: "blur" }],
-    apiKey: [{ required: true, message: proxy.$t('commonApi.keyRequired'), trigger: "blur" }],
-    apiUrl: [{ required: true, message: proxy.$t('commonApi.pathRequired'), trigger: "blur" }]
+    apiName: [{ required: true, message: () => proxy.$t('commonApi.nameRequired'), trigger: "blur" }],
+    apiKey: [{ required: true, message: () => proxy.$t('commonApi.keyRequired'), trigger: "blur" }],
+    apiUrl: [{ required: true, message: () => proxy.$t('commonApi.pathRequired'), trigger: "blur" }]
   }
 })
 

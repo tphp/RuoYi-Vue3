@@ -75,7 +75,7 @@ const props = defineProps({
   }
 })
 
-const options = ref({
+const options = computed(() => ({
   theme: "snow",
   bounds: document.body,
   debug: "warn",
@@ -96,7 +96,7 @@ const options = ref({
   },
   placeholder: t('common.remarkPlaceholder'),
   readOnly: props.readOnly
-})
+}))
 
 const styles = computed(() => {
   const style: Record<string, string> = {}

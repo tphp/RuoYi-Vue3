@@ -42,9 +42,9 @@ defineProps({
 
 // 表单校验
 const rules = ref({
-  tableName: [{ required: true, message: translate('gen.tableNamePlaceholder'), trigger: "blur" }],
-  tableComment: [{ required: true, message: translate('gen.tableCommentPlaceholder'), trigger: "blur" }],
-  className: [{ required: true, message: translate('gen.classNamePlaceholder'), trigger: "blur" }],
-  functionAuthor: [{ required: true, message: translate('gen.authorPlaceholder'), trigger: "blur" }]
+  tableName: [{ required: true, message: () => translate('gen.tableNamePlaceholder'), trigger: "blur" }],
+  tableComment: [{ required: true, message: () => translate('gen.tableCommentPlaceholder'), trigger: "blur" }],
+  className: [{ required: true, message: () => translate('gen.classNamePlaceholder'), trigger: "blur" }],
+  functionAuthor: [{ required: true, message: () => translate('gen.authorPlaceholder'), trigger: "blur" }]
 })
 </script>

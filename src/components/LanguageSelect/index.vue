@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="language-select">
     <el-dropdown trigger="click" @command="handleCommand">
       <svg-icon icon-class="language" />
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item 
-            v-for="item in languageOptions" 
+          <el-dropdown-item
+            v-for="item in languageOptions"
             :key="item.value"
             :command="item.value"
             :class="{ 'is-active': locale === item.value }"
@@ -20,28 +20,19 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import Cookies from 'js-cookie'
-import { elementLocales } from '@/locales'
+import { setLocale } from '@/locales'
 
-const { locale } = useI18n()
-const { proxy } = getCurrentInstance()!
+const { locale, t } = useI18n()
 
 const languageOptions = computed(() => [
-  { value: 'zh-cn', label: proxy.$t('common.zhCn') },
-  { value: 'en', label: proxy.$t('common.en') },
+  { value: 'zh-cn', label: t('common.zhCn') },
+  { value: 'en', label: t('common.en') },
 ])
 
-function handleCommand(lang: string) {
+function handleCommand(lang: string): void {
   if (lang === locale.value) return
-  locale.value = lang
-  Cookies.set('locale', lang)
-  const elementLocale = elementLocales[lang]
-  if (elementLocale) {
-    import('element-plus').then((ElementPlus) => {
-      ElementPlus.useLocale(elementLocale)
-    }).catch(() => {})
-  }
-  location.reload()
+  // 切换语言（不刷新页面）
+  setLocale(lang)
 }
 </script>
 

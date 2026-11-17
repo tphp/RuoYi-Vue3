@@ -178,11 +178,11 @@ const data = reactive({
     status: undefined
   } as DeptQueryParams,
   rules: {
-    parentId: [{ required: true, message: proxy.$t('dept.parentRequired'), trigger: "blur" }],
-    deptName: [{ required: true, message: proxy.$t('dept.nameRequired'), trigger: "blur" }],
-    orderNum: [{ required: true, message: proxy.$t('dept.orderRequired'), trigger: "blur" }],
+    parentId: [{ required: true, message: () => proxy.$t('dept.parentRequired'), trigger: "blur" }],
+    deptName: [{ required: true, message: () => proxy.$t('dept.nameRequired'), trigger: "blur" }],
+    orderNum: [{ required: true, message: () => proxy.$t('dept.orderRequired'), trigger: "blur" }],
     email: [{ type: "email", message: proxy.$t('common.invalidEmail'), trigger: ["blur", "change"] }],
-    phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: proxy.$t('common.invalidPhone'), trigger: "blur" }]
+    phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: () => proxy.$t('common.invalidPhone'), trigger: "blur" }]
   },
 })
 

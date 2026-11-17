@@ -69,7 +69,7 @@ const { proxy } = getCurrentInstance()
 
 const open = ref<boolean>(false)
 const visible = ref<boolean>(false)
-const title = ref<string>(proxy.$t('profile.updateAvatar'))
+const title = computed<string>(() => proxy.$t('profile.updateAvatar'))
 
 //图片裁剪数据
 const options = reactive<any>({

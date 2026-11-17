@@ -10,7 +10,7 @@
         <svg-icon
         v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
         :icon-class="item.meta.icon"/>
-        {{ item.meta.title }}
+        {{ getRouteTitle(item.meta) }}
       </el-menu-item>
     </template>
 
@@ -25,7 +25,7 @@
         <svg-icon
           v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
           :icon-class="item.meta.icon"/>
-        {{ item.meta.title }}
+        {{ getRouteTitle(item.meta) }}
         </el-menu-item>
       </template>
     </el-sub-menu>
@@ -35,6 +35,7 @@
 <script setup lang="ts">
 import { constantRoutes } from "@/router"
 import { isHttp } from '@/utils/validate'
+import { getRouteTitle } from '@/utils/ruoyi'
 import useAppStore from '@/store/modules/app'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'

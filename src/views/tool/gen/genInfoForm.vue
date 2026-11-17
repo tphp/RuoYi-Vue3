@@ -278,11 +278,11 @@ const props = defineProps({
 
 // 表单校验
 const rules = ref({
-  tplCategory: [{ required: true, message: translate('gen.tplCategoryRequired'), trigger: "blur" }],
-  packageName: [{ required: true, message: translate('gen.packageNameRequired'), trigger: "blur" }],
-  moduleName: [{ required: true, message: translate('gen.moduleNameRequired'), trigger: "blur" }],
-  businessName: [{ required: true, message: translate('gen.businessNameRequired'), trigger: "blur" }],
-  functionName: [{ required: true, message: translate('gen.functionNameRequired'), trigger: "blur" }]
+  tplCategory: [{ required: true, message: () => translate('gen.tplCategoryRequired'), trigger: "blur" }],
+  packageName: [{ required: true, message: () => translate('gen.packageNameRequired'), trigger: "blur" }],
+  moduleName: [{ required: true, message: () => translate('gen.moduleNameRequired'), trigger: "blur" }],
+  businessName: [{ required: true, message: () => translate('gen.businessNameRequired'), trigger: "blur" }],
+  functionName: [{ required: true, message: () => translate('gen.functionNameRequired'), trigger: "blur" }]
 })
 
 function subSelectChange(value: string): void {

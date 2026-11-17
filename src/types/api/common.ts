@@ -68,6 +68,8 @@ export interface TreeSelect {
 export interface TableShowColumns {
   // 显示名称
   label: string
+  // 显示名称的多语言 key（存在时优先使用，切换语言即时生效）
+  labelKey?: string
   // 是否显示
   visible: boolean
 }

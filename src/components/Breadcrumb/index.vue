@@ -2,8 +2,8 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
-        <span v-if="item.redirect === 'noRedirect' || index == levelList.length - 1" class="no-redirect">{{ item.meta.title }}</span>
-        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+        <span v-if="item.redirect === 'noRedirect' || index == levelList.length - 1" class="no-redirect">{{ getRouteTitle(item.meta) }}</span>
+        <a v-else @click.prevent="handleLink(item)">{{ getRouteTitle(item.meta) }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import usePermissionStore from '@/store/modules/permission'
-import { translate } from '@/locales'
+import { getRouteTitle } from '@/utils/ruoyi'
 
 const route = useRoute()
 const router = useRouter()
@@ -31,13 +31,13 @@ function getBreadcrumb(): void {
     }) || []
     getMatched(pathList, permissionStore.defaultRoutes, matched)
   } else {
-    matched = route.matched.filter((item: any) => item.meta && item.meta.title)
+    matched = route.matched.filter((item: any) => item.meta && (item.meta.title || item.meta.titleKey))
   }
   // 判断是否为首页
   if (!isDashboard(matched[0])) {
-    matched = [{ path: "/index", meta: { title: translate('dashboard.title') } }].concat(matched)
+    matched = [{ path: "/index", meta: { titleKey: 'dashboard.title' } }].concat(matched)
   }
-  levelList.value = matched.filter(item => item.meta && item.meta.title && (item.meta.breadcrumb as boolean) !== false)
+  levelList.value = matched.filter(item => item.meta && (item.meta.title || item.meta.titleKey) && (item.meta.breadcrumb as boolean) !== false)
 }
 function findPathNum(str: string, char = "/"): number {
   let index = str.indexOf(char)

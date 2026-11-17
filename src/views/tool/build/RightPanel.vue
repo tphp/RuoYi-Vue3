@@ -19,7 +19,7 @@
               <el-option-group v-for="group in tagList" :key="group.label" :label="group.label">
                 <el-option v-for="item in group.options" :key="item.label" :label="item.label" :value="item.tagIcon">
                   <svg-icon class="node-icon" :icon-class="item.tagIcon" style="margin-right: 10px;" />
-                  <span> {{ item.label }}</span>
+                  <span> {{ item.labelKey ? $t(item.labelKey) : item.label }}</span>
                 </el-option>
               </el-option-group>
             </el-select>
@@ -474,7 +474,7 @@ import { inputComponents, selectComponents } from '@/utils/generator/config'
 import { translate } from '@/locales'
 
 const { proxy } = getCurrentInstance()
-const dateTimeFormat: Record<string, string> = {
+const dateTimeFormat = computed<Record<string, string>>(() => ({
   date: 'YYYY-MM-DD',
   week: translate('build.weekFormat'),
   month: 'YYYY-MM',
@@ -483,7 +483,7 @@ const dateTimeFormat: Record<string, string> = {
   daterange: 'YYYY-MM-DD',
   monthrange: 'YYYY-MM',
   datetimerange: 'YYYY-MM-DD HH:mm:ss'
-}
+}))
 const props = defineProps<{
   showField: boolean
   activeData: any
@@ -496,42 +496,6 @@ const data = reactive({
   dialogVisible: false,
   iconsVisible: false,
   currentIconModel: null,
-  dateTypeOptions: [
-    {
-      label: translate('build.dateTypeDay'),
-      value: 'date'
-    },
-    {
-      label: translate('build.dateTypeWeek'),
-      value: 'week'
-    },
-    {
-      label: translate('build.dateTypeMonth'),
-      value: 'month'
-    },
-    {
-      label: translate('build.dateTypeYear'),
-      value: 'year'
-    },
-    {
-      label: translate('build.dateTypeDatetime'),
-      value: 'datetime'
-    }
-  ],
-  dateRangeTypeOptions: [
-    {
-      label: translate('build.dateTypeDaterange'),
-      value: 'daterange'
-    },
-    {
-      label: translate('build.dateTypeMonthrange'),
-      value: 'monthrange'
-    },
-    {
-      label: translate('build.dateTypeDatetimerange'),
-      value: 'datetimerange'
-    }
-  ],
   colorFormatOptions: [
     {
       label: 'hex',
@@ -583,7 +547,22 @@ const data = reactive({
   }
 })
 
-const { currentTab, currentNode, dialogVisible, iconsVisible, currentIconModel, dateTypeOptions, dateRangeTypeOptions, colorFormatOptions, justifyOptions, layoutTreeProps } = toRefs(data)
+const { currentTab, currentNode, dialogVisible, iconsVisible, currentIconModel, colorFormatOptions, justifyOptions, layoutTreeProps } = toRefs(data)
+
+// 日期类型选项（随语言切换实时更新）
+const dateTypeOptions = computed(() => [
+  { label: translate('build.dateTypeDay'), value: 'date' },
+  { label: translate('build.dateTypeWeek'), value: 'week' },
+  { label: translate('build.dateTypeMonth'), value: 'month' },
+  { label: translate('build.dateTypeYear'), value: 'year' },
+  { label: translate('build.dateTypeDatetime'), value: 'datetime' }
+])
+
+const dateRangeTypeOptions = computed(() => [
+  { label: translate('build.dateTypeDaterange'), value: 'daterange' },
+  { label: translate('build.dateTypeMonthrange'), value: 'monthrange' },
+  { label: translate('build.dateTypeDatetimerange'), value: 'datetimerange' }
+])
 
 const documentLink = computed<string>(() => props.activeData.document || 'https://element-plus.org/zh-CN/guide/installation')
 
@@ -597,7 +576,7 @@ const dateOptions = computed(() => {
   return []
 })
 
-const tagList = ref([
+const tagList = computed(() => [
   {
     label: translate('build.inputComponents'),
     options: inputComponents

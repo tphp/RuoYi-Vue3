@@ -212,8 +212,8 @@ const data = reactive({
     status: undefined
   } as DictTypeQueryParams,
   rules: {
-    dictName: [{ required: true, message: proxy.$t('dict.nameRequired'), trigger: "blur" }],
-    dictType: [{ required: true, message: proxy.$t('dict.typeRequired'), trigger: "blur" }]
+    dictName: [{ required: true, message: () => proxy.$t('dict.nameRequired'), trigger: "blur" }],
+    dictType: [{ required: true, message: () => proxy.$t('dict.typeRequired'), trigger: "blur" }]
   },
 })
 

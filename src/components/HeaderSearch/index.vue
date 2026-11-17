@@ -47,7 +47,7 @@
                 <svg-icon class="menu-icon" :icon-class="item.icon" />
               </div>
               <div class="search-info" @click="change(item)">
-                <div class="menu-title" v-html="highlightText(item.title.join(' / '))"</div>
+                <div class="menu-title" v-html="highlightText(getSearchTitle(item))"</div>
                 <div class="menu-path" v-html="highlightText(item.path)"</div>
               </div>
               <svg-icon icon-class="enter" v-show="index === activeIndex" />
@@ -82,12 +82,14 @@
 import Fuse from 'fuse.js'
 import { getNormalPath } from '@/utils/ruoyi'
 import { isHttp } from '@/utils/validate'
+import { translate } from '@/locales'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
 
 interface SearchItem {
   path: string
   title: string[]
+  titleKeys: (string | undefined)[]
   icon: string
   query?: string
 }
@@ -154,7 +156,7 @@ function initFuse(list: SearchItem[]): void {
   })
 }
 
-function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = []): SearchItem[] {
+function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = [], prefixTitleKeys: (string | undefined)[] = []): SearchItem[] {
   let res: SearchItem[] = []
   for (const r of routes) {
     if (r.hidden) { continue }
@@ -162,10 +164,12 @@ function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = []):
     const data: SearchItem = {
       path: !isHttp(r.path) ? getNormalPath(basePath + p) : r.path,
       title: [...prefixTitle],
+      titleKeys: [...prefixTitleKeys],
       icon: ''
     }
-    if (r.meta && r.meta.title) {
+    if (r.meta && (r.meta.title || r.meta.titleKey)) {
       data.title = [...data.title, r.meta.title as string]
+      data.titleKeys = [...data.titleKeys, r.meta.titleKey as string | undefined]
       data.icon = (r.meta.icon as string) || ''
       if (r.redirect !== "noRedirect") {
         res.push(data)
@@ -175,13 +179,19 @@ function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = []):
       data.query = r.query
     }
     if (r.children) {
-      const tempRoutes = generateRoutes(r.children, data.path, data.title)
+      const tempRoutes = generateRoutes(r.children, data.path, data.title, data.titleKeys)
       if (tempRoutes.length >= 1) {
         res = [...res, ...tempRoutes]
       }
     }
   }
   return res
+}
+
+/** 拼接搜索结果标题（有多语言 key 时实时翻译） */
+function getSearchTitle(item: SearchItem): string {
+  const parts = item.titleKeys.map((key, index) => (key ? translate(key) : item.title[index]))
+  return parts.join(' / ')
 }
 
 function querySearch(query: string): void {

@@ -189,8 +189,8 @@ const data = reactive({
     status: undefined
   } as NoticeQueryParams,
   rules: {
-    noticeTitle: [{ required: true, message: proxy.$t('notice.titleRequired'), trigger: "blur" }],
-    noticeType: [{ required: true, message: proxy.$t('notice.typeRequired'), trigger: "change" }]
+    noticeTitle: [{ required: true, message: () => proxy.$t('notice.titleRequired'), trigger: "blur" }],
+    noticeType: [{ required: true, message: () => proxy.$t('notice.typeRequired'), trigger: "change" }]
   },
 })
 

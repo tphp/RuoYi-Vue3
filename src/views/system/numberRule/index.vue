@@ -373,8 +373,8 @@ const form = reactive<SysNumberRule>({
 })
 
 const rules = {
-  ruleName: [{ required: true, message: translate('numberRule.nameRequired'), trigger: 'blur' }],
-  ruleCode: [{ required: true, message: translate('numberRule.codeRequired'), trigger: 'blur' }]
+  ruleName: [{ required: true, message: () => translate('numberRule.nameRequired'), trigger: 'blur' }],
+  ruleCode: [{ required: true, message: () => translate('numberRule.codeRequired'), trigger: 'blur' }]
 }
 
 /** 查询规则列表 */

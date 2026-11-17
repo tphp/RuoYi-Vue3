@@ -192,9 +192,9 @@ const data = reactive({
     configType: undefined
   } as ConfigQueryParams,
   rules: {
-    configName: [{ required: true, message: proxy.$t('config.nameRequired'), trigger: "blur" }],
-    configKey: [{ required: true, message: proxy.$t('config.keyRequired'), trigger: "blur" }],
-    configValue: [{ required: true, message: proxy.$t('config.valueRequired'), trigger: "blur" }]
+    configName: [{ required: true, message: () => proxy.$t('config.nameRequired'), trigger: "blur" }],
+    configKey: [{ required: true, message: () => proxy.$t('config.keyRequired'), trigger: "blur" }],
+    configValue: [{ required: true, message: () => proxy.$t('config.valueRequired'), trigger: "blur" }]
   }
 })
 

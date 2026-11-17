@@ -216,13 +216,13 @@ const postOptions = ref<SysPost[]>([])
 const roleOptions = ref<SysRole[]>([])
 // 列显隐信息
 const columns = ref<Record<string, TableShowColumns>>({
-  userId: { label: proxy.$t('user.userId'), visible: true },
-  userName: { label: proxy.$t('user.userName'), visible: true },
-  nickName: { label: proxy.$t('user.nickName'), visible: true },
-  deptName: { label: proxy.$t('user.deptName'), visible: true },
-  phonenumber: { label: proxy.$t('user.phonenumber'), visible: true },
-  status: { label: proxy.$t('common.status'), visible: true },
-  createTime: { label: proxy.$t('common.createTime'), visible: true }
+  userId: { label: proxy.$t('user.userId'), labelKey: 'user.userId', visible: true },
+  userName: { label: proxy.$t('user.userName'), labelKey: 'user.userName', visible: true },
+  nickName: { label: proxy.$t('user.nickName'), labelKey: 'user.nickName', visible: true },
+  deptName: { label: proxy.$t('user.deptName'), labelKey: 'user.deptName', visible: true },
+  phonenumber: { label: proxy.$t('user.phonenumber'), labelKey: 'user.phonenumber', visible: true },
+  status: { label: proxy.$t('common.status'), labelKey: 'common.status', visible: true },
+  createTime: { label: proxy.$t('common.createTime'), labelKey: 'common.createTime', visible: true }
 })
 
 const data = reactive({
@@ -236,10 +236,10 @@ const data = reactive({
     deptId: undefined
   } as UserQueryParams,
   rules: {
-    userName: [{ required: true, message: proxy.$t('user.nameRequired'), trigger: "blur" }, { min: 2, max: 20, message: proxy.$t('user.nameLengthRange'), trigger: "blur" }],
-    nickName: [{ required: true, message: proxy.$t('user.nickNameRequired'), trigger: "blur" }],
+    userName: [{ required: true, message: () => proxy.$t('user.nameRequired'), trigger: "blur" }, { min: 2, max: 20, message: () => proxy.$t('user.nameLengthRange'), trigger: "blur" }],
+    nickName: [{ required: true, message: () => proxy.$t('user.nickNameRequired'), trigger: "blur" }],
     email: [{ type: "email", message: proxy.$t('common.invalidEmail'), trigger: ["blur", "change"] }],
-    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: proxy.$t('common.invalidPhone'), trigger: "blur" }]
+    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: () => proxy.$t('common.invalidPhone'), trigger: "blur" }]
   }
 })
 

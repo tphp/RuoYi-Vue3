@@ -4,6 +4,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { getToken } from '@/utils/auth'
 import { isHttp, isPathMatch } from '@/utils/validate'
+import { getRouteTitle } from '@/utils/ruoyi'
 import { isRelogin } from '@/utils/request'
 import useUserStore from '@/store/modules/user'
 import useLockStore from '@/store/modules/lock'
@@ -21,7 +22,8 @@ const isWhiteList = (path: string): boolean => {
 router.beforeEach(async (to, from) => {
   NProgress.start()
   if (getToken()) {
-    to.meta.title && useSettingsStore().setTitle(to.meta.title as string)
+    const routeTitle = getRouteTitle(to.meta)
+    routeTitle && useSettingsStore().setTitle(routeTitle, to.meta?.titleKey)
     const isLock = useLockStore().isLock
     if (to.path === '/login') {
       NProgress.done()

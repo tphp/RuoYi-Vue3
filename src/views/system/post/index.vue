@@ -171,9 +171,9 @@ const data = reactive({
     status: undefined
   } as PostQueryParams,
   rules: {
-    postName: [{ required: true, message: proxy.$t('post.nameRequired'), trigger: "blur" }],
-    postCode: [{ required: true, message: proxy.$t('post.codeRequired'), trigger: "blur" }],
-    postSort: [{ required: true, message: proxy.$t('post.sortRequired'), trigger: "blur" }],
+    postName: [{ required: true, message: () => proxy.$t('post.nameRequired'), trigger: "blur" }],
+    postCode: [{ required: true, message: () => proxy.$t('post.codeRequired'), trigger: "blur" }],
+    postSort: [{ required: true, message: () => proxy.$t('post.sortRequired'), trigger: "blur" }],
   }
 })
 

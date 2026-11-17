@@ -16,10 +16,12 @@ export const formConf = {
 export const inputComponents = [
   {
     label: translate('build.compSingleText'),
+    labelKey: 'build.compSingleText',
     tag: 'el-input',
     tagIcon: 'input',
     type: 'text',
     placeholder: translate('common.inputPlaceholder'),
+    placeholderKey: 'common.inputPlaceholder',
     defaultValue: undefined,
     span: 24,
     labelWidth: null,
@@ -40,10 +42,12 @@ export const inputComponents = [
   },
   {
     label: translate('build.compMultiText'),
+    labelKey: 'build.compMultiText',
     tag: 'el-input',
     tagIcon: 'textarea',
     type: 'textarea',
     placeholder: translate('common.inputPlaceholder'),
+    placeholderKey: 'common.inputPlaceholder',
     defaultValue: undefined,
     span: 24,
     labelWidth: null,
@@ -63,10 +67,12 @@ export const inputComponents = [
   },
   {
     label: translate('build.compPassword'),
+    labelKey: 'build.compPassword',
     tag: 'el-input',
     tagIcon: 'password',
     type: 'password',
     placeholder: translate('common.inputPlaceholder'),
+    placeholderKey: 'common.inputPlaceholder',
     defaultValue: undefined,
     span: 24,
     'show-password': true,
@@ -88,6 +94,7 @@ export const inputComponents = [
   },
   {
     label: translate('build.compCounter'),
+    labelKey: 'build.compCounter',
     tag: 'el-input-number',
     tagIcon: 'number',
     placeholder: '',
@@ -111,9 +118,11 @@ export const inputComponents = [
 export const selectComponents = [
   {
     label: translate('build.compSelect'),
+    labelKey: 'build.compSelect',
     tag: 'el-select',
     tagIcon: 'select',
     placeholder: translate('common.selectPlaceholder'),
+    placeholderKey: 'common.selectPlaceholder',
     defaultValue: undefined,
     span: 24,
     labelWidth: null,
@@ -126,10 +135,12 @@ export const selectComponents = [
     options: [
       {
         label: translate('build.compOptionOne'),
+        labelKey: 'build.compOptionOne',
         value: 1,
       },
       {
         label: translate('build.compOptionTwo'),
+        labelKey: 'build.compOptionTwo',
         value: 2,
       },
     ],
@@ -139,9 +150,11 @@ export const selectComponents = [
   },
   {
     label: translate('build.compCascader'),
+    labelKey: 'build.compCascader',
     tag: 'el-cascader',
     tagIcon: 'cascader',
     placeholder: translate('common.selectPlaceholder'),
+    placeholderKey: 'common.selectPlaceholder',
     defaultValue: [],
     span: 24,
     labelWidth: null,
@@ -161,11 +174,13 @@ export const selectComponents = [
         id: 1,
         value: 1,
         label: translate('build.compOptionOne'),
+        labelKey: 'build.compOptionOne',
         children: [
           {
             id: 2,
             value: 2,
             label: translate('build.compOptionOneChild'),
+            labelKey: 'build.compOptionOneChild',
           },
         ],
       },
@@ -181,6 +196,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compRadioGroup'),
+    labelKey: 'build.compRadioGroup',
     tag: 'el-radio-group',
     tagIcon: 'radio',
     defaultValue: 0,
@@ -195,10 +211,12 @@ export const selectComponents = [
     options: [
       {
         label: translate('build.compOptionOne'),
+        labelKey: 'build.compOptionOne',
         value: 1,
       },
       {
         label: translate('build.compOptionTwo'),
+        labelKey: 'build.compOptionTwo',
         value: 2,
       },
     ],
@@ -208,6 +226,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compCheckboxGroup'),
+    labelKey: 'build.compCheckboxGroup',
     tag: 'el-checkbox-group',
     tagIcon: 'checkbox',
     defaultValue: [],
@@ -222,10 +241,12 @@ export const selectComponents = [
     options: [
       {
         label: translate('build.compOptionOne'),
+        labelKey: 'build.compOptionOne',
         value: 1,
       },
       {
         label: translate('build.compOptionTwo'),
+        labelKey: 'build.compOptionTwo',
         value: 2,
       },
     ],
@@ -235,6 +256,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compSwitch'),
+    labelKey: 'build.compSwitch',
     tag: 'el-switch',
     tagIcon: 'switch',
     defaultValue: false,
@@ -255,6 +277,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compSlider'),
+    labelKey: 'build.compSlider',
     tag: 'el-slider',
     tagIcon: 'slider',
     defaultValue: null,
@@ -273,9 +296,11 @@ export const selectComponents = [
   },
   {
     label: translate('build.compTimePicker'),
+    labelKey: 'build.compTimePicker',
     tag: 'el-time-picker',
     tagIcon: 'time',
     placeholder: translate('common.selectPlaceholder'),
+    placeholderKey: 'common.selectPlaceholder',
     defaultValue: '',
     span: 24,
     labelWidth: null,
@@ -291,6 +316,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compTimeRange'),
+    labelKey: 'build.compTimeRange',
     tag: 'el-time-picker',
     tagIcon: 'time-range',
     defaultValue: null,
@@ -312,9 +338,11 @@ export const selectComponents = [
   },
   {
     label: translate('build.compDatePicker'),
+    labelKey: 'build.compDatePicker',
     tag: 'el-date-picker',
     tagIcon: 'date',
     placeholder: translate('common.selectPlaceholder'),
+    placeholderKey: 'common.selectPlaceholder',
     defaultValue: null,
     type: 'date',
     span: 24,
@@ -332,6 +360,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compDateRange'),
+    labelKey: 'build.compDateRange',
     tag: 'el-date-picker',
     tagIcon: 'date-range',
     defaultValue: null,
@@ -354,6 +383,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compRate'),
+    labelKey: 'build.compRate',
     tag: 'el-rate',
     tagIcon: 'rate',
     defaultValue: 0,
@@ -372,6 +402,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compColorPicker'),
+    labelKey: 'build.compColorPicker',
     tag: 'el-color-picker',
     tagIcon: 'color',
     defaultValue: null,
@@ -387,6 +418,7 @@ export const selectComponents = [
   },
   {
     label: translate('build.compUpload'),
+    labelKey: 'build.compUpload',
     tag: 'el-upload',
     tagIcon: 'upload',
     action: 'https://jsonplaceholder.typicode.com/posts/',
@@ -419,6 +451,7 @@ export const layoutComponents = [
     justify: 'start',
     align: 'top',
     label: translate('build.compRowContainer'),
+    labelKey: 'build.compRowContainer',
     layoutTree: true,
     children: [],
     document: 'https://element-plus.org/zh-CN/component/layout',
@@ -426,6 +459,7 @@ export const layoutComponents = [
   {
     layout: 'colFormItem',
     label: translate('build.compButton'),
+    labelKey: 'build.compButton',
     changeTag: true,
     labelWidth: null,
     tag: 'el-button',

@@ -143,7 +143,8 @@ const predefineColors = ref<string[]>(["#409EFF", "#ff4500", "#ff8c00", "#ffd700
 
 /** 是否需要dynamicTitle */
 function dynamicTitleChange(): void {
-  useSettingsStore().setTitle(useSettingsStore().title)
+  const store = useSettingsStore()
+  store.setTitle(store.title, store.titleKey)
 }
 
 function tagsViewPersistChange(val: boolean): void {

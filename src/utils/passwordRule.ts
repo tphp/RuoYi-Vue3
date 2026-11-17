@@ -30,9 +30,9 @@ export function usePasswordRule() {
   const pwdValidator = computed(() => {
     const rule = PWD_RULES[pwdChrType.value] || PWD_RULES['0']
     return [
-      { required: true, message: translate('pwd.empty'), trigger: 'blur' },
-      { min: 6, max: 20, message: translate('pwd.lengthRange'), trigger: 'blur' },
-      { pattern: rule.pattern, message: translate(rule.messageKey), trigger: 'blur' }
+      { required: true, message: () => translate('pwd.empty'), trigger: 'blur' },
+      { min: 6, max: 20, message: () => translate('pwd.lengthRange'), trigger: 'blur' },
+      { pattern: rule.pattern, message: () => translate(rule.messageKey), trigger: 'blur' }
     ]
   })
   // 校验prompt的inputValidator函数
@@ -49,18 +49,18 @@ export function usePasswordRule() {
   const infoPwdValidator = computed(() => {
     const rule = PWD_RULES[pwdChrType.value] || PWD_RULES['0']
     return [
-      { required: true, message: translate('pwd.newEmpty'), trigger: 'blur' },
-      { min: 6, max: 20, message: translate('pwd.newLengthRange'), trigger: 'blur' },
-      { pattern: rule.pattern, message: translate(rule.messageKey), trigger: 'blur' }
+      { required: true, message: () => translate('pwd.newEmpty'), trigger: 'blur' },
+      { min: 6, max: 20, message: () => translate('pwd.newLengthRange'), trigger: 'blur' },
+      { pattern: rule.pattern, message: () => translate(rule.messageKey), trigger: 'blur' }
     ]
   })
   // 注册页面密码校验
   const registerPwdValidator = computed(() => {
     const rule = PWD_RULES['0']
     return [
-      { required: true, message: translate('login.passwordRequired'), trigger: 'blur' },
-      { min: 6, max: 20, message: translate('pwd.userLengthRange'), trigger: 'blur' },
-      { pattern: rule.pattern, message: translate(rule.messageKey), trigger: 'blur' }
+      { required: true, message: () => translate('login.passwordRequired'), trigger: 'blur' },
+      { min: 6, max: 20, message: () => translate('pwd.userLengthRange'), trigger: 'blur' },
+      { pattern: rule.pattern, message: () => translate(rule.messageKey), trigger: 'blur' }
     ]
   })
 

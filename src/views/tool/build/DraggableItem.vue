@@ -1,6 +1,6 @@
 <template>
   <el-col :span="element.span" :class="className" @click.stop="activeItem(element)">
-    <el-form-item :label="element.label" :label-width="element.labelWidth ? element.labelWidth + 'px' : null"
+    <el-form-item :label="element.labelKey ? $t(element.labelKey) : element.label" :label-width="element.labelWidth ? element.labelWidth + 'px' : null"
       :required="element.required" v-if="element.layout === 'colFormItem'">
       <render :key="element.tag" :conf="element" v-model="element.defaultValue" />
     </el-form-item>

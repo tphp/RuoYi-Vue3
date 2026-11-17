@@ -17,12 +17,30 @@ const messages = {
   'en': en,
 }
 
+/** 当前语言（全局唯一状态源） */
+export const currentLocale = ref<string>(Cookies.get('locale') || 'zh-cn')
+
 const i18n = createI18n({
   legacy: false,
-  locale: Cookies.get('locale') || 'zh-cn',
+  locale: currentLocale.value,
   fallbackLocale: 'zh-cn',
   messages,
 })
+
+/**
+ * 切换语言（不刷新页面）
+ * @param lang 语言标识，如 'zh-cn' | 'en'
+ */
+export function setLocale(lang: string): void {
+  if (!elementLocales[lang] || lang === currentLocale.value) return
+  currentLocale.value = lang
+  Cookies.set('locale', lang)
+  // 同步 vue-i18n 内部的 locale
+  ;(i18n.global.locale as any).value = lang
+}
+
+/** 当前语言对应的 Element Plus 语言包 */
+export const elementLocale = computed<any>(() => elementLocales[currentLocale.value] || elementLocales['zh-cn'])
 
 /**
  * 在无法使用 useI18n() 的场景（普通 .ts 模块、路由守卫等）中翻译文案

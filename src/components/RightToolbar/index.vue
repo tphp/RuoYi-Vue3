@@ -20,7 +20,7 @@
               <div class="check-line"</div>
               <template v-for="(item, key) in columns" :key="item.key">
                 <el-dropdown-item>
-                  <el-checkbox v-model="item.visible" @change="checkboxChange($event, key)" :label="item.label" />
+                  <el-checkbox v-model="item.visible" @change="checkboxChange($event, key)" :label="item.labelKey ? translate(item.labelKey) : item.label" />
                 </el-dropdown-item>
               </template>
             </el-dropdown-menu>
@@ -82,7 +82,7 @@ const emits = defineEmits(['update:showSearch', 'queryTable'])
 // 显隐数据
 const value = ref<number[]>([])
 // 弹出层标题
-const title = ref(translate('common.showHide'))
+const title = computed(() => translate('common.showHide'))
 // 是否显示弹出层
 const open = ref(false)
 
@@ -100,7 +100,7 @@ const isChecked = computed({
   set: () => {}
 })
 const isIndeterminate = computed(() => Array.isArray(props.columns) ? props.columns.some((col: TableShowColumns) => col.visible) && !isChecked.value : Object.values(props.columns).some((col) => (col as TableShowColumns).visible) && !isChecked.value)
-const transferData = computed(() => Array.isArray(props.columns) ? props.columns.map((item: TableShowColumns, index: number) => ({ key: index, label: item.label })) : Object.keys(props.columns).map((key, index) => ({ key: index, label: props.columns[key].label })))
+const transferData = computed(() => Array.isArray(props.columns) ? props.columns.map((item: TableShowColumns, index: number) => ({ key: index, label: item.labelKey ? translate(item.labelKey) : item.label })) : Object.keys(props.columns).map((key, index) => ({ key: index, label: props.columns[key].labelKey ? translate(props.columns[key].labelKey) : props.columns[key].label })))
 
 // 搜索
 const { proxy } = getCurrentInstance()!

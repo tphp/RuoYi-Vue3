@@ -18,7 +18,7 @@
               <div :key="index" class="components-item" @click="addComponent(element)">
                 <div class="components-body">
                   <svg-icon :icon-class="element.tagIcon" />
-                  {{ element.label }}
+                  {{ element.labelKey ? $t(element.labelKey) : element.label }}
                 </div>
               </div>
             </template>
@@ -33,7 +33,7 @@
               <div :key="index" class="components-item" @click="addComponent(element)">
                 <div class="components-body">
                   <svg-icon :icon-class="element.tagIcon" />
-                  {{ element.label }}
+                  {{ element.labelKey ? $t(element.labelKey) : element.label }}
                 </div>
               </div>
             </template>
@@ -48,7 +48,7 @@
               <div :key="index" class="components-item" @click="addComponent(element)">
                 <div class="components-body">
                   <svg-icon :icon-class="element.tagIcon" />
-                  {{ element.label }}
+                  {{ element.labelKey ? $t(element.labelKey) : element.label }}
                 </div>
               </div>
             </template>

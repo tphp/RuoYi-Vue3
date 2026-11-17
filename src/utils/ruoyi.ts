@@ -5,6 +5,19 @@
 
 import { translate } from '@/locales'
 
+/**
+ * 获取路由/菜单标题
+ * 优先使用多语言 key（meta.titleKey）翻译，保证切换语言后即时更新；
+ * 后端下发的动态菜单没有 key，直接回退到原始文案。
+ */
+export function getRouteTitle(meta?: any): string {
+  if (!meta) return ''
+  if (meta.titleKey) {
+    return translate(meta.titleKey)
+  }
+  return meta.title || ''
+}
+
 // 日期格式化
 export function parseTime(time: any, pattern?: string): string | null {
   if (arguments.length === 0 || !time) {

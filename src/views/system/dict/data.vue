@@ -221,9 +221,9 @@ const data = reactive({
     status: undefined
   } as DictDataQueryParams,
   rules: {
-    dictLabel: [{ required: true, message: proxy.$t('dict.labelRequired'), trigger: "blur" }],
-    dictValue: [{ required: true, message: proxy.$t('dict.valueRequired'), trigger: "blur" }],
-    dictSort: [{ required: true, message: proxy.$t('dict.sortRequired'), trigger: "blur" }]
+    dictLabel: [{ required: true, message: () => proxy.$t('dict.labelRequired'), trigger: "blur" }],
+    dictValue: [{ required: true, message: () => proxy.$t('dict.valueRequired'), trigger: "blur" }],
+    dictSort: [{ required: true, message: () => proxy.$t('dict.sortRequired'), trigger: "blur" }]
   }
 })
 

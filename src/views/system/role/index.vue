@@ -292,9 +292,9 @@ const data = reactive({
     status: undefined
   } as RoleQueryParams,
   rules: {
-    roleName: [{ required: true, message: proxy.$t('role.nameRequired'), trigger: "blur" }],
-    roleKey: [{ required: true, message: proxy.$t('role.keyRequired'), trigger: "blur" }],
-    roleSort: [{ required: true, message: proxy.$t('role.sortRequired'), trigger: "blur" }]
+    roleName: [{ required: true, message: () => proxy.$t('role.nameRequired'), trigger: "blur" }],
+    roleKey: [{ required: true, message: () => proxy.$t('role.keyRequired'), trigger: "blur" }],
+    roleSort: [{ required: true, message: () => proxy.$t('role.sortRequired'), trigger: "blur" }]
   },
 })
 

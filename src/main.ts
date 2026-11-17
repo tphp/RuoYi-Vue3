@@ -8,12 +8,7 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
 // i18n 国际化
-import i18n, { elementLocales } from '@/locales'
-
-// 根据 Cookie 获取当前语言
-const currentLocale = Cookies.get('locale') || 'zh-cn'
-// Element Plus 语言包
-const elementLocale = elementLocales[currentLocale] || elementLocales['zh-cn']
+import i18n, { elementLocale } from '@/locales'
 
 import '@/assets/styles/index.scss' // global css
 
@@ -87,12 +82,13 @@ app.component('svg-icon', SvgIcon)
 directive(app)
 
 // 使用element-plus 并且设置全局的大小
+// locale 传入响应式对象，Element Plus 内置文案（分页、日期选择器等）可随语言实时切换
 // @ts-ignore
-app.use(ElementPlus, {
+app.use(ElementPlus, reactive({
   locale: elementLocale,
   // 支持 large、default、small
   size: Cookies.get('size') || 'small'
-})
+}))
 
 // 全局设置：是否可以通过点击 modal 关闭 Dialog
 ElDialog.props.closeOnClickModal.default = false

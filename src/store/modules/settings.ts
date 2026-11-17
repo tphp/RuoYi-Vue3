@@ -12,6 +12,7 @@ const storageSetting = JSON.parse(localStorage.getItem('layout-setting') || '{}'
 
 interface SettingsState {
   title: string
+  titleKey: string
   theme: string
   sideTheme: string
   showSettings: boolean
@@ -33,6 +34,7 @@ const useSettingsStore = defineStore(
   {
     state: (): SettingsState => ({
       title: '',
+      titleKey: '',
       theme: storageSetting.theme || '#409EFF',
       sideTheme: storageSetting.sideTheme || sideTheme,
       showSettings: showSettings,
@@ -57,8 +59,9 @@ const useSettingsStore = defineStore(
         }
       },
       // 设置网页标题
-      setTitle(title: string) {
+      setTitle(title: string, titleKey?: string) {
         this.title = title
+        this.titleKey = titleKey || ''
         useDynamicTitle()
       },
       // 切换暗黑模式

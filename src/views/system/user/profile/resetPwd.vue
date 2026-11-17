@@ -47,8 +47,8 @@ const equalToPassword = (rule: any, value: string, callback: (error?: Error) => 
 }
 
 const rules = {
-  oldPassword: [{ required: true, message: proxy.$t('profile.oldPasswordRequired'), trigger: "blur" }],
-  confirmPassword: [{ required: true, message: proxy.$t('profile.confirmPasswordRequired'), trigger: "blur" }, { required: true, validator: equalToPassword, trigger: "blur" }]
+  oldPassword: [{ required: true, message: () => proxy.$t('profile.oldPasswordRequired'), trigger: "blur" }],
+  confirmPassword: [{ required: true, message: () => proxy.$t('profile.confirmPasswordRequired'), trigger: "blur" }, { required: true, validator: equalToPassword, trigger: "blur" }]
 }
 
 /** 提交按钮 */

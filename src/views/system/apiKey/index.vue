@@ -208,9 +208,9 @@ const data = reactive({
     status: undefined
   } as ApiKeyQueryParams,
   rules: {
-    appName: [{ required: true, message: proxy.$t('apiKey.appNameRequired'), trigger: "blur" }],
-    apiKey: [{ required: true, message: proxy.$t('apiKey.apiKeyRequired'), trigger: "blur" }],
-    apiSecret: [{ required: true, message: proxy.$t('apiKey.apiSecretRequired'), trigger: "blur" }]
+    appName: [{ required: true, message: () => proxy.$t('apiKey.appNameRequired'), trigger: "blur" }],
+    apiKey: [{ required: true, message: () => proxy.$t('apiKey.apiKeyRequired'), trigger: "blur" }],
+    apiSecret: [{ required: true, message: () => proxy.$t('apiKey.apiSecretRequired'), trigger: "blur" }]
   }
 })
 

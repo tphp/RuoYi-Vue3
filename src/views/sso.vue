@@ -36,10 +36,12 @@ const route = useRoute()
 const router = useRouter()
 
 const loading = ref<boolean>(true)
-const message = ref<string>(t('sso.verifying'))
 const statusIcon = ref<string>('CircleCheck')
 const errorMsg = ref<string>('')
+// 非错误状态下的提示文案（随语言切换实时更新）
+const infoMsg = ref<string>(t('sso.verifying'))
 
+const message = computed<string>(() => errorMsg.value || infoMsg.value)
 const isError = computed<boolean>(() => !!errorMsg.value)
 
 /**
@@ -49,7 +51,6 @@ function setErrorState(text: string): void {
   loading.value = false
   statusIcon.value = 'CircleCloseFilled'
   errorMsg.value = text
-  message.value = text
 }
 
 /**
@@ -58,7 +59,7 @@ function setErrorState(text: string): void {
 async function doSsoLogin(): Promise<void> {
   const token = (route.query?.token as string) || ''
   if (!token) {
-    setErrorState(t('sso.tokenMissing'))
+    setErrorState(t('sso.credentialMissing'))
     return
   }
 
@@ -67,8 +68,8 @@ async function doSsoLogin(): Promise<void> {
     if (res && res.token) {
       setToken(res.token)
       statusIcon.value = 'CircleCheck'
-      message.value = t('sso.loginSuccess')
       errorMsg.value = ''
+      infoMsg.value = t('sso.loginSuccessRedirect')
       // 跳转到指定 redirect 路径，未指定则进入首页（保留其它 query 参数）
       const query = { ...route.query }
       delete query.token
@@ -77,7 +78,7 @@ async function doSsoLogin(): Promise<void> {
       const target = isSafeRedirect(redirect) ? redirect : '/'
       router.replace({ path: target, query })
     } else {
-      setErrorState(res?.msg || t('sso.loginFailed'))
+      setErrorState(res?.msg || t('common.operationFail'))
     }
   } catch (err: any) {
     const msg = (err && (err.msg || err.message)) || t('sso.loginFailedRetry')

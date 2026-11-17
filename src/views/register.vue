@@ -1,6 +1,7 @@
 <template>
   <div class="register">
     <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="register-form">
+      <language-select class="register-lang-select" />
       <h3 class="title">{{ title }}</h3>
       <el-form-item prop="username">
         <el-input 
@@ -82,6 +83,7 @@ import defaultSettings from '@/settings'
 import { usePasswordRule } from "@/utils/passwordRule"
 import { useI18n } from 'vue-i18n'
 import type { RegisterForm } from '@/types/api/login'
+import LanguageSelect from '@/components/LanguageSelect/index.vue'
 
 const { t } = useI18n()
 const title = import.meta.env.VITE_APP_TITLE
@@ -108,14 +110,14 @@ const equalToPassword = (rule: any, value: string, callback: (error?: Error) => 
 
 const registerRules = {
   username: [
-    { required: true, trigger: "blur", message: t('login.accountRequired') },
-    { min: 2, max: 20, message: t('login.usernameLength'), trigger: "blur" }
+    { required: true, trigger: "blur", message: () => t('login.accountRequired') },
+    { min: 2, max: 20, message: () => t('login.usernameLength'), trigger: "blur" }
   ],
   confirmPassword: [
-    { required: true, trigger: "blur", message: t('profile.confirmPasswordPlaceholder') },
+    { required: true, trigger: "blur", message: () => t('profile.confirmPasswordPlaceholder') },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
-  code: [{ required: true, trigger: "change", message: t('login.captchaRequired') }]
+  code: [{ required: true, trigger: "change", message: () => t('login.captchaRequired') }]
 }
 
 const codeUrl = ref<string>("")
@@ -177,6 +179,7 @@ getCode()
   background: #ffffff;
   width: 400px;
   padding: 25px 25px 5px 25px;
+  position: relative;
   .el-input {
     height: 40px;
     input {
@@ -187,6 +190,19 @@ getCode()
     height: 39px;
     width: 14px;
     margin-left: 0px;
+  }
+}
+.register-lang-select {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 2;
+  font-size: 18px;
+  color: #5a5e66;
+  cursor: pointer;
+
+  :deep(.el-dropdown) {
+    margin-left: 0;
   }
 }
 .register-tip {

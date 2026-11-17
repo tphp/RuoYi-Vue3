@@ -271,9 +271,9 @@ const data = reactive({
     status: undefined
   } as JobQueryParams,
   rules: {
-    jobName: [{ required: true, message: proxy.$t('job.nameRequired'), trigger: "blur" }],
-    invokeTarget: [{ required: true, message: proxy.$t('job.invokeTargetRequired'), trigger: "blur" }],
-    cronExpression: [{ required: true, message: proxy.$t('job.cronRequired'), trigger: "change" }]
+    jobName: [{ required: true, message: () => proxy.$t('job.nameRequired'), trigger: "blur" }],
+    invokeTarget: [{ required: true, message: () => proxy.$t('job.invokeTargetRequired'), trigger: "blur" }],
+    cronExpression: [{ required: true, message: () => proxy.$t('job.cronRequired'), trigger: "change" }]
   }
 })
 

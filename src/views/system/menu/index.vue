@@ -332,9 +332,9 @@ const data = reactive({
     visible: undefined
   } as MenuQueryParams,
   rules: {
-    menuName: [{ required: true, message: proxy.$t('menu.nameRequired'), trigger: "blur" }],
-    orderNum: [{ required: true, message: proxy.$t('menu.orderRequired'), trigger: "blur" }],
-    path: [{ required: true, message: proxy.$t('menu.pathRequired'), trigger: "blur" }]
+    menuName: [{ required: true, message: () => proxy.$t('menu.nameRequired'), trigger: "blur" }],
+    orderNum: [{ required: true, message: () => proxy.$t('menu.orderRequired'), trigger: "blur" }],
+    path: [{ required: true, message: () => proxy.$t('menu.pathRequired'), trigger: "blur" }]
   },
 })
 

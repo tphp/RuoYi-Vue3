@@ -235,8 +235,8 @@ const data = reactive({
     pageSize: 10,
   } as SaleOrderQuery,
   rules: {
-    customerName: [{ required: true, message: proxy.$t('sale.customerNameRequired'), trigger: "blur" }],
-    orderDate: [{ required: true, message: proxy.$t('sale.orderDateRequired'), trigger: "change" }],
+    customerName: [{ required: true, message: () => proxy.$t('sale.customerNameRequired'), trigger: "blur" }],
+    orderDate: [{ required: true, message: () => proxy.$t('sale.orderDateRequired'), trigger: "change" }],
   },
 })
 

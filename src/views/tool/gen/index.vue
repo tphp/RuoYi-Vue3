@@ -118,7 +118,7 @@
       @pagination="getList"
     />
     <!-- 预览界面 -->
-    <el-dialog :title="preview.title" v-model="preview.open" width="80%" top="5vh" append-to-body class="scrollbar">
+    <el-dialog :title="previewTitle" v-model="preview.open" width="80%" top="5vh" append-to-body class="scrollbar">
       <el-tabs v-model="preview.activeName">
         <el-tab-pane
           v-for="(value, key) in preview.data"
@@ -167,13 +167,14 @@ const data = reactive({
   } as GenQueryParams,
   preview: {
     open: false,
-    title: translate('gen.codePreview'),
     data: {},
     activeName: "domain.java"
   }
 })
 
 const { queryParams, preview } = toRefs(data)
+// 弹窗标题（随语言切换实时更新）
+const previewTitle = computed(() => translate('gen.codePreview'))
 
 onActivated(() => {
   const time = route.query.t
