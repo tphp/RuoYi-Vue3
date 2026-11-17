@@ -28,7 +28,7 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="类型" prop="businessType">
+         <el-form-item :label="$t('menu.menuType')" prop="businessType">
             <el-select
                v-model="queryParams.businessType"
                placeholder="操作类型"
@@ -128,7 +128,7 @@
                <span>{{ parseTime(scope.row.operTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="消耗时间" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
+         <el-table-column :label="$t('operlog.costTime')" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
             <template #default="scope">
                <span>{{ scope.row.costTime }}毫秒</span>
             </template>

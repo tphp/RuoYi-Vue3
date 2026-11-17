@@ -6,15 +6,15 @@
         <div class="detail-card-title"><el-icon><InfoFilled /><</el-icon> 基本信息</div>
         <el-row class="detail-row">
           <el-col :span="12">
-            <div class="detail-item"><span class="detail-label">操作模块</span><span class="detail-value">{{ form.title }}</span</div>
+            <div class="detail-item"><span class="detail-label">操作模块</span><span class="detail-value">{{ form.title }}</span></div>
           </el-col>
           <el-col :span="12">
-            <div class="detail-item"><span class="detail-label">业务类型</span><span class="detail-value">{{ typeLabel }}</span</div>
+            <div class="detail-item"><span class="detail-label">业务类型</span><span class="detail-value">{{ typeLabel }}</span></div>
           </el-col>
         </el-row>
         <el-row class="detail-row">
           <el-col :span="12">
-            <div class="detail-item"><span class="detail-label">操作时间</span><span class="detail-value">{{ form.operTime }}</span</div>
+            <div class="detail-item"><span class="detail-label">操作时间</span><span class="detail-value">{{ form.operTime }}</span></div>
           </el-col>
           <el-col :span="12">
             <div class="detail-item">
@@ -31,17 +31,17 @@
         <div class="detail-card-title"><el-icon><User /><</el-icon> 操作人员</div>
         <el-row class="detail-row">
           <el-col :span="12">
-            <div class="detail-item"><span class="detail-label">操作人员</span><span class="detail-value">{{ form.operName }}</span</div>
+            <div class="detail-item"><span class="detail-label">操作人员</span><span class="detail-value">{{ form.operName }}</span></div>
           </el-col>
           <el-col :span="12" v-if="form.deptName">
-            <div class="detail-item"><span class="detail-label">所属部门</span><span class="detail-value">{{ form.deptName }}</span</div>
+            <div class="detail-item"><span class="detail-label">所属部门</span><span class="detail-value">{{ form.deptName }}</span></div>
           </el-col>
         </el-row>
         <el-row class="detail-row">
           <el-col :span="24">
             <div class="detail-item">
               <span class="detail-label">操作地址</span>
-              <span class="detail-value">{{ form.operIp }}&nbsp;&nbsp;<span class="detail-location">{{ form.operLocation }}</span</span>
+              <span class="detail-value">{{ form.operIp }}&nbsp;&nbsp;<span class="detail-location">{{ form.operLocation }}</span></span>
             </div>
           </el-col>
         </el-row>
@@ -63,12 +63,12 @@
         </el-row>
         <el-row class="detail-row">
           <el-col :span="24">
-            <div class="detail-item"><span class="detail-label">操作方法</span><span class="detail-value mono">{{ form.method }}</span</div>
+            <div class="detail-item"><span class="detail-label">操作方法</span><span class="detail-value mono">{{ form.method }}</span></div>
           </el-col>
         </el-row>
         <el-row class="detail-row">
           <el-col :span="12">
-            <div class="detail-item"><span class="detail-label">消耗时间</span><span class="detail-value">{{ form.costTime }} 毫秒</span</div>
+            <div class="detail-item"><span class="detail-label">消耗时间</span><span class="detail-value">{{ form.costTime }} 毫秒</span></div>
           </el-col>
         </el-row>
       </div>

@@ -19,7 +19,7 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="类型" prop="noticeType">
+         <el-form-item :label="$t('menu.menuType')" prop="noticeType">
             <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_notice_type"
@@ -120,7 +120,7 @@
                </el-col>
                <el-col :span="12">
                   <el-form-item :label="$t('notice.noticeType')" prop="noticeType">
-                     <el-select v-model="form.noticeType" placeholder="请选择">
+                     <el-select v-model="form.noticeType" :placeholder="$t('common.select')">
                         <el-option
                            v-for="dict in sys_notice_type"
                            :key="dict.value"
@@ -150,8 +150,8 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>

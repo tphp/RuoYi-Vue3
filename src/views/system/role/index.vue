@@ -121,10 +121,10 @@
               <el-tooltip :content="$t('common.delete')" placement="top" v-if="scope.row.roleId !== 1">
                 <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:role:remove']"</el-button>
               </el-tooltip>
-              <el-tooltip content="数据权限" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip :content="$t('role.dataPermission')" placement="top" v-if="scope.row.roleId !== 1">
                 <el-button link type="primary" icon="CircleCheck" @click="handleDataScope(scope.row)" v-hasPermi="['system:role:edit']"</el-button>
               </el-tooltip>
-              <el-tooltip content="分配用户" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip :content="$t('role.assignUser')" placement="top" v-if="scope.row.roleId !== 1">
                 <el-button link type="primary" icon="User" @click="handleAuthUser(scope.row)" v-hasPermi="['system:role:edit']"</el-button>
               </el-tooltip>
             </template>
@@ -184,13 +184,13 @@
                ></el-tree>
             </el-form-item>
             <el-form-item :label="$t('common.remark')">
-               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+               <el-input v-model="form.remark" type="textarea" :placeholder="$t('common.remarkPlaceholder')"></el-input>
             </el-form-item>
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>
@@ -233,8 +233,8 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitDataScope">确 定</el-button>
-               <el-button @click="cancelDataScope">取 消</el-button>
+               <el-button type="primary" @click="submitDataScope">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancelDataScope">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>

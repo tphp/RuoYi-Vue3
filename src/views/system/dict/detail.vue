@@ -13,7 +13,7 @@
       <!-- 加载中 -->
       <div v-if="loading" class="drawer-loading">
         <el-icon class="is-loading"><Loading /><</el-icon>
-        <span>加载中...</span>
+        <span>{{ $t('notice.loading') }}</span>
       </div>
 
       <!-- 空数据 -->

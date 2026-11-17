@@ -65,7 +65,7 @@
          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
          <el-table-column prop="deptName" :label="$t('dept.deptName')" width="260"></el-table-column>
-         <el-table-column prop="orderNum" label="排序" width="200">
+         <el-table-column prop="orderNum" :label="$t('common.sort')" width="200">
             <template #default="scope">
                <el-input-number v-model="scope.row.orderNum" controls-position="right" :min="0" style="width: 88px" />
             </template>
@@ -145,8 +145,8 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>

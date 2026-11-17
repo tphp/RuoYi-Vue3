@@ -156,8 +156,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+          <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -196,7 +196,7 @@
       </el-table>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="detailOpen = false">关 闭</el-button>
+          <el-button @click="detailOpen = false">{{ $t('common.close') }}</el-button>
         </div>
       </template>
     </el-dialog>

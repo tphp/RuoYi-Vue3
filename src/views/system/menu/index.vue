@@ -70,16 +70,16 @@
                <span class="ml5">{{ scope.row.menuName }}</span>
             </template>
          </el-table-column>
-         <el-table-column prop="menuName" label="类型" :show-overflow-tooltip="true" width="100">
+         <el-table-column prop="menuName" :label="$t('menu.menuType')" :show-overflow-tooltip="true" width="100">
             <template #default="scope">
                <el-tag v-if="scope.row.menuType === 'M' && scope.row.isFrame === '0'" type="danger" size="small">外链</el-tag>
-               <el-tag v-else-if="scope.row.menuType === 'M'" type="primary" size="small">目录</el-tag>
+               <el-tag v-else-if="scope.row.menuType === 'M'" type="primary" size="small">{{ $t('menu.directory') }}</el-tag>
                <el-tag v-else-if="scope.row.menuType === 'C' && scope.row.isFrame === '0'" type="danger" size="small">外链</el-tag>
-               <el-tag v-else-if="scope.row.menuType === 'C'" type="success" size="small">菜单</el-tag>
-               <el-tag v-else-if="scope.row.menuType === 'F'" type="warning" size="small">按钮</el-tag>
+               <el-tag v-else-if="scope.row.menuType === 'C'" type="success" size="small">{{ $t('menu.menu') }}</el-tag>
+               <el-tag v-else-if="scope.row.menuType === 'F'" type="warning" size="small">{{ $t('menu.button') }}</el-tag>
             </template>
          </el-table-column>
-         <el-table-column prop="orderNum" label="排序" width="200">
+         <el-table-column prop="orderNum" :label="$t('common.sort')" width="200">
             <template #default="scope">
                <el-input-number v-model="scope.row.orderNum" controls-position="right" :min="0" style="width: 88px" />
             </template>
@@ -119,9 +119,9 @@
                <el-col :span="24">
                   <el-form-item :label="$t('menu.menuType')" prop="menuType">
                      <el-radio-group v-model="form.menuType">
-                        <el-radio value="M">目录</el-radio>
-                        <el-radio value="C">菜单</el-radio>
-                        <el-radio value="F">按钮</el-radio>
+                        <el-radio value="M">{{ $t('menu.directory') }}</el-radio>
+                        <el-radio value="C">{{ $t('menu.menu') }}</el-radio>
+                        <el-radio value="F">{{ $t('menu.button') }}</el-radio>
                      </el-radio-group>
                   </el-form-item>
                </el-col>
@@ -133,7 +133,7 @@
                         trigger="click"
                      >
                         <template #reference>
-                           <el-input v-model="form.icon" placeholder="点击选择图标" @blur="showSelectIcon" readonly>
+                           <el-input v-model="form.icon" :placeholder="$t('menu.iconPlaceholder')" @blur="showSelectIcon" readonly>
                               <template #prefix>
                                  <svg-icon
                                     v-if="form.icon"
@@ -182,8 +182,8 @@
                         </span>
                      </template>
                      <el-radio-group v-model="form.isFrame">
-                        <el-radio value="0">是</el-radio>
-                        <el-radio value="1">否</el-radio>
+                        <el-radio value="0">{{ $t('common.yes') }}</el-radio>
+                        <el-radio value="1">{{ $t('common.no') }}</el-radio>
                      </el-radio-group>
                   </el-form-item>
                </el-col>
@@ -297,8 +297,8 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>

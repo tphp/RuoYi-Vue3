@@ -11,8 +11,8 @@
       </el-form-item>
       <el-form-item :label="$t('user.sex')">
          <el-radio-group v-model="form.sex">
-            <el-radio value="0">男</el-radio>
-            <el-radio value="1">女</el-radio>
+            <el-radio value="0">{{ $t('user.male') }}</el-radio>
+            <el-radio value="1">{{ $t('user.female') }}</el-radio>
          </el-radio-group>
       </el-form-item>
       <el-form-item>

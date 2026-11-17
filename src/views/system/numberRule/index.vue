@@ -286,8 +286,8 @@
               <el-col :span="12">
                 <el-form-item label="是否补零" label-width="100px">
                   <el-radio-group v-model="form.items[activeItemIndex].isPadZero">
-                    <el-radio value="1">是</el-radio>
-                    <el-radio value="0">否</el-radio>
+                    <el-radio value="1">{{ $t('common.yes') }}</el-radio>
+                    <el-radio value="0">{{ $t('common.no') }}</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
@@ -318,8 +318,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+          <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
         </div>
       </template>
     </el-dialog>

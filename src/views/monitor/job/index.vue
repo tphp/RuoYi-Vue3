@@ -149,7 +149,7 @@
                </el-col>
                <el-col :span="12">
                   <el-form-item label="任务分组" prop="jobGroup">
-                     <el-select v-model="form.jobGroup" placeholder="请选择">
+                     <el-select v-model="form.jobGroup" :placeholder="$t('common.select')">
                         <el-option
                            v-for="dict in sys_job_group"
                            :key="dict.value"
@@ -223,8 +223,8 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>

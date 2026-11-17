@@ -88,7 +88,7 @@
 
       <el-table v-loading="loading" :data="dataList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="字典编码" align="center" prop="dictCode" />
+         <el-table-column :label="$t('dict.dictCode')" align="center" prop="dictCode" />
          <el-table-column :label="$t('dict.dictLabel')" align="center" prop="dictLabel">
             <template #default="scope">
                <span v-if="(scope.row.listClass == '' || scope.row.listClass == 'default') && (scope.row.cssClass == '' || scope.row.cssClass == null)">{{ scope.row.dictLabel }}</span>
@@ -96,7 +96,7 @@
             </template>
          </el-table-column>
          <el-table-column :label="$t('dict.dictValue')" align="center" prop="dictValue" />
-         <el-table-column label="字典排序" align="center" prop="dictSort" />
+         <el-table-column :label="$t('dict.dictSort')" align="center" prop="dictSort" />
          <el-table-column :label="$t('common.status')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -136,13 +136,13 @@
             <el-form-item label="数据键值" prop="dictValue">
                <el-input v-model="form.dictValue" placeholder="请输入数据键值" />
             </el-form-item>
-            <el-form-item label="样式属性" prop="cssClass">
+            <el-form-item :label="$t('dict.cssClass')" prop="cssClass">
                <el-input v-model="form.cssClass" placeholder="请输入样式属性" />
             </el-form-item>
             <el-form-item label="显示排序" prop="dictSort">
                <el-input-number v-model="form.dictSort" controls-position="right" :min="0" />
             </el-form-item>
-            <el-form-item label="回显样式" prop="listClass">
+            <el-form-item :label="$t('dict.listClass')" prop="listClass">
                <el-select v-model="form.listClass">
                   <el-option
                      v-for="item in listClassOptions"
@@ -162,13 +162,13 @@
                </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('common.remark')" prop="remark">
-               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+               <el-input v-model="form.remark" type="textarea" :placeholder="$t('common.remarkPlaceholder')"></el-input>
             </el-form-item>
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>

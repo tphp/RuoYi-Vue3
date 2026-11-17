@@ -43,8 +43,8 @@
     </el-row>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="handleImportTable">确 定</el-button>
-        <el-button @click="visible = false">取 消</el-button>
+        <el-button type="primary" @click="handleImportTable">{{ $t('common.confirm') }}</el-button>
+        <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
   </el-dialog>

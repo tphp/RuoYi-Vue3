@@ -151,13 +151,13 @@
                </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('common.remark')" prop="remark">
-               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+               <el-input v-model="form.remark" type="textarea" :placeholder="$t('common.remarkPlaceholder')" />
             </el-form-item>
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>

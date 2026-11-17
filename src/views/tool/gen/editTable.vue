@@ -94,7 +94,7 @@
           </el-table-column>
           <el-table-column :label="$t('dict.dictType')" min-width="12%">
             <template #default="scope">
-              <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
+              <el-select v-model="scope.row.dictType" clearable filterable :placeholder="$t('common.select')">
                 <el-option
                   v-for="dict in dictOptions"
                   :key="dict.dictType"

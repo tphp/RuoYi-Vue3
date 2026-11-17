@@ -163,7 +163,7 @@
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.treeCode" placeholder="请选择">
+            <el-select v-model="info.treeCode" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in info.columns"
                 :key="index"
@@ -181,7 +181,7 @@
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.treeParentCode" placeholder="请选择">
+            <el-select v-model="info.treeParentCode" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in info.columns"
                 :key="index"
@@ -199,7 +199,7 @@
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.treeName" placeholder="请选择">
+            <el-select v-model="info.treeName" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in info.columns"
                 :key="index"
@@ -223,7 +223,7 @@
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.subTableName" placeholder="请选择" @change="subSelectChange">
+            <el-select v-model="info.subTableName" :placeholder="$t('common.select')" @change="subSelectChange">
               <el-option
                 v-for="(table, index) in tables"
                 :key="index"
@@ -241,7 +241,7 @@
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.subTableFkName" placeholder="请选择">
+            <el-select v-model="info.subTableFkName" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in subColumns"
                 :key="index"
