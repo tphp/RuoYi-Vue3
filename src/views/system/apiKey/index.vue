@@ -19,7 +19,7 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item :label="$t('common.status')" prop="status">
             <el-select v-model="queryParams.status" placeholder="状态" clearable style="width: 240px">
                <el-option
                   v-for="dict in sys_normal_disable"
@@ -30,8 +30,8 @@
             </el-select>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -43,7 +43,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:apiKey:add']"
-            >新增</el-button>
+            >{{ $t('common.add') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -53,7 +53,7 @@
                :disabled="single"
                @click="handleUpdate"
                v-hasPermi="['system:apiKey:edit']"
-            >修改</el-button>
+            >{{ $t('common.edit') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -63,7 +63,7 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['system:apiKey:remove']"
-            >删除</el-button>
+            >{{ $t('common.delete') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -72,7 +72,7 @@
                icon="Download"
                @click="handleExport"
                v-hasPermi="['system:apiKey:export']"
-            >导出</el-button>
+            >{{ $t('common.export') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
@@ -97,7 +97,7 @@
                <span v-else>-</span>
             </template>
          </el-table-column>
-         <el-table-column label="状态" align="center" prop="status" width="80">
+         <el-table-column :label="$t('common.status')" align="center" prop="status" width="80">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
@@ -107,16 +107,16 @@
                <span>{{ parseTime(scope.row.expireTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
-         <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+         <el-table-column :label="$t('common.remark')" align="center" prop="remark" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('common.createTime')" align="center" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('common.action')" align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:apiKey:edit']">修改</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:apiKey:remove']">删除</el-button>
+               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:apiKey:edit']">{{ $t('common.edit') }}</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:apiKey:remove']">{{ $t('common.delete') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -149,7 +149,7 @@
                   </template>
                </el-input>
             </el-form-item>
-            <el-form-item label="状态" prop="status">
+            <el-form-item :label="$t('common.status')" prop="status">
                <el-radio-group v-model="form.status">
                   <el-radio
                      v-for="dict in sys_normal_disable"
@@ -167,7 +167,7 @@
                   style="width: 100%"
                />
             </el-form-item>
-            <el-form-item label="备注" prop="remark">
+            <el-form-item :label="$t('common.remark')" prop="remark">
                <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
             </el-form-item>
          </el-form>
@@ -289,13 +289,13 @@ function submitForm() {
     if (valid) {
       if (form.value.id != undefined) {
         updateApiKey(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addApiKey(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -311,7 +311,7 @@ function handleDelete(row: SysApiKey) {
     return delApiKey(apiIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

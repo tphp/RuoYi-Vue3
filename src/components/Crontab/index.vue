@@ -117,8 +117,8 @@
 
             <div class="pop_btn">
                 <el-button type="primary" @click="submitFill">确定</el-button>
-                <el-button type="warning" @click="clearCron">重置</el-button>
-                <el-button @click="hidePopup">取消</el-button>
+                <el-button type="warning" @click="clearCron">{{ $t('common.reset') }}</el-button>
+                <el-button @click="hidePopup">{{ $t('common.cancel') }}</el-button>
             </div>
         </div>
     </div>

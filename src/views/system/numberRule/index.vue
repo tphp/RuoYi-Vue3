@@ -18,7 +18,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item :label="$t('common.status')" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in sys_normal_disable"
@@ -33,8 +33,8 @@
     <!-- 操作按钮 -->
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+        <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -43,7 +43,7 @@
           icon="Plus"
           @click="handleAdd"
           v-hasPermi="['system:numberRule:add']"
-        >新增</el-button>
+        >{{ $t('common.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -53,7 +53,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:numberRule:edit']"
-        >修改</el-button>
+        >{{ $t('common.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -63,7 +63,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:numberRule:remove']"
-        >删除</el-button>
+        >{{ $t('common.delete') }}</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -75,17 +75,17 @@
       <el-table-column label="规则名称" align="center" prop="ruleName" :show-overflow-tooltip="true" />
       <el-table-column label="规则编码" align="center" prop="ruleCode" :show-overflow-tooltip="true" />
       <el-table-column label="规则描述" align="center" prop="description" :show-overflow-tooltip="true" />
-      <el-table-column label="状态" align="center" prop="status" width="80">
+      <el-table-column :label="$t('common.status')" align="center" prop="status" width="80">
         <template #default="scope">
           <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('common.createTime')" align="center" prop="createTime" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column :label="$t('common.action')" align="center" width="240">
         <template #default="scope">
           <el-button
             type="primary"
@@ -93,7 +93,7 @@
             icon="Edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:numberRule:edit']"
-          >修改</el-button>
+          >{{ $t('common.edit') }}</el-button>
           <el-button
             type="primary"
             link
@@ -108,7 +108,7 @@
             icon="Close"
             @click="handleStatusChange(scope.row, '1')"
             v-hasPermi="['system:numberRule:edit']"
-          >停用</el-button>
+          >{{ $t('common.disable') }}</el-button>
           <el-button
             v-if="scope.row.status !== '0'"
             type="success"
@@ -116,14 +116,14 @@
             icon="Open"
             @click="handleStatusChange(scope.row, '0')"
             v-hasPermi="['system:numberRule:edit']"
-          >启用</el-button>
+          >{{ $t('common.enable') }}</el-button>
           <el-button
             type="danger"
             link
             icon="Delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:numberRule:remove']"
-          >删除</el-button>
+          >{{ $t('common.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -161,10 +161,10 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="状态" prop="status">
+            <el-form-item :label="$t('common.status')" prop="status">
               <el-radio-group v-model="form.status">
-                <el-radio value="0">启用</el-radio>
-                <el-radio value="1">停用</el-radio>
+                <el-radio value="0">{{ $t('common.enable') }}</el-radio>
+                <el-radio value="1">{{ $t('common.disable') }}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -222,7 +222,7 @@
                 link
                 icon="Delete"
                 @click.stop="removeItem(index)"
-              >删除</el-button>
+              >{{ $t('common.delete') }}</el-button>
             </div>
           </div>
         </div>
@@ -272,7 +272,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="流水号长度" label-width="100px">
+                <el-form-item :label="$t('numberRule.serialLength')" label-width="100px">
                   <el-input-number
                     v-model="form.items[activeItemIndex].serialLength"
                     :min="1"
@@ -312,7 +312,7 @@
           <span class="preview-value">{{ previewNumber }}</span>
         </div>
 
-        <el-form-item label="备注" prop="remark">
+        <el-form-item :label="$t('common.remark')" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
         </el-form-item>
       </el-form>

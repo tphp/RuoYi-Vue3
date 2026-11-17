@@ -1,23 +1,23 @@
 <template>
    <el-form ref="userRef" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="用户昵称" prop="nickName">
+      <el-form-item :label="$t('user.nickName')" prop="nickName">
          <el-input v-model="form.nickName" maxlength="30" />
       </el-form-item>
-      <el-form-item label="手机号码" prop="phonenumber">
+      <el-form-item :label="$t('user.phonenumber')" prop="phonenumber">
          <el-input v-model="form.phonenumber" maxlength="11" />
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
+      <el-form-item :label="$t('user.email')" prop="email">
          <el-input v-model="form.email" maxlength="50" />
       </el-form-item>
-      <el-form-item label="性别">
+      <el-form-item :label="$t('user.sex')">
          <el-radio-group v-model="form.sex">
             <el-radio value="0">男</el-radio>
             <el-radio value="1">女</el-radio>
          </el-radio-group>
       </el-form-item>
       <el-form-item>
-      <el-button type="primary" @click="submit">保存</el-button>
-      <el-button type="danger" @click="close">关闭</el-button>
+      <el-button type="primary" @click="submit">{{ $t('common.save') }}</el-button>
+      <el-button type="danger" @click="close">{{ $t('common.close') }}</el-button>
       </el-form-item>
    </el-form>
 </template>
@@ -46,7 +46,7 @@ function submit() {
   proxy.$refs.userRef.validate((valid: boolean) => {
     if (valid) {
       updateUserProfile(form.value).then(() => {
-        proxy.$modal.msgSuccess("修改成功")
+        proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
         if (props.user) {
           props.user.phonenumber = form.value.phonenumber
           props.user.email = form.value.email

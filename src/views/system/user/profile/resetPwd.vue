@@ -10,8 +10,8 @@
       <el-input v-model="user.confirmPassword" placeholder="请确认新密码" type="password" show-password />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submit">保存</el-button>
-      <el-button type="danger" @click="close">关闭</el-button>
+      <el-button type="primary" @click="submit">{{ $t('common.save') }}</el-button>
+      <el-button type="danger" @click="close">{{ $t('common.close') }}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -40,7 +40,7 @@ const user = reactive<UserProfilePwd>({
 
 const equalToPassword = (rule: any, value: string, callback: (error?: Error) => void): void => {
   if (user.newPassword !== value) {
-    callback(new Error("两次输入的密码不一致"))
+    callback(new Error(this.$t('profile.passwordNotMatch')))
   } else {
     callback()
   }
@@ -56,7 +56,7 @@ function submit() {
   proxy.$refs.pwdRef.validate((valid: boolean) => {
     if (valid) {
       updateUserPwd(user.oldPassword!, user.newPassword!).then(() => {
-        proxy.$modal.msgSuccess("修改成功")
+        proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
       })
     }
   })

@@ -24,7 +24,7 @@
                   >
                     清空最近联系人
                   </el-button>
-                  <el-input v-model="recentlyUserName" style="width: 200px;" placeholder="请输入用户名" clearable>
+                  <el-input v-model="recentlyUserName" style="width: 200px;" :placeholder="$t('logininfor.userNamePlaceholder')" clearable>
                   </el-input>
                 </div>
                 <user-table
@@ -50,9 +50,9 @@
               :style="{height: collapsed ? '0px' : boxHeight + 'px'}"
             >
               <tree-panel
-                title="组织架构"
+                :title="$t('dept.organization')"
                 :tree-data="deptOptions"
-                search-placeholder="请输入部门名称"
+                search-:placeholder="$t('dept.deptNamePlaceholder')"
                 storage-key="dept-sidebar-width"
                 :defaultExpandAll="true"
                 @node-click="handleNodeClick"
@@ -62,7 +62,7 @@
               />
               <div class="tree-sidebar-content">
                 <div class="tree-header">
-                  <el-input v-model="userName" style="width: 200px;" placeholder="请输入用户名" clearable @keyup.enter="searchList">
+                  <el-input v-model="userName" style="width: 200px;" :placeholder="$t('logininfor.userNamePlaceholder')" clearable @keyup.enter="searchList">
                     <template #append>
                       <el-button @click="searchList" :icon="Search" />
                     </template>
@@ -106,7 +106,7 @@
     </div>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="clearUserCheck" style="float: left;">清空</el-button>
+        <el-button @click="clearUserCheck" style="float: left;">{{ $t('common.clear') }}</el-button>
         <el-button type="primary" @click="confirmClick()" v-if="!(emitQuick && !emitMultiple)">
           确定
           <span
@@ -116,7 +116,7 @@
             ( {{ Object.keys(userCheck).length }} )
           </span>
         </el-button>
-        <el-button @click="dialogUserShow = false">取消</el-button>
+        <el-button @click="dialogUserShow = false">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
   </el-dialog>

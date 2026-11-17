@@ -8,7 +8,7 @@
           type="text" 
           size="large" 
           auto-complete="off" 
-          placeholder="账号"
+          :placeholder="$t('login.accountPlaceholder')"
         >
           <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
         </el-input>
@@ -19,7 +19,7 @@
           type="password"
           size="large" 
           auto-complete="off"
-          placeholder="密码"
+          :placeholder="$t('login.passwordPlaceholder')"
           @keyup.enter="handleRegister"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -31,7 +31,7 @@
           type="password"
           size="large" 
           auto-complete="off"
-          placeholder="确认密码"
+          :placeholder="$t('profile.confirmPasswordPlaceholder')"
           @keyup.enter="handleRegister"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -42,7 +42,7 @@
           size="large" 
           v-model="registerForm.code"
           auto-complete="off"
-          placeholder="验证码"
+          :placeholder="$t('login.codePlaceholder')"
           style="width: 63%"
           @keyup.enter="handleRegister"
         >
@@ -60,11 +60,11 @@
           style="width:100%;"
           @click.prevent="handleRegister"
         >
-          <span v-if="!loading">注 册</span>
-          <span v-else>注 册 中...</span>
+          <span v-if="!loading">{{ $t('login.registerBtn') }}/span>
+          <span v-else>{{ $t('login.registering') }}/span>
         </el-button>
         <div style="float: right;">
-          <router-link class="link-type" :to="'/login'">使用已有账户登录</router-link>
+          <router-link class="link-type" :to="'/login'">{{ $t('login.alreadyHaveAccount') }}/router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -80,8 +80,10 @@ import { ElMessageBox } from "element-plus"
 import { getCodeImg, register } from "@/api/login"
 import defaultSettings from '@/settings'
 import { usePasswordRule } from "@/utils/passwordRule"
+import { useI18n } from 'vue-i18n'
 import type { RegisterForm } from '@/types/api/login'
 
+const { t } = useI18n()
 const title = import.meta.env.VITE_APP_TITLE
 const footerContent = defaultSettings.footerContent
 const router = useRouter()
@@ -98,7 +100,7 @@ const registerForm = ref<RegisterForm>({
 
 const equalToPassword = (rule: any, value: string, callback: (error?: Error) => void): void => {
   if (registerForm.value.password !== value) {
-    callback(new Error("两次输入的密码不一致"))
+    callback(new Error(t('profile.passwordNotMatch')))
   } else {
     callback()
   }
@@ -106,14 +108,14 @@ const equalToPassword = (rule: any, value: string, callback: (error?: Error) => 
 
 const registerRules = {
   username: [
-    { required: true, trigger: "blur", message: "请输入您的账号" },
-    { min: 2, max: 20, message: "用户账号长度必须介于 2 和 20 之间", trigger: "blur" }
+    { required: true, trigger: "blur", message: t('login.accountRequired') },
+    { min: 2, max: 20, message: t('login.usernameLength'), trigger: "blur" }
   ],
   confirmPassword: [
-    { required: true, trigger: "blur", message: "请再次输入您的密码" },
+    { required: true, trigger: "blur", message: t('profile.confirmPasswordPlaceholder') },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  code: [{ required: true, trigger: "change", message: t('login.captchaRequired') }]
 }
 
 const codeUrl = ref<string>("")
@@ -126,7 +128,7 @@ function handleRegister(): void {
       loading.value = true
       register(registerForm.value).then(() => {
         const username = registerForm.value.username
-        ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", "系统提示", {
+        ElMessageBox.alert("<font color='red'>" + t('login.registerSuccess', { username }) + "</font>", t('common.tip'), {
           dangerouslyUseHTMLString: true,
           type: "success",
         }).then(() => {

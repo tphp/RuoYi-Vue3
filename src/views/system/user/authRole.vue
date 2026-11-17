@@ -4,7 +4,7 @@
       <el-form :model="form" label-width="80px">
          <el-row>
             <el-col :span="8" :offset="2">
-               <el-form-item label="用户昵称" prop="nickName">
+               <el-form-item :label="$t('user.nickName')" prop="nickName">
                   <el-input v-model="form.nickName" disabled />
                </el-form-item>
             </el-col>
@@ -24,10 +24,10 @@
             </template>
          </el-table-column>
          <el-table-column type="selection" :reserve-selection="true" :selectable="checkSelectable" width="55"></el-table-column>
-         <el-table-column label="角色编号" align="center" prop="roleId" />
-         <el-table-column label="角色名称" align="center" prop="roleName" />
-         <el-table-column label="权限字符" align="center" prop="roleKey" />
-         <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+         <el-table-column :label="$t('role.roleId')" align="center" prop="roleId" />
+         <el-table-column :label="$t('role.roleName')" align="center" prop="roleName" />
+         <el-table-column :label="$t('role.roleKey')" align="center" prop="roleKey" />
+         <el-table-column :label="$t('common.createTime')" align="center" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -38,7 +38,7 @@
 
       <el-form label-width="100px">
          <div style="text-align: center;margin-left:-120px;margin-top:30px;">
-            <el-button type="primary" @click="submitForm()">提交</el-button>
+            <el-button type="primary" @click="submitForm()">{{ $t('common.submit') }}</el-button>
             <el-button @click="close()">返回</el-button>
          </div>
       </el-form>
@@ -103,7 +103,7 @@ function submitForm() {
   const userId = form.value.userId
   const rIds = roleIds.value.join(",")
   updateAuthRole({ userId: userId!, roleIds: rIds }).then(() => {
-    proxy.$modal.msgSuccess("授权成功")
+    proxy.$modal.msgSuccess(this.$t('role.authSuccess'))
     close()
   })
 }

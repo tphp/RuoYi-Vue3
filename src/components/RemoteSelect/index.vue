@@ -39,8 +39,8 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="Search" @click="handleFilter">搜索</el-button>
-          <el-button icon="Refresh" @click="resetFilter">重置</el-button>
+          <el-button type="primary" icon="Search" @click="handleFilter">{{ $t('common.search') }}</el-button>
+          <el-button icon="Refresh" @click="resetFilter">{{ $t('common.reset') }}</el-button>
         </el-form-item>
       </el-form>
       <el-table

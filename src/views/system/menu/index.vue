@@ -1,16 +1,16 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="菜单名称" prop="menuName">
+         <el-form-item :label="$t('menu.menuName')" prop="menuName">
             <el-input
                v-model="queryParams.menuName"
-               placeholder="请输入菜单名称"
+               :placeholder="$t('menu.menuNamePlaceholder')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item :label="$t('common.status')" prop="status">
             <el-select v-model="queryParams.status" placeholder="菜单状态" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_normal_disable"
@@ -21,8 +21,8 @@
             </el-select>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -34,7 +34,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:menu:add']"
-            >新增</el-button>
+            >{{ $t('common.add') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -43,7 +43,7 @@
                icon="Check"
                @click="handleSaveSort"
                v-hasPermi="['system:menu:edit']"
-            >保存排序</el-button>
+            >{{ $t('common.saveSort') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button 
@@ -51,7 +51,7 @@
                plain
                icon="Sort"
                @click="toggleExpandAll"
-            >展开/折叠</el-button>
+            >{{ $t('common.expandAll') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
@@ -64,7 +64,7 @@
          :default-expand-all="isExpandAll"
          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
-         <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="220">
+         <el-table-column prop="menuName" :label="$t('menu.menuName')" :show-overflow-tooltip="true" width="220">
             <template #default="scope">
                <svg-icon :icon-class="scope.row.icon" />
                <span class="ml5">{{ scope.row.menuName }}</span>
@@ -84,18 +84,18 @@
                <el-input-number v-model="scope.row.orderNum" controls-position="right" :min="0" style="width: 88px" />
             </template>
          </el-table-column>
-         <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true" />
-         <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true" />
-         <el-table-column prop="status" label="状态" width="80">
+         <el-table-column prop="perms" :label="$t('menu.perms')" :show-overflow-tooltip="true" />
+         <el-table-column prop="component" :label="$t('menu.component')" :show-overflow-tooltip="true" />
+         <el-table-column prop="status" :label="$t('common.status')" width="80">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="210" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('common.action')" align="center" width="210" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:menu:edit']">修改</el-button>
-               <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:menu:add']">新增</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:menu:remove']">删除</el-button>
+               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:menu:edit']">{{ $t('common.edit') }}</el-button>
+               <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:menu:add']">{{ $t('common.add') }}</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:menu:remove']">{{ $t('common.delete') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -105,7 +105,7 @@
          <el-form ref="menuRef" :model="form" :rules="rules" label-width="100px">
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="上级菜单">
+                  <el-form-item :label="$t('menu.parentName')">
                      <el-tree-select
                         v-model="form.parentId"
                         :data="menuOptions"
@@ -117,7 +117,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="24">
-                  <el-form-item label="菜单类型" prop="menuType">
+                  <el-form-item :label="$t('menu.menuType')" prop="menuType">
                      <el-radio-group v-model="form.menuType">
                         <el-radio value="M">目录</el-radio>
                         <el-radio value="C">菜单</el-radio>
@@ -126,7 +126,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="12" v-if="form.menuType != 'F'">
-                  <el-form-item label="菜单图标" prop="icon">
+                  <el-form-item :label="$t('menu.icon')" prop="icon">
                      <el-popover
                         placement="bottom-start"
                         :width="540"
@@ -155,8 +155,8 @@
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="菜单名称" prop="menuName">
-                     <el-input v-model="form.menuName" placeholder="请输入菜单名称" />
+                  <el-form-item :label="$t('menu.menuName')" prop="menuName">
+                     <el-input v-model="form.menuName" :placeholder="$t('menu.menuNamePlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12" v-if="form.menuType == 'C'">
@@ -197,7 +197,7 @@
                            路由地址
                         </span>
                      </template>
-                     <el-input v-model="form.path" placeholder="请输入路由地址" />
+                     <el-input v-model="form.path" :placeholder="$t('menu.pathPlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12" v-if="form.menuType == 'C'">
@@ -210,7 +210,7 @@
                            组件路径
                         </span>
                      </template>
-                     <el-input v-model="form.component" placeholder="请输入组件路径" />
+                     <el-input v-model="form.component" :placeholder="$t('menu.componentPlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12" v-if="form.menuType != 'M'">
@@ -443,13 +443,13 @@ function submitForm() {
     if (valid) {
       if (form.value.menuId != undefined) {
         updateMenu(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addMenu(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -485,11 +485,11 @@ function handleSaveSort() {
   }
   collectChanged(menuList.value)
   if (changedMenuIds.length === 0) {
-   proxy.$modal.msgWarning("未检测到排序修改")
+   proxy.$modal.msgWarning(this.$t('common.sortNoChange'))
     return
   }
   updateMenuSort({ menuIds: changedMenuIds.join(","), orderNums: changedOrderNums.join(",") }).then(() => {
-   proxy.$modal.msgSuccess("排序保存成功")
+   proxy.$modal.msgSuccess(this.$t('common.sortSuccess'))
     recordOriginalOrders(menuList.value)
   })
 }
@@ -500,7 +500,7 @@ function handleDelete(row: SysMenu) {
     return delMenu(row.menuId!)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

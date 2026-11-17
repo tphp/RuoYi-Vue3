@@ -14,27 +14,27 @@
         </el-select>
       </el-form-item>
       <el-form-item label="订单日期">
-        <el-date-picker v-model="dateRange" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" />
+        <el-date-picker v-model="dateRange" value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-:placeholder="$t('common.startDate')" end-:placeholder="$t('common.endDate')" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+        <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
     <!-- 操作按钮 -->
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['sale:order:add']">新增</el-button>
+        <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['sale:order:add']">{{ $t('common.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate" v-hasPermi="['sale:order:edit']">修改</el-button>
+        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate" v-hasPermi="['sale:order:edit']">{{ $t('common.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete" v-hasPermi="['sale:order:remove']">删除</el-button>
+        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete" v-hasPermi="['sale:order:remove']">{{ $t('common.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['sale:order:export']">导出</el-button>
+        <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['sale:order:export']">{{ $t('common.export') }}</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -51,16 +51,16 @@
         </template>
       </el-table-column>
       <el-table-column label="总金额" align="center" prop="totalAmount" width="120" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160">
+      <el-table-column :label="$t('common.createTime')" align="center" prop="createTime" width="160">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('common.action')" width="200" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="View" @click="handleDetail(scope.row)" v-hasPermi="['sale:order:query']">详情</el-button>
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['sale:order:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['sale:order:remove']">删除</el-button>
+          <el-button link type="primary" icon="View" @click="handleDetail(scope.row)" v-hasPermi="['sale:order:query']">{{ $t('common.detail') }}</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['sale:order:edit']">{{ $t('common.edit') }}</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['sale:order:remove']">{{ $t('common.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -101,7 +101,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
+            <el-form-item :label="$t('common.remark')" prop="remark">
               <el-input v-model="form.remark" placeholder="请输入备注" />
             </el-form-item>
           </el-col>
@@ -174,7 +174,7 @@
         </el-descriptions-item>
         <el-descriptions-item label="总金额">{{ detailData.totalAmount?.toFixed(2) }}</el-descriptions-item>
         <el-descriptions-item label="收货地址" :span="2">{{ detailData.deliveryAddress }}</el-descriptions-item>
-        <el-descriptions-item label="备注" :span="3">{{ detailData.remark }}</el-descriptions-item>
+        <el-descriptions-item :label="$t('common.remark')" :span="3">{{ detailData.remark }}</el-descriptions-item>
       </el-descriptions>
       <el-divider content-position="left">订单明细</el-divider>
       <el-table :data="detailData.orderDetailList" border>
@@ -354,13 +354,13 @@ function submitForm() {
     if (valid) {
       if (form.value.orderId != undefined) {
         updateOrder(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addOrder(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -377,7 +377,7 @@ function handleDelete(row?: any) {
     return delOrder(orderIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

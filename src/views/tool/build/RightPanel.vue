@@ -79,7 +79,7 @@
             <el-input-number :value="activeData.max" :min="0" placeholder="最多可选"
               @input="$set(activeData, 'max', $event ? $event : undefined)" />
           </el-form-item>
-          <el-form-item v-if="activeData.prepend !== undefined" label="前缀">
+          <el-form-item v-if="activeData.prepend !== undefined" :label="$t('numberRule.prefix')">
             <el-input v-model="activeData.prepend" placeholder="请输入前缀" />
           </el-form-item>
           <el-form-item v-if="activeData.append !== undefined" label="后缀">

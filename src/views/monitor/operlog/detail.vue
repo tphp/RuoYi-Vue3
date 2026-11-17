@@ -19,7 +19,7 @@
           <el-col :span="12">
             <div class="detail-item">
               <span class="detail-label">执行状态</span>
-              <el-tag v-if="form.status === 0" type="success" size="small">正常</el-tag>
+              <el-tag v-if="form.status === 0" type="success" size="small">{{ $t('user.normal') }}/el-tag>
               <el-tag v-else type="danger" size="small">异常</el-tag>
             </div>
           </el-col>
@@ -79,7 +79,7 @@
         <div class="code-body">
           <div class="code-wrap">
             <div class="code-action">
-              <el-button size="small" :icon="CopyDocument" @click="copyText(form.operParam)">复制</el-button>
+              <el-button size="small" :icon="CopyDocument" @click="copyText(form.operParam)">{{ $t('common.copy') }}</el-button>
             </div>
             <pre class="code-pre">{{ formatJson(form.operParam) }}</pre>
           </div>
@@ -92,7 +92,7 @@
         <div class="code-body">
           <div class="code-wrap">
             <div class="code-action">
-              <el-button size="small" :icon="CopyDocument" @click="copyText(form.jsonResult)">复制</el-button>
+              <el-button size="small" :icon="CopyDocument" @click="copyText(form.jsonResult)">{{ $t('common.copy') }}</el-button>
             </div>
             <pre class="code-pre">{{ formatJson(form.jsonResult) }}</pre>
           </div>

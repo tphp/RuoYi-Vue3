@@ -1,17 +1,17 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="任务名称" prop="jobName">
+         <el-form-item :label="$t('job.jobName')" prop="jobName">
             <el-input
                v-model="queryParams.jobName"
-               placeholder="请输入任务名称"
+               :placeholder="$t('job.jobNamePlaceholder')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="任务组名" prop="jobGroup">
-            <el-select v-model="queryParams.jobGroup" placeholder="请选择任务组名" clearable style="width: 200px">
+         <el-form-item :label="$t('job.jobGroup')" prop="jobGroup">
+            <el-select v-model="queryParams.jobGroup" :placeholder="$t('job.jobGroupPlaceholder')" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_job_group"
                   :key="dict.value"
@@ -31,8 +31,8 @@
             </el-select>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -44,7 +44,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['monitor:job:add']"
-            >新增</el-button>
+            >{{ $t('common.add') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -54,7 +54,7 @@
                :disabled="single"
                @click="handleUpdate"
                v-hasPermi="['monitor:job:edit']"
-            >修改</el-button>
+            >{{ $t('common.edit') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -64,7 +64,7 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['monitor:job:remove']"
-            >删除</el-button>
+            >{{ $t('common.delete') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -73,7 +73,7 @@
                icon="Download"
                @click="handleExport"
                v-hasPermi="['monitor:job:export']"
-            >导出</el-button>
+            >{{ $t('common.export') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -82,27 +82,27 @@
                icon="Operation"
                @click="handleJobLog"
                v-hasPermi="['monitor:job:query']"
-            >日志</el-button>
+            >{{ $t('job.log') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table v-loading="loading" :data="jobList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="任务编号" width="100" align="center" prop="jobId" />
-         <el-table-column label="任务名称" align="center" :show-overflow-tooltip="true">
+         <el-table-column :label="$t('job.jobId')" width="100" align="center" prop="jobId" />
+         <el-table-column :label="$t('job.jobName')" align="center" :show-overflow-tooltip="true">
             <template #default="scope">
                <a class="link-type" style="cursor:pointer" @click="handleView(scope.row)">{{ scope.row.jobName }}</a>
             </template>
          </el-table-column>
-         <el-table-column label="任务组名" align="center" prop="jobGroup">
+         <el-table-column :label="$t('job.jobGroup')" align="center" prop="jobGroup">
             <template #default="scope">
                <dict-tag :options="sys_job_group" :value="scope.row.jobGroup" />
             </template>
          </el-table-column>
-         <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('job.invokeTarget')" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
          <el-table-column label="cron执行表达式" align="center" prop="cronExpression" :show-overflow-tooltip="true" />
-         <el-table-column label="状态" align="center">
+         <el-table-column :label="$t('common.status')" align="center">
             <template #default="scope">
                <el-switch
                   v-model="scope.row.status"
@@ -112,12 +112,12 @@
                ></el-switch>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('common.action')" align="center" width="200" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-tooltip content="修改" placement="top">
+               <el-tooltip :content="$t('common.edit')" placement="top">
                   <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['monitor:job:edit']"></el-button>
                </el-tooltip>
-               <el-tooltip content="删除" placement="top">
+               <el-tooltip :content="$t('common.delete')" placement="top">
                   <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['monitor:job:remove']"></el-button>
                </el-tooltip>
                <el-tooltip content="执行一次" placement="top">
@@ -143,8 +143,8 @@
          <el-form ref="jobRef" :model="form" :rules="rules" label-width="120px">
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="任务名称" prop="jobName">
-                     <el-input v-model="form.jobName" placeholder="请输入任务名称" />
+                  <el-form-item :label="$t('job.jobName')" prop="jobName">
+                     <el-input v-model="form.jobName" :placeholder="$t('job.jobNamePlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -176,11 +176,11 @@
                            </el-tooltip>
                         </span>
                      </template>
-                     <el-input v-model="form.invokeTarget" placeholder="请输入调用目标字符串" />
+                     <el-input v-model="form.invokeTarget" :placeholder="$t('job.invokeTargetPlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="24">
-                  <el-form-item label="cron表达式" prop="cronExpression">
+                  <el-form-item :label="$t('job.cronExpression')" prop="cronExpression">
                      <el-input v-model="form.cronExpression" placeholder="请输入cron执行表达式">
                         <template #append>
                            <el-button type="primary" @click="handleShowCron">
@@ -192,7 +192,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="24" v-if="form.jobId !== undefined">
-                  <el-form-item label="状态">
+                  <el-form-item :label="$t('common.status')">
                      <el-radio-group v-model="form.status">
                         <el-radio
                            v-for="dict in sys_job_status"
@@ -399,13 +399,13 @@ function submitForm() {
     if (valid) {
       if (form.value.jobId != undefined) {
         updateJob(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addJob(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -421,7 +421,7 @@ function handleDelete(row?: SysJob) {
     return delJob(jobIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

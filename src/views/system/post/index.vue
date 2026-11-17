@@ -1,26 +1,26 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="岗位编码" prop="postCode">
+         <el-form-item :label="$t('post.postCode')" prop="postCode">
             <el-input
                v-model="queryParams.postCode"
-               placeholder="请输入岗位编码"
+               :placeholder="$t('post.postCodePlaceholder')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="岗位名称" prop="postName">
+         <el-form-item :label="$t('post.postName')" prop="postName">
             <el-input
                v-model="queryParams.postName"
-               placeholder="请输入岗位名称"
+               :placeholder="$t('post.postNamePlaceholder')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="状态" prop="status">
-            <el-select v-model="queryParams.status" placeholder="岗位状态" clearable style="width: 200px">
+         <el-form-item :label="$t('common.status')" prop="status">
+            <el-select v-model="queryParams.status" :placeholder="$t('post.statusPlaceholder')" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -30,8 +30,8 @@
             </el-select>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -43,7 +43,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:post:add']"
-            >新增</el-button>
+            >{{ $t('common.add') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -53,7 +53,7 @@
                :disabled="single"
                @click="handleUpdate"
                v-hasPermi="['system:post:edit']"
-            >修改</el-button>
+            >{{ $t('common.edit') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -63,7 +63,7 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['system:post:remove']"
-            >删除</el-button>
+            >{{ $t('common.delete') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -72,31 +72,31 @@
                icon="Download"
                @click="handleExport"
                v-hasPermi="['system:post:export']"
-            >导出</el-button>
+            >{{ $t('common.export') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="岗位编号" align="center" prop="postId" />
-         <el-table-column label="岗位编码" align="center" prop="postCode" />
-         <el-table-column label="岗位名称" align="center" prop="postName" />
+         <el-table-column :label="$t('post.postId')" align="center" prop="postId" />
+         <el-table-column :label="$t('post.postCode')" align="center" prop="postCode" />
+         <el-table-column :label="$t('post.postName')" align="center" prop="postName" />
          <el-table-column label="岗位排序" align="center" prop="postSort" />
-         <el-table-column label="状态" align="center" prop="status">
+         <el-table-column :label="$t('common.status')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+         <el-table-column :label="$t('common.createTime')" align="center" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" width="180" align="center" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('common.action')" width="180" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:post:edit']">修改</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:post:remove']">删除</el-button>
+               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:post:edit']">{{ $t('common.edit') }}</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:post:remove']">{{ $t('common.delete') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -112,10 +112,10 @@
       <!-- 添加或修改岗位对话框 -->
       <el-dialog :title="title" v-model="open" width="500px" append-to-body>
          <el-form ref="postRef" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="岗位名称" prop="postName">
-               <el-input v-model="form.postName" placeholder="请输入岗位名称" />
+            <el-form-item :label="$t('post.postName')" prop="postName">
+               <el-input v-model="form.postName" :placeholder="$t('post.postNamePlaceholder')" />
             </el-form-item>
-            <el-form-item label="岗位编码" prop="postCode">
+            <el-form-item :label="$t('post.postCode')" prop="postCode">
                <el-input v-model="form.postCode" placeholder="请输入编码名称" />
             </el-form-item>
             <el-form-item label="岗位顺序" prop="postSort">
@@ -130,7 +130,7 @@
                   >{{ dict.label }}</el-radio>
                </el-radio-group>
             </el-form-item>
-            <el-form-item label="备注" prop="remark">
+            <el-form-item :label="$t('common.remark')" prop="remark">
                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
             </el-form-item>
          </el-form>
@@ -251,13 +251,13 @@ function submitForm() {
     if (valid) {
       if (form.value.postId != undefined) {
         updatePost(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(this.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addPost(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(this.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -273,7 +273,7 @@ function handleDelete(row?: SysPost) {
     return delPost(postIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(this.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

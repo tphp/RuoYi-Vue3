@@ -14,8 +14,8 @@
             <el-col :span="12">
               <div class="detail-item">
                 <span class="detail-label">执行状态</span>
-                <el-tag v-if="logForm.status == 0" type="success" size="small">正常</el-tag>
-                <el-tag v-else type="danger" size="small">失败</el-tag>
+                <el-tag v-if="logForm.status == 0" type="success" size="small">{{ $t('user.normal') }}/el-tag>
+                <el-tag v-else type="danger" size="small">{{ $t('common.error') }}/el-tag>
               </div>
             </el-col>
           </el-row>
@@ -100,7 +100,7 @@
             <el-col :span="12">
               <div class="detail-item">
                 <span class="detail-label">执行状态</span>
-                <el-tag v-if="jobForm.status == 0" type="success" size="small">正常</el-tag>
+                <el-tag v-if="jobForm.status == 0" type="success" size="small">{{ $t('user.normal') }}/el-tag>
                 <el-tag v-else type="info" size="small">暂停</el-tag>
               </div>
             </el-col>

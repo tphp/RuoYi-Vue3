@@ -92,7 +92,7 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="字典类型" min-width="12%">
+          <el-table-column :label="$t('dict.dictType')" min-width="12%">
             <template #default="scope">
               <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
                 <el-option
@@ -114,7 +114,7 @@
     </el-tabs>
     <el-form label-width="100px">
       <div style="text-align: center;margin-left:-100px;margin-top:10px;">
-        <el-button type="primary" @click="submitForm()">提交</el-button>
+        <el-button type="primary" @click="submitForm()">{{ $t('common.submit') }}</el-button>
         <el-button @click="close()">返回</el-button>
       </div>
     </el-form>

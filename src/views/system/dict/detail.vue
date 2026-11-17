@@ -34,13 +34,13 @@
           <el-col :span="disabledCount > 0 ? 8 : 12">
             <div class="stat-card">
               <div class="stat-num success">{{ normalCount }}</div>
-              <div class="stat-label">正常</div>
+              <div class="stat-label">{{ $t('user.normal') }}/div>
             </div>
           </el-col>
           <el-col v-if="disabledCount > 0" :span="8">
             <div class="stat-card">
               <div class="stat-num danger">{{ disabledCount }}</div>
-              <div class="stat-label">停用</div>
+              <div class="stat-label">{{ $t('common.disable') }}</div>
             </div>
           </el-col>
         </el-row>
