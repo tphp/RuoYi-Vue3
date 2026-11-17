@@ -6,7 +6,16 @@ import ElementPlus from 'element-plus'
 import { ElDialog } from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
-import locale from 'element-plus/es/locale/lang/zh-cn'
+
+// i18n 国际化
+import i18n from '@/locales'
+
+// 根据 Cookie 获取当前语言
+const currentLocale = Cookies.get('locale') || 'zh-cn'
+// 动态加载 Element Plus 语言包
+const elementLocale = currentLocale === 'en' 
+  ? await import('element-plus/es/locale/lang/en').then(m => m.default) 
+  : (await import('element-plus/es/locale/lang/zh-cn')).default
 
 import '@/assets/styles/index.scss' // global css
 
@@ -72,6 +81,7 @@ app.component('Editor', Editor)
 
 app.use(router)
 app.use(store)
+app.use(i18n)
 app.use(plugins)
 app.use(elementIcons)
 app.component('svg-icon', SvgIcon)
@@ -81,7 +91,7 @@ directive(app)
 // 使用element-plus 并且设置全局的大小
 // @ts-ignore
 app.use(ElementPlus, {
-  locale: locale,
+  locale: elementLocale,
   // 支持 large、default、small
   size: Cookies.get('size') || 'small'
 })
