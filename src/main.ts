@@ -31,6 +31,7 @@ import './permission' // permission control
 import { useDict } from '@/utils/dict'
 import { getConfigKey } from "@/api/system/config"
 import { parseTime, resetForm, addDateRange, handleTree, selectDictLabel, selectDictLabels } from '@/utils/ruoyi'
+import { setupLocaleForm } from '@/utils/localeForm'
 
 // 分页组件
 import Pagination from '@/components/Pagination/index.vue'
@@ -80,6 +81,9 @@ app.use(elementIcons)
 app.component('svg-icon', SvgIcon)
 
 directive(app)
+
+// 语言切换后刷新表单校验提示
+setupLocaleForm(app)
 
 // 使用element-plus 并且设置全局的大小
 // locale 传入响应式对象，Element Plus 内置文案（分页、日期选择器等）可随语言实时切换
