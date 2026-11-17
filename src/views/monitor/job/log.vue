@@ -25,10 +25,10 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="执行状态" prop="status">
+         <el-form-item :label="$t('job.execStatus')" prop="status">
             <el-select
                v-model="queryParams.status"
-               placeholder="请选择执行状态"
+               :placeholder="$t('job.execStatusPlaceholder')"
                clearable
                style="width: 240px"
             >
@@ -40,7 +40,7 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="执行时间" style="width: 308px">
+         <el-form-item :label="$t('job.operTime')" style="width: 308px">
             <el-date-picker
                v-model="dateRange"
                value-format="YYYY-MM-DD"
@@ -106,20 +106,20 @@
             </template>
          </el-table-column>
          <el-table-column :label="$t('job.invokeTarget')" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
-         <el-table-column label="日志信息" align="center" prop="jobMessage" :show-overflow-tooltip="true" />
-         <el-table-column label="执行状态" align="center" prop="status">
+         <el-table-column :label="$t('job.jobMessage')" align="center" prop="jobMessage" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('job.execStatus')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="执行时间" align="center" prop="createTime" width="180">
+         <el-table-column :label="$t('job.operTime')" align="center" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
          <el-table-column :label="$t('common.action')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:job:query']">详细</el-button>
+               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:job:query']">{{ $t('common.detail') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -213,7 +213,7 @@ function handleView(row: SysJobLog) {
 
 /** 删除按钮操作 */
 function handleDelete() {
-  proxy.$modal.confirm('是否确认删除调度日志编号为"' + ids.value + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('job.deleteLogConfirm', { ids: ids.value })).then(function () {
     return delJobLog(ids.value)
   }).then(() => {
     getList()
@@ -223,11 +223,11 @@ function handleDelete() {
 
 /** 清空按钮操作 */
 function handleClean() {
-  proxy.$modal.confirm("是否确认清空所有调度日志数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t('job.clearLogConfirm')).then(function () {
     return cleanJobLog()
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("清空成功")
+    proxy.$modal.msgSuccess(proxy.$t('common.clearSuccess'))
   }).catch(() => {})
 }
 

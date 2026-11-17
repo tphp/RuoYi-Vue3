@@ -148,10 +148,10 @@
             <el-form-item prop="roleKey">
                <template #label>
                   <span>
-                     <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
+                     <el-tooltip :content="$t('role.roleKeyTip')" placement="top">
                         <el-icon><question-filled /></el-icon>
                      </el-tooltip>
-                     权限字符
+                     {{ $t('role.roleKey') }}
                   </span>
                </template>
                <el-input v-model="form.roleKey" :placeholder="$t('role.roleKeyPlaceholder')" />
@@ -168,10 +168,10 @@
                   >{{ dict.label }}</el-radio>
                </el-radio-group>
             </el-form-item>
-            <el-form-item label="菜单权限">
+            <el-form-item :label="$t('role.menuPermission')">
                <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">{{ $t('common.expandAll') }}</el-checkbox>
-               <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, 'menu')">全选/全不选</el-checkbox>
-               <el-checkbox v-model="form.menuCheckStrictly" @change="handleCheckedTreeConnect($event, 'menu')">父子联动</el-checkbox>
+               <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, 'menu')">{{ $t('common.selectAllNone') }}</el-checkbox>
+               <el-checkbox v-model="form.menuCheckStrictly" @change="handleCheckedTreeConnect($event, 'menu')">{{ $t('common.parentChildLink') }}</el-checkbox>
                <el-tree
                   class="tree-border"
                   :data="menuOptions"
@@ -179,7 +179,7 @@
                   ref="menuRef"
                   node-key="id"
                   :check-strictly="!form.menuCheckStrictly"
-                  empty-text="加载中，请稍候"
+                  :empty-text="$t('common.loadingPleaseWait')"
                   :props="{ label: 'label', children: 'children' }"
                ></el-tree>
             </el-form-item>
@@ -204,7 +204,7 @@
             <el-form-item :label="$t('role.roleKey')">
                <el-input v-model="form.roleKey" :disabled="true" />
             </el-form-item>
-            <el-form-item label="权限范围">
+            <el-form-item :label="$t('role.dataScope')">
                <el-select v-model="form.dataScope" @change="dataScopeSelectChange">
                   <el-option
                      v-for="item in dataScopeOptions"
@@ -214,10 +214,10 @@
                   ></el-option>
                </el-select>
             </el-form-item>
-            <el-form-item label="数据权限" v-show="form.dataScope == 2">
+            <el-form-item :label="$t('role.dataPermission')" v-show="form.dataScope == 2">
                <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">{{ $t('common.expandAll') }}</el-checkbox>
-               <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
-               <el-checkbox v-model="form.deptCheckStrictly" @change="handleCheckedTreeConnect($event, 'dept')">父子联动</el-checkbox>
+               <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">{{ $t('common.selectAllNone') }}</el-checkbox>
+               <el-checkbox v-model="form.deptCheckStrictly" @change="handleCheckedTreeConnect($event, 'dept')">{{ $t('common.parentChildLink') }}</el-checkbox>
                <el-tree
                   class="tree-border"
                   :data="deptOptions"
@@ -226,7 +226,7 @@
                   ref="deptRef"
                   node-key="id"
                   :check-strictly="!form.deptCheckStrictly"
-                  empty-text="加载中，请稍候"
+                  :empty-text="$t('common.loadingPleaseWait')"
                   :props="{ label: 'label', children: 'children' }"
                ></el-tree>
             </el-form-item>
@@ -274,12 +274,12 @@ const menuRef = ref<any | null>(null)
 const deptRef = ref<any | null>(null)
 
 /** 数据范围选项*/
-const dataScopeOptions = ref([
-  { value: "1", label: "全部数据权限" },
-  { value: "2", label: "自定数据权限" },
-  { value: "3", label: "本部门数据权限" },
-  { value: "4", label: "本部门及以下数据权限" },
-  { value: "5", label: "仅本人数据权限" }
+const dataScopeOptions = computed(() => [
+  { value: "1", label: proxy.$t('role.scopeAll') },
+  { value: "2", label: proxy.$t('role.scopeCustom') },
+  { value: "3", label: proxy.$t('role.scopeDept') },
+  { value: "4", label: proxy.$t('role.scopeDeptAndBelow') },
+  { value: "5", label: proxy.$t('role.scopeSelf') }
 ])
 
 const data = reactive({
@@ -292,9 +292,9 @@ const data = reactive({
     status: undefined
   } as RoleQueryParams,
   rules: {
-    roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
-    roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
-    roleSort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
+    roleName: [{ required: true, message: proxy.$t('role.nameRequired'), trigger: "blur" }],
+    roleKey: [{ required: true, message: proxy.$t('role.keyRequired'), trigger: "blur" }],
+    roleSort: [{ required: true, message: proxy.$t('role.sortRequired'), trigger: "blur" }]
   },
 })
 
@@ -326,7 +326,7 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row?: SysRole) {
   const roleIds = row?.roleId || ids.value
-  proxy.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('role.deleteConfirm', { ids: roleIds })).then(function () {
     return delRole(roleIds)
   }).then(() => {
     getList()
@@ -350,11 +350,11 @@ function handleSelectionChange(selection: SysRole[]) {
 
 /** 角色状态修改 */
 function handleStatusChange(row: SysRole) {
-  const text = row.status === "0" ? "启用" : "停用"
-  proxy.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?').then(function () {
+  const text = row.status === "0" ? proxy.$t('common.enable') : proxy.$t('common.disable')
+  proxy.$modal.confirm(proxy.$t('role.confirmChangeStatus', { status: text, name: row.roleName })).then(function () {
     return changeRoleStatus(row.roleId!, row.status!)
   }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功")
+    proxy.$modal.msgSuccess(proxy.$t('role.statusChangeSuccess', { status: text }))
   }).catch(function () {
     row.status = row.status === "0" ? "1" : "0"
   })
@@ -425,7 +425,7 @@ function handleAdd() {
   reset()
   getMenuTreeselect()
   open.value = true
-  title.value = "添加角色"
+  title.value = proxy.$t('role.addTitle')
 }
 
 /** 修改角色 */
@@ -448,7 +448,7 @@ function handleUpdate(row?: SysRole) {
       })
     })
   })
-  title.value = "修改角色"
+  title.value = proxy.$t('role.editTitle')
 }
 
 /** 根据角色ID查询菜单树结构 */
@@ -563,7 +563,7 @@ function handleDataScope(row: SysRole) {
       })
     })
   })
-  title.value = "分配数据权限"
+  title.value = proxy.$t('role.assignDataPermission')
 }
 
 /** 提交按钮（数据权限） */

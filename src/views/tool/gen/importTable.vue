@@ -1,6 +1,6 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="导入表" v-model="visible" width="800px" top="5vh" append-to-body>
+  <el-dialog :title="$t('gen.importTable')" v-model="visible" width="800px" top="5vh" append-to-body>
     <el-form :model="queryParams" ref="queryRef" :inline="true">
       <el-form-item :label="$t('gen.tableName')" prop="tableName">
         <el-input
@@ -109,7 +109,7 @@ function resetQuery() {
 function handleImportTable() {
   const tableNames = tables.value.join(",")
   if (tableNames == "") {
-    proxy.$modal.msgError("请选择要导入的表")
+    proxy.$modal.msgError(proxy.$t('gen.selectTableRequired'))
     return
   }
   importTable({ tables: tableNames, tplWebType: 'element-plus-typescript' }).then(res => {

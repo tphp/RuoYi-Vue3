@@ -20,7 +20,7 @@
             />
          </el-form-item>
          <el-form-item :label="$t('config.configType')" prop="configType">
-            <el-select v-model="queryParams.configType" placeholder="系统内置" clearable style="width: 240px">
+            <el-select v-model="queryParams.configType" :placeholder="$t('config.configTypePlaceholder')" clearable style="width: 240px">
                <el-option
                   v-for="dict in sys_yes_no"
                   :key="dict.value"
@@ -91,14 +91,14 @@
                icon="Refresh"
                @click="handleRefreshCache"
                v-hasPermi="['system:config:remove']"
-            >刷新缓存</el-button>
+            >{{ $t('config.refreshCache') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table v-loading="loading" :data="configList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="参数主键" align="center" prop="configId" />
+         <el-table-column :label="$t('config.configId')" align="center" prop="configId" />
          <el-table-column :label="$t('config.configName')" align="center" prop="configName" :show-overflow-tooltip="true" />
          <el-table-column :label="$t('config.configKey')" align="center" prop="configKey" :show-overflow-tooltip="true" />
          <el-table-column :label="$t('config.configValue')" align="center" prop="configValue" :show-overflow-tooltip="true" />
@@ -192,9 +192,9 @@ const data = reactive({
     configType: undefined
   } as ConfigQueryParams,
   rules: {
-    configName: [{ required: true, message: "参数名称不能为空", trigger: "blur" }],
-    configKey: [{ required: true, message: "参数键名不能为空", trigger: "blur" }],
-    configValue: [{ required: true, message: "参数键值不能为空", trigger: "blur" }]
+    configName: [{ required: true, message: proxy.$t('config.nameRequired'), trigger: "blur" }],
+    configKey: [{ required: true, message: proxy.$t('config.keyRequired'), trigger: "blur" }],
+    configValue: [{ required: true, message: proxy.$t('config.valueRequired'), trigger: "blur" }]
   }
 })
 
@@ -253,7 +253,7 @@ function handleSelectionChange(selection: SysConfig[]) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加参数"
+  title.value = proxy.$t('config.addTitle')
 }
 
 /** 修改按钮操作 */
@@ -263,7 +263,7 @@ function handleUpdate(row: SysConfig) {
   getConfig(configId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改参数"
+    title.value = proxy.$t('config.editTitle')
   })
 }
 
@@ -291,7 +291,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row: SysConfig) {
   const configIds = row.configId || ids.value
-  proxy.$modal.confirm('是否确认删除参数编号为"' + configIds + '"的数据项？').then(function () {
+  proxy.$modal.confirm(proxy.$t('config.deleteConfirm', { ids: configIds })).then(function () {
     return delConfig(configIds)
   }).then(() => {
     getList()
@@ -309,7 +309,7 @@ function handleExport() {
 /** 刷新缓存按钮操作 */
 function handleRefreshCache() {
   refreshCache().then(() => {
-    proxy.$modal.msgSuccess("刷新缓存成功")
+    proxy.$modal.msgSuccess(proxy.$t('config.refreshCacheSuccess'))
   })
 }
 

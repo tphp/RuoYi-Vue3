@@ -24,11 +24,12 @@ import Cookies from 'js-cookie'
 import { elementLocales } from '@/locales'
 
 const { locale } = useI18n()
+const { proxy } = getCurrentInstance()!
 
-const languageOptions = [
-  { value: 'zh-cn', label: '简体中文' },
-  { value: 'en', label: 'English' },
-]
+const languageOptions = computed(() => [
+  { value: 'zh-cn', label: proxy.$t('common.zhCn') },
+  { value: 'en', label: proxy.$t('common.en') },
+])
 
 function handleCommand(lang: string) {
   if (lang === locale.value) return

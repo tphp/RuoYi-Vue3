@@ -1,6 +1,6 @@
 <template>
    <div class="app-container">
-      <h4 class="form-header h4">基本信息</h4>
+      <h4 class="form-header h4">{{ $t('common.basicInfo') }}</h4>
       <el-form :model="form" label-width="80px">
          <el-row>
             <el-col :span="8" :offset="2">
@@ -9,16 +9,16 @@
                </el-form-item>
             </el-col>
             <el-col :span="8" :offset="2">
-               <el-form-item label="登录账号" prop="userName">
+               <el-form-item :label="$t('user.loginAccount')" prop="userName">
                   <el-input v-model="form.userName" disabled />
                </el-form-item>
             </el-col>
          </el-row>
       </el-form>
 
-      <h4 class="form-header h4">角色信息</h4>
+      <h4 class="form-header h4">{{ $t('user.roleInfo') }}</h4>
       <el-table v-loading="loading" :row-key="getRowKey" @row-click="clickRow" ref="roleRef" @selection-change="handleSelectionChange" :data="roles.slice((pageNum - 1) * pageSize, pageNum * pageSize)">
-         <el-table-column label="序号" width="55" type="index" align="center">
+         <el-table-column :label="$t('common.index')" width="55" type="index" align="center">
             <template #default="scope">
                <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
             </template>
@@ -39,7 +39,7 @@
       <el-form label-width="100px">
          <div style="text-align: center;margin-left:-120px;margin-top:30px;">
             <el-button type="primary" @click="submitForm()">{{ $t('common.submit') }}</el-button>
-            <el-button @click="close()">返回</el-button>
+            <el-button @click="close()">{{ $t('common.back') }}</el-button>
          </div>
       </el-form>
    </div>

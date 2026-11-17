@@ -1,16 +1,16 @@
 <template>
   <div>
-    <el-dialog title="添加选项" v-model="open" width="800px" :close-on-click-modal="false" :modal-append-to-body="false"
+    <el-dialog :title="$t('build.addOption')" v-model="open" width="800px" :close-on-click-modal="false" :modal-append-to-body="false"
       @open="onOpen" @close="onClose">
       <el-form ref="treeNodeForm" :model="formData" :rules="rules" label-width="100px">
         <el-col :span="24">
-          <el-form-item label="选项名" prop="label">
-            <el-input v-model="formData.label" placeholder="请输入选项名" clearable />
+          <el-form-item :label="$t('build.optionLabel')" prop="label">
+            <el-input v-model="formData.label" :placeholder="$t('build.optionLabelRequired')" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="选项值" prop="value">
-            <el-input v-model="formData.value" placeholder="请输入选项值" clearable>
+          <el-form-item :label="$t('build.optionValue')" prop="value">
+            <el-input v-model="formData.value" :placeholder="$t('build.optionValueRequired')" clearable>
               <template #append>
                 <el-select v-model="dataType" :style="{ width: '100px' }">
                   <el-option v-for="(item, index) in dataTypeOptions" :key="index" :label="item.label" :value="item.value"
@@ -32,6 +32,8 @@
   </div>
 </template>
 <script setup lang="ts">
+import { translate } from '@/locales'
+
 const open = defineModel()
 const emit = defineEmits(['confirm'])
 const formData = ref({
@@ -42,14 +44,14 @@ const rules = {
   label: [
     {
       required: true,
-      message: '请输入选项名',
+      message: translate('build.optionLabelRequired'),
       trigger: 'blur'
     }
   ],
   value: [
     {
       required: true,
-      message: '请输入选项值',
+      message: translate('build.optionValueRequired'),
       trigger: 'blur'
     }
   ]
@@ -57,11 +59,11 @@ const rules = {
 const dataType = ref<string>('string')
 const dataTypeOptions = ref<any[]>([
   {
-    label: '字符串',
+    label: translate('build.valueTypeString'),
     value: 'string'
   },
   {
-    label: '数字',
+    label: translate('build.valueTypeNumber'),
     value: 'number'
   }
 ])

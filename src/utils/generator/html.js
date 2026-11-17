@@ -1,15 +1,16 @@
 /* eslint-disable max-len */
 import { trigger } from './config'
+import { translate } from '@/locales'
 
 let confGlobal
 let someSpanIsNot24
 
 export function dialogWrapper(str) {
-  return `<el-dialog v-model="dialogVisible"  @open="onOpen" @close="onClose" title="Dialog Titile">
+  return `<el-dialog v-model="dialogVisible"  @open="onOpen" @close="onClose" title="${translate('build.dialogTitle')}">
     ${str}
     <template #footer>
-      <el-button @click="close">取消</el-button>
-	  <el-button type="primary" @click="handelConfirm">确定</el-button>
+      <el-button @click="close">${translate('common.cancel')}</el-button>
+	  <el-button type="primary" @click="handelConfirm">${translate('common.confirm')}</el-button>
     </template>
   </el-dialog>`
 }
@@ -56,8 +57,8 @@ function buildFromBtns(conf, type) {
   let str = ''
   if (conf.formBtns && type === 'file') {
     str = `<el-form-item>
-          <el-button type="primary" @click="submitForm">提交</el-button>
-          <el-button @click="resetForm">重置</el-button>
+          <el-button type="primary" @click="submitForm">${translate('common.submit')}</el-button>
+          <el-button @click="resetForm">${translate('common.reset')}</el-button>
         </el-form-item>`
     if (someSpanIsNot24) {
       str = `<el-col :span="24">
@@ -337,7 +338,7 @@ function buildElUploadChild(conf) {
   const list = []
   if (conf['list-type'] === 'picture-card') list.push('<i class="el-icon-plus"></i>')
   else list.push(`<el-button size="small" type="primary" icon="el-icon-upload">${conf.buttonText}</el-button>`)
-  if (conf.showTip) list.push(`<div slot="tip" class="el-upload__tip">只能上传不超过 ${conf.fileSize}${conf.sizeUnit} 的${conf.accept}文件</div>`)
+  if (conf.showTip) list.push(`<div slot="tip" class="el-upload__tip">${translate('build.uploadTipWithSize', { size: conf.fileSize, unit: conf.sizeUnit, accept: conf.accept })}</div>`)
   return list.join('\n')
 }
 

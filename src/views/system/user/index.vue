@@ -100,7 +100,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('user.deptName')" prop="deptId">
-              <el-tree-select v-model="form.deptId" :data="enabledDeptOptions" :props="{ value: 'id', label: 'label', children: 'children' }" value-key="id" placeholder="请选择归属部门" clearable check-strictly />
+              <el-tree-select v-model="form.deptId" :data="enabledDeptOptions" :props="{ value: 'id', label: 'label', children: 'children' }" value-key="id" :placeholder="$t('user.deptPlaceholder')" clearable check-strictly />
             </el-form-item>
           </el-col>
         </el-row>
@@ -124,7 +124,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.userId == undefined" :label="$t('user.password')" prop="password" :rules="pwdValidator">
-              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password />
+              <el-input v-model="form.password" :placeholder="$t('user.passwordPlaceholder')" type="password" maxlength="20" show-password />
             </el-form-item>
           </el-col>
         </el-row>
@@ -179,7 +179,7 @@
     <!-- 用户详情抽屉 -->
     <user-view-drawer ref="userViewRef" />
     <!-- 用户导入对话框 -->
-    <excel-import-dialog ref="importUserRef" :title="$t('user.importTitle')" action="/system/user/importData" template-action="/system/user/importTemplate" template-file-name="user_template" update-support-label="是否更新已经存在的用户数据" @success="getList" />
+    <excel-import-dialog ref="importUserRef" :title="$t('user.importTitle')" action="/system/user/importData" template-action="/system/user/importTemplate" template-file-name="user_template" :update-support-label="$t('user.updateExistingData')" @success="getList" />
   </div>
 </template>
 
@@ -236,10 +236,10 @@ const data = reactive({
     deptId: undefined
   } as UserQueryParams,
   rules: {
-    userName: [{ required: true, message: "用户名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "用户名称长度必须介于 2 和 20 之间", trigger: "blur" }],
-    nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
+    userName: [{ required: true, message: proxy.$t('user.nameRequired'), trigger: "blur" }, { min: 2, max: 20, message: proxy.$t('user.nameLengthRange'), trigger: "blur" }],
+    nickName: [{ required: true, message: proxy.$t('user.nickNameRequired'), trigger: "blur" }],
+    email: [{ type: "email", message: proxy.$t('common.invalidEmail'), trigger: ["blur", "change"] }],
+    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: proxy.$t('common.invalidPhone'), trigger: "blur" }]
   }
 })
 
@@ -300,7 +300,7 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row?: SysUser) {
   const userIds = row?.userId || ids.value
-  proxy.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
+  proxy.$modal.confirm(proxy.$t('user.deleteConfirm', { ids: userIds })).then(function () {
     return delUser(userIds)
   }).then(() => {
     getList()
@@ -317,11 +317,11 @@ function handleExport() {
 
 /** 用户状态修改  */
 function handleStatusChange(row: SysUser) {
-  const text = row.status === "0" ? "启用" : "停用"
-  proxy.$modal.confirm('确认要"' + text + '""' + row.userName + '"用户吗?').then(function () {
+  const text = row.status === "0" ? proxy.$t('common.enable') : proxy.$t('common.disable')
+  proxy.$modal.confirm(proxy.$t('user.confirmChangeStatus', { status: text, name: row.userName })).then(function () {
     return changeUserStatus(row.userId!, row.status!)
   }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功")
+    proxy.$modal.msgSuccess(proxy.$t('user.statusChangeSuccess', { status: text }))
   }).catch(function () {
     row.status = row.status === "0" ? "1" : "0"
   })
@@ -349,14 +349,14 @@ function handleAuthRole(row: SysUser) {
 
 /** 重置密码按钮操作 */
 function handleResetPwd(row: SysUser) {
-  proxy.$prompt(`请输入「${row.userName}」的新密码`, "重置密码", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
+  proxy.$prompt(proxy.$t('user.enterNewPassword', { name: row.userName }), proxy.$t('common.resetPassword'), {
+    confirmButtonText: proxy.$t('common.confirm'),
+    cancelButtonText: proxy.$t('common.cancel'),
     closeOnClickModal: false,
     inputValidator: pwdPromptValidator
-  }).then(({ value }: { value: string }) => { 
+  }).then(({ value }: { value: string }) => {
     resetUserPwd(row.userId!, value).then(() => {
-      proxy.$modal.msgSuccess("修改成功，新密码是：" + value)
+      proxy.$modal.msgSuccess(proxy.$t('user.resetPwdSuccess', { pwd: value }))
     })
   }).catch(() => {})
 }
@@ -410,7 +410,7 @@ function handleAdd() {
     postOptions.value = response.posts
     roleOptions.value = response.roles
     open.value = true
-    title.value = "添加用户"
+    title.value = proxy.$t('user.addTitle')
     form.value.password = initPassword.value
   })
 }
@@ -426,7 +426,7 @@ function handleUpdate(row?: SysUser) {
     form.value.postIds = response.postIds
     form.value.roleIds = response.roleIds
     open.value = true
-    title.value = "修改用户"
+    title.value = proxy.$t('user.editTitle')
     form.value.password = ""
   })
 }

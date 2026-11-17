@@ -1,6 +1,6 @@
 <template>
   <div class="user-info-head" @click="editCropper()">
-    <img :src="options.img" title="点击上传头像" class="img-circle img-lg" />
+    <img :src="options.img" :title="$t('profile.clickUploadAvatar')" class="img-circle img-lg" />
     <el-dialog :title="title" v-model="open" width="800px" append-to-body @opened="modalOpened" @close="closeDialog">
       <el-row>
         <el-col :xs="24" :md="12" :style="{ height: '350px' }">
@@ -33,7 +33,7 @@
             :before-upload="beforeUpload"
           >
             <el-button>
-              选择
+              {{ $t('common.select') }}
               <el-icon class="el-icon--right"><Upload /></el-icon>
             </el-button>
           </el-upload>
@@ -51,7 +51,7 @@
           <el-button icon="RefreshRight" @click="rotateRight()"</el-button>
         </el-col>
         <el-col :lg="{ span: 2, offset: 6 }" :md="2">
-          <el-button type="primary" @click="uploadImg()">提 交</el-button>
+          <el-button type="primary" @click="uploadImg()">{{ $t('common.submit') }}</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -69,7 +69,7 @@ const { proxy } = getCurrentInstance()
 
 const open = ref<boolean>(false)
 const visible = ref<boolean>(false)
-const title = ref<string>("修改头像")
+const title = ref<string>(proxy.$t('profile.updateAvatar'))
 
 //图片裁剪数据
 const options = reactive<any>({

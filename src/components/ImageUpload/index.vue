@@ -23,19 +23,19 @@
     </el-upload>
     <!-- 上传提示 -->
     <div class="el-upload__tip" v-if="showTip && !disabled">
-      请上传
+      {{ $t('common.pleaseUpload') }}
       <template v-if="fileSize">
-        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+        {{ $t('common.sizeNotExceed') }} <b style="color: #f56c6c">{{ fileSize }}MB</b>
       </template>
       <template v-if="fileType">
-        格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+        {{ $t('common.formatIs') }} <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
       </template>
-      的文件
+      {{ $t('common.fileSuffix') }}
     </div>
 
     <el-dialog
       v-model="dialogVisible"
-      title="预览"
+      :title="$t('common.preview')"
       width="800px"
       append-to-body
     >
@@ -154,28 +154,28 @@ function handleBeforeUpload(file: File): boolean {
     isImg = file.type.indexOf("image") > -1
   }
   if (!isImg) {
-    proxy.$modal.msgError(`文件格式不正确，请上传${props.fileType.join("/")}图片格式文件!`)
+    proxy.$modal.msgError(proxy.$t('common.imageFormatError', { type: props.fileType.join("/") }))
     return false
   }
   if (file.name.includes(',')) {
-    proxy.$modal.msgError('文件名不正确，不能包含英文逗号!')
+    proxy.$modal.msgError(proxy.$t('common.fileNameCommaError'))
     return false
   }
   if (props.fileSize) {
     const isLt = file.size / 1024 / 1024 < props.fileSize
     if (!isLt) {
-      proxy.$modal.msgError(`上传头像图片大小不能超过 ${props.fileSize} MB!`)
+      proxy.$modal.msgError(proxy.$t('common.avatarSizeExceeded', { size: props.fileSize }))
       return false
     }
   }
-  proxy.$modal.loading("正在上传图片，请稍候...")
+  proxy.$modal.loading(proxy.$t('common.uploadingImage'))
   number.value++
   return true
 }
 
 // 文件个数超出
 function handleExceed(): void {
-  proxy.$modal.msgError(`上传文件数量不能超过 ${props.limit} 个!`)
+  proxy.$modal.msgError(proxy.$t('common.fileCountExceeded', { limit: props.limit }))
 }
 
 // 上传成功回调
@@ -216,7 +216,7 @@ function uploadedSuccessfully(): void {
 
 // 上传失败
 function handleUploadError(): void {
-  proxy.$modal.msgError("上传图片失败")
+  proxy.$modal.msgError(proxy.$t('common.uploadImageFailed'))
   proxy.$modal.closeLoading()
 }
 

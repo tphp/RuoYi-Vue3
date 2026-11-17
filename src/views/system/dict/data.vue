@@ -21,7 +21,7 @@
             />
          </el-form-item>
          <el-form-item :label="$t('common.status')" prop="status">
-            <el-select v-model="queryParams.status" placeholder="数据状态" clearable style="width: 200px">
+            <el-select v-model="queryParams.status" :placeholder="$t('dict.dataStatus')" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -130,16 +130,16 @@
             <el-form-item :label="$t('dict.dictType')">
                <el-input v-model="form.dictType" :disabled="true" />
             </el-form-item>
-            <el-form-item label="数据标签" prop="dictLabel">
-               <el-input v-model="form.dictLabel" placeholder="请输入数据标签" />
+            <el-form-item :label="$t('dict.dictLabel')" prop="dictLabel">
+               <el-input v-model="form.dictLabel" :placeholder="$t('dict.dictLabelPlaceholder')" />
             </el-form-item>
-            <el-form-item label="数据键值" prop="dictValue">
-               <el-input v-model="form.dictValue" placeholder="请输入数据键值" />
+            <el-form-item :label="$t('dict.dictValue')" prop="dictValue">
+               <el-input v-model="form.dictValue" :placeholder="$t('dict.dictValuePlaceholder')" />
             </el-form-item>
             <el-form-item :label="$t('dict.cssClass')" prop="cssClass">
-               <el-input v-model="form.cssClass" placeholder="请输入样式属性" />
+               <el-input v-model="form.cssClass" :placeholder="$t('dict.cssClassPlaceholder')" />
             </el-form-item>
-            <el-form-item label="显示排序" prop="dictSort">
+            <el-form-item :label="$t('dict.dictSort')" prop="dictSort">
                <el-input-number v-model="form.dictSort" controls-position="right" :min="0" />
             </el-form-item>
             <el-form-item :label="$t('dict.listClass')" prop="listClass">
@@ -202,13 +202,13 @@ const defaultDictType = ref<string>("")
 const typeOptions = ref<SysDictType[]>([])
 const route = useRoute()
 // 数据标签回显样式
-const listClassOptions = ref<ListClassOption[]>([
-  { value: "default", label: "默认" }, 
-  { value: "primary", label: "主要" }, 
-  { value: "success", label: "成功" },
-  { value: "info", label: "信息" },
-  { value: "warning", label: "警告" },
-  { value: "danger", label: "危险" }
+const listClassOptions = computed<ListClassOption[]>(() => [
+  { value: "default", label: proxy.$t('common.default') },
+  { value: "primary", label: proxy.$t('dict.listClassPrimary') },
+  { value: "success", label: proxy.$t('common.success') },
+  { value: "info", label: proxy.$t('dict.listClassInfo') },
+  { value: "warning", label: proxy.$t('common.warning') },
+  { value: "danger", label: proxy.$t('dict.listClassDanger') }
 ])
 
 const data = reactive({
@@ -221,9 +221,9 @@ const data = reactive({
     status: undefined
   } as DictDataQueryParams,
   rules: {
-    dictLabel: [{ required: true, message: "数据标签不能为空", trigger: "blur" }],
-    dictValue: [{ required: true, message: "数据键值不能为空", trigger: "blur" }],
-    dictSort: [{ required: true, message: "数据顺序不能为空", trigger: "blur" }]
+    dictLabel: [{ required: true, message: proxy.$t('dict.labelRequired'), trigger: "blur" }],
+    dictValue: [{ required: true, message: proxy.$t('dict.valueRequired'), trigger: "blur" }],
+    dictSort: [{ required: true, message: proxy.$t('dict.sortRequired'), trigger: "blur" }]
   }
 })
 
@@ -299,7 +299,7 @@ function resetQuery() {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加字典数据"
+  title.value = proxy.$t('dict.addDataTitle')
   form.value.dictType = queryParams.value.dictType
 }
 
@@ -317,7 +317,7 @@ function handleUpdate(row?: SysDictData) {
   getData(dictCode).then(response => {
     form.value = response.data!
     open.value = true
-    title.value = "修改字典数据"
+    title.value = proxy.$t('dict.editDataTitle')
   })
 }
 
@@ -347,7 +347,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row?: SysDictData) {
   const dictCodes = row?.dictCode || ids.value
-  proxy.$modal.confirm('是否确认删除字典编码为"' + dictCodes + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('dict.deleteDataConfirm', { codes: dictCodes })).then(function() {
     return delData(dictCodes)
   }).then(() => {
     getList()

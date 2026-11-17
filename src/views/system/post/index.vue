@@ -82,7 +82,7 @@
          <el-table-column :label="$t('post.postId')" align="center" prop="postId" />
          <el-table-column :label="$t('post.postCode')" align="center" prop="postCode" />
          <el-table-column :label="$t('post.postName')" align="center" prop="postName" />
-         <el-table-column label="岗位排序" align="center" prop="postSort" />
+         <el-table-column :label="$t('post.postSort')" align="center" prop="postSort" />
          <el-table-column :label="$t('common.status')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -116,12 +116,12 @@
                <el-input v-model="form.postName" :placeholder="$t('post.postNamePlaceholder')" />
             </el-form-item>
             <el-form-item :label="$t('post.postCode')" prop="postCode">
-               <el-input v-model="form.postCode" placeholder="请输入编码名称" />
+               <el-input v-model="form.postCode" :placeholder="$t('post.postCodePlaceholder')" />
             </el-form-item>
-            <el-form-item label="岗位顺序" prop="postSort">
+            <el-form-item :label="$t('post.postSortLabel')" prop="postSort">
                <el-input-number v-model="form.postSort" controls-position="right" :min="0" />
             </el-form-item>
-            <el-form-item label="岗位状态" prop="status">
+            <el-form-item :label="$t('post.status')" prop="status">
                <el-radio-group v-model="form.status">
                   <el-radio
                      v-for="dict in sys_normal_disable"
@@ -171,9 +171,9 @@ const data = reactive({
     status: undefined
   } as PostQueryParams,
   rules: {
-    postName: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
-    postCode: [{ required: true, message: "岗位编码不能为空", trigger: "blur" }],
-    postSort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
+    postName: [{ required: true, message: proxy.$t('post.nameRequired'), trigger: "blur" }],
+    postCode: [{ required: true, message: proxy.$t('post.codeRequired'), trigger: "blur" }],
+    postSort: [{ required: true, message: proxy.$t('post.sortRequired'), trigger: "blur" }],
   }
 })
 
@@ -231,7 +231,7 @@ function handleSelectionChange(selection: SysPost[]) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加岗位"
+  title.value = proxy.$t('post.addTitle')
 }
 
 /** 修改按钮操作 */
@@ -241,7 +241,7 @@ function handleUpdate(row?: SysPost) {
   getPost(postId).then(response => {
     form.value = response.data!
     open.value = true
-    title.value = "修改岗位"
+    title.value = proxy.$t('post.editTitle')
   })
 }
 
@@ -269,7 +269,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row?: SysPost) {
   const postIds = row?.postId || ids.value
-  proxy.$modal.confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('post.deleteConfirm', { ids: postIds })).then(function() {
     return delPost(postIds)
   }).then(() => {
     getList()

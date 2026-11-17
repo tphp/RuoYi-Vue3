@@ -1,11 +1,11 @@
 <template>
 	<div class="popup-result">
-		<p class="title">最近5次运行时间</p>
+		<p class="title">{{ $t('crontab.recentRuns') }}</p>
 		<ul class="popup-result-scroll">
 			<template v-if='isShow'>
 				<li v-for='item in resultList' :key="item">{{item}}</li>
 			</template>
-			<li v-else>计算结果中...</li>
+			<li v-else>{{ $t('crontab.calculating') }}</li>
 		</ul>
 	</div>
 </template>
@@ -18,6 +18,7 @@ const props = defineProps({
         default: ''
     }
 })
+const { proxy } = getCurrentInstance()!
 const dayRule = ref<string>('')
 const dayRuleSup = ref<string | number | number[] | string>('')
 const dateArr = ref<number[][]>([])
@@ -319,11 +320,11 @@ function expressionChange(): void {
     }
     // 判断100年内的结果条数
     if (resultArr.length === 0) {
-        resultList.value = ['没有达到条件的结果！']
+        resultList.value = [proxy.$t('crontab.noResult')]
     } else {
         resultList.value = resultArr
         if (resultArr.length !== 5) {
-            resultList.value.push('最近100年内只有上面' + resultArr.length + '条结果！')
+            resultList.value.push(proxy.$t('crontab.limitHint', { count: resultArr.length }))
         }
     }
     // 计算完成-显示结果

@@ -1,6 +1,6 @@
 <template>
    <!-- 授权用户 -->
-   <el-dialog title="选择用户" v-model="visible" width="800px" top="5vh" append-to-body>
+   <el-dialog :title="$t('user.selectUser')" v-model="visible" width="800px" top="5vh" append-to-body>
       <el-form :model="queryParams" ref="queryRef" :inline="true">
          <el-form-item :label="$t('user.userName')" prop="userName">
             <el-input
@@ -31,7 +31,7 @@
             <el-table-column :label="$t('user.userName')" prop="userName" :show-overflow-tooltip="true" />
             <el-table-column :label="$t('user.nickName')" prop="nickName" :show-overflow-tooltip="true" />
             <el-table-column :label="$t('user.email')" prop="email" :show-overflow-tooltip="true" />
-            <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
+            <el-table-column :label="$t('role.phone')" prop="phonenumber" :show-overflow-tooltip="true" />
             <el-table-column :label="$t('common.status')" align="center" prop="status">
                <template #default="scope">
                   <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -129,7 +129,7 @@ function handleSelectUser() {
   const roleId = queryParams.roleId
   const uIds = userIds.value.join(",")
   if (uIds == "") {
-    proxy.$modal.msgError("请选择要分配的用户")
+    proxy.$modal.msgError(proxy.$t('role.selectUserRequired'))
     return
   }
   authUserSelectAll({ roleId: roleId!, userIds: uIds }).then(res => {

@@ -94,13 +94,13 @@
          <el-form ref="deptRef" :model="form" :rules="rules" label-width="80px">
             <el-row>
                <el-col :span="24" v-if="form.parentId !== 0">
-                  <el-form-item label="上级部门" prop="parentId">
+                  <el-form-item :label="$t('dept.parentName')" prop="parentId">
                      <el-tree-select
                         v-model="form.parentId"
                         :data="deptOptions"
                         :props="{ value: 'deptId', label: 'deptName', children: 'children' }"
                         value-key="deptId"
-                        placeholder="选择上级部门"
+                        :placeholder="$t('dept.parentDeptPlaceholder')"
                         check-strictly
                      />
                   </el-form-item>
@@ -111,7 +111,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="显示排序" prop="orderNum">
+                  <el-form-item :label="$t('dept.orderNum')" prop="orderNum">
                      <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
                   </el-form-item>
                </el-col>
@@ -131,7 +131,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="部门状态">
+                  <el-form-item :label="$t('dept.status')">
                      <el-radio-group v-model="form.status">
                         <el-radio
                            v-for="dict in sys_normal_disable"
@@ -178,11 +178,11 @@ const data = reactive({
     status: undefined
   } as DeptQueryParams,
   rules: {
-    parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
-    deptName: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
-    orderNum: [{ required: true, message: "显示排序不能为空", trigger: "blur" }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
+    parentId: [{ required: true, message: proxy.$t('dept.parentRequired'), trigger: "blur" }],
+    deptName: [{ required: true, message: proxy.$t('dept.nameRequired'), trigger: "blur" }],
+    orderNum: [{ required: true, message: proxy.$t('dept.orderRequired'), trigger: "blur" }],
+    email: [{ type: "email", message: proxy.$t('common.invalidEmail'), trigger: ["blur", "change"] }],
+    phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: proxy.$t('common.invalidPhone'), trigger: "blur" }]
   },
 })
 
@@ -240,7 +240,7 @@ function handleAdd(row?: SysDept) {
     form.value.parentId = row.deptId
   }
   open.value = true
-  title.value = "添加部门"
+  title.value = proxy.$t('dept.addTitle')
 }
 
 /** 展开/折叠操作 */
@@ -261,7 +261,7 @@ function handleUpdate(row: SysDept) {
   getDept(row.deptId!).then(response => {
     form.value = response.data!
     open.value = true
-    title.value = "修改部门"
+    title.value = proxy.$t('dept.editTitle')
   })
 }
 
@@ -324,7 +324,7 @@ function handleSaveSort() {
 
 /** 删除按钮操作 */
 function handleDelete(row: SysDept) {
-  proxy.$modal.confirm('是否确认删除名称为"' + row.deptName + '"的数据项?').then(function() {
+  proxy.$modal.confirm(proxy.$t('dept.deleteConfirm', { name: row.deptName })).then(function() {
     return delDept(row.deptId!)
   }).then(() => {
     getList()

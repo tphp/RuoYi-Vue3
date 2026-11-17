@@ -24,4 +24,13 @@ const i18n = createI18n({
   messages,
 })
 
+/**
+ * 在无法使用 useI18n() 的场景（普通 .ts 模块、路由守卫等）中翻译文案
+ * @param key 多语言 key，如 'common.confirm'
+ * @param named 命名插值参数，如 { ids: '1,2' }
+ */
+export function translate(key: string, named?: Record<string, unknown>): string {
+  return i18n.global.t(key, named as any) as unknown as string
+}
+
 export default i18n

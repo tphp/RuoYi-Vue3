@@ -4,7 +4,7 @@
          <el-form-item :label="$t('commonApi.apiName')" prop="apiName">
             <el-input
                v-model="queryParams.apiName"
-               placeholder="请输入接口名称"
+               :placeholder="$t('commonApi.apiNamePlaceholder')"
                clearable
                style="width: 240px"
                @keyup.enter="handleQuery"
@@ -16,7 +16,7 @@
          </el-form-item>
          <el-form-item style="float:right;margin-left:0">
             <div class="link-list" v-if="showSearch">
-               <el-button type="primary" link @click="showSearch = false">展开筛选</el-button>
+               <el-button type="primary" link @click="showSearch = false">{{ $t('common.expandFilter') }}</el-button>
             </div>
          </el-form-item>
       </el-form>
@@ -29,7 +29,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:commonApi:add']"
-            >新建</el-button>
+            >{{ $t('common.new') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -46,11 +46,11 @@
 
       <el-table v-loading="loading" :data="commonApiList" @selection-change="handleSelectionChange" border>
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="序号" width="60" type="index" align="center" />
+         <el-table-column :label="$t('common.index')" width="60" type="index" align="center" />
          <el-table-column :label="$t('commonApi.apiName')" align="center" prop="apiName" min-width="180" :show-overflow-tooltip="true" />
-         <el-table-column label="接口关键字" align="center" prop="apiKey" min-width="180" :show-overflow-tooltip="true" />
-         <el-table-column label="接口地址" align="center" prop="apiUrl" min-width="320" :show-overflow-tooltip="true" />
-         <el-table-column label="创建人" align="center" prop="createBy" width="100" />
+         <el-table-column :label="$t('commonApi.apiKey')" align="center" prop="apiKey" min-width="180" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('commonApi.apiPath')" align="center" prop="apiUrl" min-width="320" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('common.createBy')" align="center" prop="createBy" width="100" />
          <el-table-column :label="$t('common.createTime')" align="center" prop="createTime" width="160">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -78,44 +78,44 @@
             <el-row>
                <el-col :span="12">
                   <el-form-item :label="$t('commonApi.apiName')" prop="apiName">
-                     <el-input v-model="form.apiName" placeholder="请输入接口名称" />
+                     <el-input v-model="form.apiName" :placeholder="$t('commonApi.apiNamePlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="接口关键字" prop="apiKey">
-                     <el-input v-model="form.apiKey" placeholder="请输入接口关键字（唯一标识）" />
+                  <el-form-item :label="$t('commonApi.apiKey')" prop="apiKey">
+                     <el-input v-model="form.apiKey" :placeholder="$t('commonApi.apiKeyPlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="接口地址" prop="apiUrl">
-                     <el-input v-model="form.apiUrl" placeholder="请输入接口URL地址" />
+                  <el-form-item :label="$t('commonApi.apiPath')" prop="apiUrl">
+                     <el-input v-model="form.apiUrl" :placeholder="$t('commonApi.apiPathPlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
                   <el-form-item label="Cookie" prop="cookie">
-                     <el-input v-model="form.cookie" type="textarea" :rows="2" placeholder="请输入请求Cookie（如 LtpaToken=xxx; JSESSIONID=xxx）" />
+                     <el-input v-model="form.cookie" type="textarea" :rows="2" :placeholder="$t('commonApi.cookiePlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
                   <el-form-item :label="$t('commonApi.description')" prop="description">
-                     <el-input v-model="form.description" type="textarea" :rows="5" placeholder="请输入描述信息" />
+                     <el-input v-model="form.description" type="textarea" :rows="5" :placeholder="$t('commonApi.descriptionPlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="创建人" prop="createBy">
+                  <el-form-item :label="$t('common.createBy')" prop="createBy">
                      <el-input v-model="form.createBy" disabled />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="修改人" prop="updateBy">
+                  <el-form-item :label="$t('common.updateBy')" prop="updateBy">
                      <el-input v-model="form.updateBy" disabled />
                   </el-form-item>
                </el-col>
@@ -168,9 +168,9 @@ const data = reactive({
     apiKey: undefined
   } as CommonApiQueryParams,
   rules: {
-    apiName: [{ required: true, message: "接口名称不能为空", trigger: "blur" }],
-    apiKey: [{ required: true, message: "接口关键字不能为空", trigger: "blur" }],
-    apiUrl: [{ required: true, message: "接口地址不能为空", trigger: "blur" }]
+    apiName: [{ required: true, message: proxy.$t('commonApi.nameRequired'), trigger: "blur" }],
+    apiKey: [{ required: true, message: proxy.$t('commonApi.keyRequired'), trigger: "blur" }],
+    apiUrl: [{ required: true, message: proxy.$t('commonApi.pathRequired'), trigger: "blur" }]
   }
 })
 
@@ -226,7 +226,7 @@ function handleSelectionChange(selection: SysCommonApi[]) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "通用接口"
+  title.value = proxy.$t('commonApi.title')
 }
 
 function handleUpdate(row: SysCommonApi) {
@@ -235,7 +235,7 @@ function handleUpdate(row: SysCommonApi) {
   getCommonApi(id).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "通用接口"
+    title.value = proxy.$t('commonApi.title')
   })
 }
 
@@ -261,8 +261,8 @@ function submitForm() {
 
 function handleDelete(row: SysCommonApi) {
   const apiIds = row.id || ids.value
-  const tips = Array.isArray(apiIds) ? apiIds.length + "条选中数据" : '"' + apiIds + '"'
-  proxy.$modal.confirm('是否确认删除通用接口编号为' + tips + '的数据项？').then(function () {
+  const tips = Array.isArray(apiIds) ? proxy.$t('common.selectedCount', { n: apiIds.length }) : '"' + apiIds + '"'
+  proxy.$modal.confirm(proxy.$t('commonApi.deleteConfirm', { tips })).then(function () {
     return delCommonApi(apiIds)
   }).then(() => {
     getList()

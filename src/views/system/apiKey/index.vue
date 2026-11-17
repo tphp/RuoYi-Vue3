@@ -1,10 +1,10 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="应用名称" prop="appName">
+         <el-form-item :label="$t('apiKey.appName')" prop="appName">
             <el-input
                v-model="queryParams.appName"
-               placeholder="请输入应用名称"
+               :placeholder="$t('apiKey.appNamePlaceholder')"
                clearable
                style="width: 240px"
                @keyup.enter="handleQuery"
@@ -13,14 +13,14 @@
          <el-form-item label="API Key" prop="apiKey">
             <el-input
                v-model="queryParams.apiKey"
-               placeholder="请输入API Key"
+               :placeholder="$t('apiKey.apiKeyPlaceholder')"
                clearable
                style="width: 240px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item :label="$t('common.status')" prop="status">
-            <el-select v-model="queryParams.status" placeholder="状态" clearable style="width: 240px">
+            <el-select v-model="queryParams.status" :placeholder="$t('common.status')" clearable style="width: 240px">
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -79,7 +79,7 @@
 
       <el-table v-loading="loading" :data="apiKeyList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="应用名称" align="center" prop="appName" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('apiKey.appName')" align="center" prop="appName" :show-overflow-tooltip="true" />
          <el-table-column label="API Key" align="center" prop="apiKey" :show-overflow-tooltip="true" width="280">
             <template #default="scope">
                <el-button link type="primary" @click="copyText(scope.row.apiKey)">
@@ -91,7 +91,7 @@
             <template #default="scope">
                <span v-if="scope.row.apiSecret">
                   <el-button link type="primary" @click="copyText(scope.row.apiSecret)">
-                     点击复制
+                     {{ $t('apiKey.clickToCopy') }}
                   </el-button>
                </span>
                <span v-else>-</span>
@@ -102,7 +102,7 @@
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="过期时间" align="center" prop="expireTime" width="180">
+         <el-table-column :label="$t('apiKey.expireTime')" align="center" prop="expireTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.expireTime) }}</span>
             </template>
@@ -132,20 +132,20 @@
       <!-- 添加或修改API密钥对话框 -->
       <el-dialog :title="title" v-model="open" width="600px" append-to-body>
          <el-form ref="apiKeyRef" :model="form" :rules="rules" label-width="100px">
-            <el-form-item label="应用名称" prop="appName">
-               <el-input v-model="form.appName" placeholder="请输入应用名称（如：OA系统、ERP系统）" />
+            <el-form-item :label="$t('apiKey.appName')" prop="appName">
+               <el-input v-model="form.appName" :placeholder="$t('apiKey.appNameExample')" />
             </el-form-item>
             <el-form-item label="API Key" prop="apiKey">
-               <el-input v-model="form.apiKey" placeholder="请输入API Key" :readonly="!!form.id">
+               <el-input v-model="form.apiKey" :placeholder="$t('apiKey.apiKeyPlaceholder')" :readonly="!!form.id">
                   <template #append>
-                     <el-button type="button" @click="handleGenerateApiKey" :disabled="!!form.id">生成</el-button>
+                     <el-button type="button" @click="handleGenerateApiKey" :disabled="!!form.id">{{ $t('common.generate') }}</el-button>
                   </template>
                </el-input>
             </el-form-item>
             <el-form-item label="API Secret" prop="apiSecret">
-               <el-input v-model="form.apiSecret" placeholder="点击右侧按钮生成" readonly type="password" show-password>
+               <el-input v-model="form.apiSecret" :placeholder="$t('apiKey.generateOnRight')" readonly type="password" show-password>
                   <template #append>
-                     <el-button type="button" @click="handleApiSecret" :disabled="!!form.id">生成</el-button>
+                     <el-button type="button" @click="handleApiSecret" :disabled="!!form.id">{{ $t('common.generate') }}</el-button>
                   </template>
                </el-input>
             </el-form-item>
@@ -158,17 +158,17 @@
                   >{{ dict.label }}</el-radio>
                </el-radio-group>
             </el-form-item>
-            <el-form-item label="过期时间" prop="expireTime">
+            <el-form-item :label="$t('apiKey.expireTime')" prop="expireTime">
                <el-date-picker
                   v-model="form.expireTime"
                   type="datetime"
                   value-format="YYYY-MM-DD HH:mm:ss"
-                  placeholder="选择过期时间（不填表示永不过期）"
+                  :placeholder="$t('apiKey.expireTimePlaceholder')"
                   style="width: 100%"
                />
             </el-form-item>
             <el-form-item :label="$t('common.remark')" prop="remark">
-               <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
+               <el-input v-model="form.remark" type="textarea" :placeholder="$t('common.remarkPlaceholder')" />
             </el-form-item>
          </el-form>
          <template #footer>
@@ -208,9 +208,9 @@ const data = reactive({
     status: undefined
   } as ApiKeyQueryParams,
   rules: {
-    appName: [{ required: true, message: "应用名称不能为空", trigger: "blur" }],
-    apiKey: [{ required: true, message: "API Key不能为空", trigger: "blur" }],
-    apiSecret: [{ required: true, message: "API Secret不能为空", trigger: "blur" }]
+    appName: [{ required: true, message: proxy.$t('apiKey.appNameRequired'), trigger: "blur" }],
+    apiKey: [{ required: true, message: proxy.$t('apiKey.apiKeyRequired'), trigger: "blur" }],
+    apiSecret: [{ required: true, message: proxy.$t('apiKey.apiSecretRequired'), trigger: "blur" }]
   }
 })
 
@@ -269,7 +269,7 @@ function handleSelectionChange(selection: SysApiKey[]) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加API密钥"
+  title.value = proxy.$t('apiKey.addTitle')
 }
 
 /** 修改按钮操作 */
@@ -279,7 +279,7 @@ function handleUpdate(row: SysApiKey) {
   getApiKey(id).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改API密钥"
+    title.value = proxy.$t('apiKey.editTitle')
   })
 }
 
@@ -307,7 +307,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row: SysApiKey) {
   const apiIds = row.id || ids.value
-  proxy.$modal.confirm('是否确认删除API密钥编号为"' + apiIds + '"的数据项？').then(function () {
+  proxy.$modal.confirm(proxy.$t('apiKey.deleteConfirm', { ids: apiIds })).then(function () {
     return delApiKey(apiIds)
   }).then(() => {
     getList()
@@ -324,16 +324,12 @@ function handleExport() {
 
 /** 生成API Key */
 function handleGenerateApiKey() {
-  console.log('开始生成API Key')
   generateApiKey().then(response => {
-    console.log('API Key生成响应:', response)
-    console.log('response.data:', response.data)
     form.value.apiKey = response.data
-    console.log('form.value.apiKey:', form.value.apiKey)
-    proxy.$modal.msgSuccess("API Key生成成功，请妥善保管")
+    proxy.$modal.msgSuccess(proxy.$t('apiKey.generateSuccess'))
   }).catch((error) => {
-    console.error('API Key生成失败:', error)
-    proxy.$modal.msgError("API Key生成失败，请检查权限")
+    console.error(error)
+    proxy.$modal.msgError(proxy.$t('apiKey.generateFail'))
   })
 }
 
@@ -341,18 +337,18 @@ function handleGenerateApiKey() {
 function handleApiSecret() {
   generateApiSecret().then(response => {
     form.value.apiSecret = response.data
-    proxy.$modal.msgSuccess("API Secret生成成功，请妥善保管")
+    proxy.$modal.msgSuccess(proxy.$t('apiKey.secretGenerateSuccess'))
   }).catch(() => {
-    proxy.$modal.msgError("API Secret生成失败，请检查权限")
+    proxy.$modal.msgError(proxy.$t('apiKey.secretGenerateFail'))
   })
 }
 
 /** 复制文本 */
 function copyText(text: string) {
   navigator.clipboard.writeText(text).then(() => {
-    proxy.$modal.msgSuccess("复制成功")
+    proxy.$modal.msgSuccess(proxy.$t('common.copySuccess'))
   }).catch(() => {
-    proxy.$modal.msgError("复制失败")
+    proxy.$modal.msgError(proxy.$t('common.copyFail'))
   })
 }
 

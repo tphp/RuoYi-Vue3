@@ -1,10 +1,10 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true">
-         <el-form-item label="登录地址" prop="ipaddr">
+         <el-form-item :label="$t('logininfor.loginAddress')" prop="ipaddr">
             <el-input
                v-model="queryParams.ipaddr"
-               placeholder="请输入登录地址"
+               :placeholder="$t('logininfor.loginAddressPlaceholder')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
@@ -29,7 +29,7 @@
          :data="onlineList.slice((pageNum - 1) * pageSize, pageNum * pageSize)"
          style="width: 100%;"
       >
-         <el-table-column label="序号" width="50" type="index" align="center">
+         <el-table-column :label="$t('common.index')" width="50" type="index" align="center">
             <template #default="scope">
                <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
             </template>
@@ -98,7 +98,7 @@ function resetQuery() {
 
 /** 强退按钮操作 */
 function handleForceLogout(row: SysUserOnline) {
-  proxy.$modal.confirm('是否确认强退名称为"' + row.userName + '"的用户?').then(function () {
+  proxy.$modal.confirm(proxy.$t('online.forceExitConfirmWithName', { name: row.userName })).then(function () {
     return forceLogout(row.tokenId!)
   }).then(() => {
     getList()

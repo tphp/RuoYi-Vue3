@@ -96,14 +96,14 @@
                icon="Refresh"
                @click="handleRefreshCache"
                v-hasPermi="['system:dict:remove']"
-            >刷新缓存</el-button>
+            >{{ $t('dict.refreshCache') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="字典编号" align="center" prop="dictId" />
+         <el-table-column :label="$t('dict.dictId')" align="center" prop="dictId" />
          <el-table-column :label="$t('dict.dictName')" align="center" prop="dictName" :show-overflow-tooltip="true"/>
          <el-table-column :label="$t('dict.dictType')" align="center" :show-overflow-tooltip="true">
            <template #default="scope">
@@ -124,7 +124,7 @@
          <el-table-column :label="$t('common.action')" align="center" width="280" class-name="small-padding fixed-width">
             <template #default="scope">
                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dict:edit']">{{ $t('common.edit') }}</el-button>
-               <el-button link type="primary" icon="Operation" @click="handleDataList(scope.row)" v-hasPermi="['system:dict:edit']">列表</el-button>
+               <el-button link type="primary" icon="Operation" @click="handleDataList(scope.row)" v-hasPermi="['system:dict:edit']">{{ $t('dict.listAction') }}</el-button>
                <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dict:remove']">{{ $t('common.delete') }}</el-button>
             </template>
          </el-table-column>
@@ -148,10 +148,10 @@
                <el-input v-model="form.dictType" :placeholder="$t('dict.dictTypePlaceholder')" />
                <template #label>
                  <span>
-                   <el-tooltip content='数据存储中的Key值，如：sys_user_sex' placement="top">
+                   <el-tooltip :content="$t('dict.dictTypeTip')" placement="top">
                      <el-icon><question-filled /></el-icon>
                    </el-tooltip>
-                   字典类型
+                   {{ $t('dict.dictType') }}
                  </span>
                </template>
             </el-form-item>
@@ -212,8 +212,8 @@ const data = reactive({
     status: undefined
   } as DictTypeQueryParams,
   rules: {
-    dictName: [{ required: true, message: "字典名称不能为空", trigger: "blur" }],
-    dictType: [{ required: true, message: "字典类型不能为空", trigger: "blur" }]
+    dictName: [{ required: true, message: proxy.$t('dict.nameRequired'), trigger: "blur" }],
+    dictType: [{ required: true, message: proxy.$t('dict.typeRequired'), trigger: "blur" }]
   },
 })
 
@@ -264,7 +264,7 @@ function resetQuery() {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加字典类型"
+  title.value = proxy.$t('dict.addTitle')
 }
 
 /** 多选框选中数据 */
@@ -282,7 +282,7 @@ function handleViewData(row: SysDictType) {
 
 /** 字典数据列表页面 */
 function handleDataList(row: SysDictType) {
-  proxy.$tab.openPage("字典数据", '/system/dict-data/index/' + row.dictId)
+  proxy.$tab.openPage(proxy.$t('dict.dataTitle'), '/system/dict-data/index/' + row.dictId)
 }
 
 /** 修改按钮操作 */
@@ -292,7 +292,7 @@ function handleUpdate(row?: SysDictType) {
   getType(dictId).then(response=> {
     form.value = response.data!
     open.value = true
-    title.value = "修改字典类型"
+    title.value = proxy.$t('dict.editTitle')
   })
 }
 
@@ -320,7 +320,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row?: SysDictType) {
   const dictIds = row?.dictId || ids.value
-  proxy.$modal.confirm('是否确认删除字典编号为"' + dictIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('dict.deleteConfirm', { ids: dictIds })).then(function() {
     return delType(dictIds)
   }).then(() => {
     getList()

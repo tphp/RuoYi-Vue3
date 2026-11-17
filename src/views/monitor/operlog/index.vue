@@ -1,10 +1,10 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="操作地址" prop="operIp">
+         <el-form-item :label="$t('operlog.operAddress')" prop="operIp">
             <el-input
                v-model="queryParams.operIp"
-               placeholder="请输入操作地址"
+               :placeholder="$t('operlog.operAddressPlaceholder')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
@@ -13,7 +13,7 @@
          <el-form-item :label="$t('operlog.title')" prop="title">
             <el-input
                v-model="queryParams.title"
-               placeholder="请输入系统模块"
+               :placeholder="$t('operlog.modulePlaceholder')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
@@ -31,7 +31,7 @@
          <el-form-item :label="$t('menu.menuType')" prop="businessType">
             <el-select
                v-model="queryParams.businessType"
-               placeholder="操作类型"
+               :placeholder="$t('operlog.businessTypePlaceholder')"
                clearable
                style="width: 240px"
             >
@@ -117,25 +117,25 @@
             </template>
          </el-table-column>
          <el-table-column :label="$t('operlog.operName')" align="center" width="110" prop="operName" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
-         <el-table-column label="操作地址" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
-         <el-table-column label="操作状态" align="center" prop="status">
+         <el-table-column :label="$t('operlog.operAddress')" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('operlog.status')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="操作日期" align="center" prop="operTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
+         <el-table-column :label="$t('operlog.operDate')" align="center" prop="operTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
             <template #default="scope">
                <span>{{ parseTime(scope.row.operTime) }}</span>
             </template>
          </el-table-column>
          <el-table-column :label="$t('operlog.costTime')" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
             <template #default="scope">
-               <span>{{ scope.row.costTime }}毫秒</span>
+               <span>{{ scope.row.costTime }} {{ $t('common.millisecond') }}</span>
             </template>
          </el-table-column>
          <el-table-column :label="$t('common.action')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="View" @click="handleDetail(scope.row, scope.index)" v-hasPermi="['monitor:operlog:query']">详细</el-button>
+               <el-button link type="primary" icon="View" @click="handleDetail(scope.row, scope.index)" v-hasPermi="['monitor:operlog:query']">{{ $t('common.detail') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -234,7 +234,7 @@ function handleDetail(row: SysOperLog) {
 /** 删除按钮操作 */
 function handleDelete(row?: SysOperLog) {
   const operIds = row?.operId || ids.value
-  proxy.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('operlog.deleteConfirm', { ids: operIds })).then(function () {
     return delOperlog(operIds)
   }).then(() => {
     getList()
@@ -244,11 +244,11 @@ function handleDelete(row?: SysOperLog) {
 
 /** 清空按钮操作 */
 function handleClean() {
-  proxy.$modal.confirm("是否确认清空所有操作日志数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t('operlog.clearConfirm')).then(function () {
     return cleanOperlog()
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("清空成功")
+    proxy.$modal.msgSuccess(proxy.$t('common.clearSuccess'))
   }).catch(() => {})
 }
 

@@ -3,6 +3,8 @@
  * Copyright (c) 2019 ruoyi
  */
 
+import { translate } from '@/locales'
+
 // 日期格式化
 export function parseTime(time: any, pattern?: string): string | null {
   if (arguments.length === 0 || !time) {
@@ -35,7 +37,7 @@ export function parseTime(time: any, pattern?: string): string | null {
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+    if (key === 'a') { return translate('common.weekDay' + value) }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }

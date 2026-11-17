@@ -11,6 +11,7 @@
 
 <script setup lang="ts">
 import usePermissionStore from '@/store/modules/permission'
+import { translate } from '@/locales'
 
 const route = useRoute()
 const router = useRouter()
@@ -34,7 +35,7 @@ function getBreadcrumb(): void {
   }
   // 判断是否为首页
   if (!isDashboard(matched[0])) {
-    matched = [{ path: "/index", meta: { title: "首页" } }].concat(matched)
+    matched = [{ path: "/index", meta: { title: translate('dashboard.title') } }].concat(matched)
   }
   levelList.value = matched.filter(item => item.meta && item.meta.title && (item.meta.breadcrumb as boolean) !== false)
 }

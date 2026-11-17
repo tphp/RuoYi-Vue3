@@ -19,8 +19,8 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item :label="$t('menu.menuType')" prop="noticeType">
-            <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable style="width: 200px">
+         <el-form-item :label="$t('notice.noticeType')" prop="noticeType">
+            <el-select v-model="queryParams.noticeType" :placeholder="$t('notice.noticeTypePlaceholder')" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_notice_type"
                   :key="dict.value"
@@ -70,7 +70,7 @@
 
       <el-table v-loading="loading" :data="noticeList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="序号" align="center" prop="noticeId" width="100" />
+         <el-table-column :label="$t('common.index')" align="center" prop="noticeId" width="100" />
          <el-table-column :label="$t('notice.noticeTitle')" align="center" :show-overflow-tooltip="true">
             <template #default="scope">
                <a class="link-type" style="cursor:pointer" @click="handleViewData(scope.row)">{{ scope.row.noticeTitle }}</a>
@@ -94,7 +94,7 @@
          </el-table-column>
          <el-table-column :label="$t('common.action')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="User" @click="handleReadUsers(scope.row)" v-hasPermi="['system:notice:list']">阅读用户</el-button>
+               <el-button link type="primary" icon="User" @click="handleReadUsers(scope.row)" v-hasPermi="['system:notice:list']">{{ $t('notice.readUsers') }}</el-button>
                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:notice:edit']">{{ $t('common.edit') }}</el-button>
                <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:notice:remove']" >{{ $t('common.delete') }}</el-button>
             </template>
@@ -142,7 +142,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="24">
-                  <el-form-item label="内容">
+                  <el-form-item :label="$t('notice.noticeContent')">
                     <editor v-model="form.noticeContent" :min-height="192"/>
                   </el-form-item>
                </el-col>
@@ -189,8 +189,8 @@ const data = reactive({
     status: undefined
   } as NoticeQueryParams,
   rules: {
-    noticeTitle: [{ required: true, message: "公告标题不能为空", trigger: "blur" }],
-    noticeType: [{ required: true, message: "公告类型不能为空", trigger: "change" }]
+    noticeTitle: [{ required: true, message: proxy.$t('notice.titleRequired'), trigger: "blur" }],
+    noticeType: [{ required: true, message: proxy.$t('notice.typeRequired'), trigger: "change" }]
   },
 })
 
@@ -247,7 +247,7 @@ function handleSelectionChange(selection: SysNotice[]) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加公告"
+  title.value = proxy.$t('notice.addTitle')
 }
 
 /**修改按钮操作 */
@@ -257,7 +257,7 @@ function handleUpdate(row?: SysNotice) {
   getNotice(noticeId).then(response => {
     form.value = response.data!
     open.value = true
-    title.value = "修改公告"
+    title.value = proxy.$t('notice.editTitle')
   })
 }
 
@@ -295,7 +295,7 @@ function handleReadUsers(row: SysNotice) {
 /** 删除按钮操作 */
 function handleDelete(row?: SysNotice) {
   const noticeIds = row?.noticeId || ids.value
-  proxy.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('notice.deleteConfirm', { ids: noticeIds })).then(function() {
     return delNotice(noticeIds)
   }).then(() => {
     getList()

@@ -19,7 +19,7 @@
       <!-- 空数据 -->
       <div v-else-if="!dataList.length" class="drawer-empty">
         <el-icon style="font-size:36px;"><Document /><</el-icon>
-        <div>暂无字典数据</div>
+        <div>{{ $t('dict.noDictData') }}</div>
       </div>
 
       <template v-else>
@@ -28,7 +28,7 @@
           <el-col :span="disabledCount > 0 ? 8 : 12">
             <div class="stat-card">
               <div class="stat-num">{{ dataList.length }}</div>
-              <div class="stat-label">共计条目</div>
+              <div class="stat-label">{{ $t('dict.totalItems') }}</div>
             </div>
           </el-col>
           <el-col :span="disabledCount > 0 ? 8 : 12">
@@ -48,21 +48,21 @@
         <!-- 数据列表 -->
         <div v-for="item in dataList" :key="item.dictCode" class="dict-item">
           <div class="dict-cell">
-            <div class="dict-cell-key">标签</div>
+            <div class="dict-cell-key">{{ $t('dict.dictLabel') }}</div>
             <div class="dict-cell-val">
               <el-tag v-if="item.listClass && item.listClass !== 'default'" :type="item.listClass === 'primary' ? undefined : item.listClass" size="small">{{ item.dictLabel }}</el-tag>
               <span v-else>{{ item.dictLabel }}</span>
             </div>
           </div>
           <div class="dict-cell">
-            <div class="dict-cell-key">键值</div>
+            <div class="dict-cell-key">{{ $t('dict.dictValue') }}</div>
             <div class="dict-cell-val">{{ item.dictValue }}</div>
           </div>
           <div class="dict-cell">
-            <div class="dict-cell-key">状态</div>
+            <div class="dict-cell-key">{{ $t('common.status') }}</div>
             <div class="dict-cell-val">
               <el-tag :type="item.status === '0' ? 'success' : 'danger'" size="small">
-                {{ item.status === '0' ? '正常' : '停用' }}
+                {{ item.status === '0' ? $t('user.normal') : $t('common.disable') }}
               </el-tag>
             </div>
           </div>

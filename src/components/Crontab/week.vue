@@ -2,19 +2,19 @@
     <el-form>
         <el-form-item>
             <el-radio v-model='radioValue' :value="1">
-                周，允许的通配符[, - * ? / L #]
+                {{ $t('crontab.week.wildcard') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="2">
-                不指定
+                {{ $t('crontab.notSpecified') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="3">
-                周期从
+                {{ $t('crontab.cycleFrom') }}
                 <el-select clearable v-model="cycle01">
                     <el-option
                         v-for="(item,index) of weekList"
@@ -39,8 +39,8 @@
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="4">
-                第
-                <el-input-number v-model='average01' :min="1" :max="4" /> 周的
+                {{ $t('crontab.theNth') }}
+                <el-input-number v-model='average01' :min="1" :max="4" /> {{ $t('crontab.weekOfMonth') }}
                 <el-select clearable v-model="average02">
                     <el-option v-for="item in weekList" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
@@ -49,7 +49,7 @@
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="5">
-                本月最后一个
+                {{ $t('crontab.lastOfMonth') }}
                 <el-select clearable v-model="weekday">
                     <el-option v-for="item in weekList" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
@@ -58,8 +58,8 @@
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="6">
-                指定
-                <el-select class="multiselect" clearable v-model="checkboxList" placeholder="可多选" multiple :multiple-limit="6">
+                {{ $t('crontab.specify') }}
+                <el-select class="multiselect" clearable v-model="checkboxList" :placeholder="$t('crontab.multiSelect')" multiple :multiple-limit="6">
                     <el-option v-for="item in weekList" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
             </el-radio>
@@ -70,6 +70,7 @@
 
 <script setup lang="ts">
 const emit = defineEmits(['update'])
+const { proxy } = getCurrentInstance()!
 const props = defineProps({
     cron: {
         type: Object,
@@ -97,14 +98,14 @@ const average02 = ref<number>(2)
 const weekday = ref<number>(2)
 const checkboxList = ref<number[]>([])
 const checkCopy = ref<number[]>([2])
-const weekList = ref<any[]>([
-    {key: 1, value: '星期日'},
-    {key: 2, value: '星期一'},
-    {key: 3, value: '星期二'},
-    {key: 4, value: '星期三'},
-    {key: 5, value: '星期四'},
-    {key: 6, value: '星期五'},
-    {key: 7, value: '星期六'}
+const weekList = computed<any[]>(() => [
+    {key: 1, value: proxy.$t('crontab.week0')},
+    {key: 2, value: proxy.$t('crontab.week1')},
+    {key: 3, value: proxy.$t('crontab.week2')},
+    {key: 4, value: proxy.$t('crontab.week3')},
+    {key: 5, value: proxy.$t('crontab.week4')},
+    {key: 6, value: proxy.$t('crontab.week5')},
+    {key: 7, value: proxy.$t('crontab.week6')}
 ])
 const cycleTotal = computed(() => {
     cycle01.value = props.check(cycle01.value, 1, 6)

@@ -34,7 +34,7 @@
                icon="Plus"
                @click="openSelectUser"
                v-hasPermi="['system:role:add']"
-            >添加用户</el-button>
+            >{{ $t('role.addUser') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -44,7 +44,7 @@
                :disabled="multiple"
                @click="cancelAuthUserAll"
                v-hasPermi="['system:role:remove']"
-            >批量取消授权</el-button>
+            >{{ $t('role.batchCancelAuth') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button 
@@ -62,7 +62,7 @@
          <el-table-column :label="$t('user.userName')" prop="userName" :show-overflow-tooltip="true" />
          <el-table-column :label="$t('user.nickName')" prop="nickName" :show-overflow-tooltip="true" />
          <el-table-column :label="$t('user.email')" prop="email" :show-overflow-tooltip="true" />
-         <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('role.phone')" prop="phonenumber" :show-overflow-tooltip="true" />
          <el-table-column :label="$t('common.status')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -75,7 +75,7 @@
          </el-table-column>
          <el-table-column :label="$t('common.action')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="CircleClose" @click="cancelAuthUser(scope.row)" v-hasPermi="['system:role:remove']">取消授权</el-button>
+               <el-button link type="primary" icon="CircleClose" @click="cancelAuthUser(scope.row)" v-hasPermi="['system:role:remove']">{{ $t('role.cancelAuth') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -156,11 +156,11 @@ function openSelectUser() {
 
 /** 取消授权按钮操作 */
 function cancelAuthUser(row: SysUser) {
-  proxy.$modal.confirm('确认要取消该用户"' + row.userName + '"角色吗？').then(function () {
+  proxy.$modal.confirm(proxy.$t('role.cancelAuthConfirm', { name: row.userName })).then(function () {
     return authUserCancel({ userId: row.userId!, roleId: queryParams.roleId })
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("取消授权成功")
+    proxy.$modal.msgSuccess(proxy.$t('role.cancelAuthSuccess'))
   }).catch(() => {})
 }
 
@@ -168,11 +168,11 @@ function cancelAuthUser(row: SysUser) {
 function cancelAuthUserAll() {
   const roleId = queryParams.roleId
   const uIds = userIds.value.join(",")
-  proxy.$modal.confirm("是否取消选中用户授权数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t('role.batchCancelAuthConfirm')).then(function () {
     return authUserCancelAll({ roleId: roleId, userIds: uIds })
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("取消授权成功")
+    proxy.$modal.msgSuccess(proxy.$t('role.cancelAuthSuccess'))
   }).catch(() => {})
 }
 

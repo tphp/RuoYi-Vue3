@@ -66,6 +66,7 @@
 
 <script setup lang="ts" name="RemoteSelect">
 import { Search } from '@element-plus/icons-vue'
+import { translate } from '@/locales'
 
 /** 弹窗表格列配置 */
 interface ColumnConfig {
@@ -100,7 +101,7 @@ const props = defineProps({
   /** 输入框占位提示 */
   placeholder: {
     type: String,
-    default: '请输入'
+    default: () => translate('common.inputPlaceholder')
   },
   /** 是否禁用 */
   disabled: {
@@ -110,7 +111,7 @@ const props = defineProps({
   /** 弹窗标题 */
   title: {
     type: String,
-    default: '请选择'
+    default: () => translate('common.selectPlaceholder')
   },
   /** 数据请求函数，返回列表（数组或 {data:[...]}/{rows:[...]}），必填 */
   request: {
@@ -219,7 +220,7 @@ async function loadData() {
       return list.value
     })
     .catch(e => {
-      console.error('加载数据失败：', e)
+      console.error(translate('common.loadDataFailed'), e)
       list.value = []
       throw e
     })

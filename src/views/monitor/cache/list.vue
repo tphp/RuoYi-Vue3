@@ -4,7 +4,7 @@
       <el-col :span="8">
         <el-card style="height: calc(100vh - 125px)">
           <template #header>
-            <Collection style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">缓存列表</span>
+            <Collection style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">{{ $t('cache.list') }}</span>
             <el-button
               style="float: right; padding: 3px 0"
               link
@@ -22,13 +22,13 @@
             style="width: 100%"
           >
             <el-table-column
-              label="序号"
+              :label="$t('common.index')"
               width="60"
               type="index"
             ></el-table-column>
 
             <el-table-column
-              label="缓存名称"
+              :label="$t('cache.cacheName')"
               align="center"
               prop="cacheName"
               :show-overflow-tooltip="true"
@@ -63,7 +63,7 @@
       <el-col :span="8">
         <el-card style="height: calc(100vh - 125px)">
           <template #header>
-            <Key style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">键名列表</span>
+            <Key style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">{{ $t('cache.keyList') }}</span>
             <el-button
               style="float: right; padding: 3px 0"
               link
@@ -81,12 +81,12 @@
             style="width: 100%"
           >
             <el-table-column
-              label="序号"
+              :label="$t('common.index')"
               width="60"
               type="index"
             ></el-table-column>
             <el-table-column
-              label="缓存键名"
+              :label="$t('cache.cacheKey')"
               align="center"
               :show-overflow-tooltip="true"
               :formatter="keyFormatter"
@@ -114,30 +114,30 @@
       <el-col :span="8">
         <el-card :bordered="false" style="height: calc(100vh - 125px)">
           <template #header>
-            <Document style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">缓存内容</span>
+            <Document style="width: 1em; height: 1em; vertical-align: middle;" /> <span style="vertical-align: middle;">{{ $t('cache.cacheContent') }}</span>
             <el-button
               style="float: right; padding: 3px 0"
               link
               type="primary"
               icon="Refresh"
               @click="handleClearCacheAll()"
-              >清理全部</el-button
+              >{{ $t('cache.clearAll') }}</el-button
             >
           </template>
           <el-form :model="cacheForm">
             <el-row :gutter="32">
               <el-col :offset="1" :span="22">
-                <el-form-item label="缓存名称:" prop="cacheName">
+                <el-form-item :label="$t('cache.cacheName')" prop="cacheName">
                   <el-input v-model="cacheForm.cacheName" :readOnly="true" />
                 </el-form-item>
               </el-col>
               <el-col :offset="1" :span="22">
-                <el-form-item label="缓存键名:" prop="cacheKey">
+                <el-form-item :label="$t('cache.cacheKey')" prop="cacheKey">
                   <el-input v-model="cacheForm.cacheKey" :readOnly="true" />
                 </el-form-item>
               </el-col>
               <el-col :offset="1" :span="22">
-                <el-form-item label="缓存内容:" prop="cacheValue">
+                <el-form-item :label="$t('cache.cacheContent')" prop="cacheValue">
                   <el-input
                     v-model="cacheForm.cacheValue"
                     type="textarea"
@@ -191,13 +191,13 @@ function getCacheNames(): void {
 /** 刷新缓存名称列表 */
 function refreshCacheNames(): void {
   getCacheNames()
-  proxy.$modal.msgSuccess("刷新缓存列表成功")
+  proxy.$modal.msgSuccess(proxy.$t('cache.refreshListSuccess'))
 }
 
 /** 清理指定名称缓存 */
 function handleClearCacheName(row: SysCache): void {
   clearCacheName(row.cacheName as string).then(() => {
-    proxy.$modal.msgSuccess("清理缓存名称[" + row.cacheName + "]成功")
+    proxy.$modal.msgSuccess(proxy.$t('cache.clearNameSuccess', { name: row.cacheName }))
     getCacheKeys()
   })
 }
@@ -219,13 +219,13 @@ function getCacheKeys(row?: SysCache): void {
 /** 刷新缓存键名列表 */
 function refreshCacheKeys(): void {
   getCacheKeys()
-  proxy.$modal.msgSuccess("刷新键名列表成功")
+  proxy.$modal.msgSuccess(proxy.$t('cache.refreshKeySuccess'))
 }
 
 /** 清理指定键名缓存 */
 function handleClearCacheKey(cacheKey: string): void {
   clearCacheKey(cacheKey).then(() => {
-    proxy.$modal.msgSuccess("清理缓存键名[" + cacheKey + "]成功")
+    proxy.$modal.msgSuccess(proxy.$t('cache.clearKeySuccess', { key: cacheKey }))
     getCacheKeys()
   })
 }
@@ -251,7 +251,7 @@ function handleCacheValue(cacheKey: string): void {
 /** 清理全部缓存 */
 function handleClearCacheAll(): void {
   clearCacheAll().then(() => {
-    proxy.$modal.msgSuccess("清理全部缓存成功")
+    proxy.$modal.msgSuccess(proxy.$t('cache.clearAllSuccess'))
   })
 }
 

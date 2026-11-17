@@ -1,10 +1,10 @@
 <template>
-  <el-dialog v-model="visible" :title="`「${noticeTitle}」已读用户`" width="760px" top="6vh" append-to-body @close="handleClose">
+  <el-dialog v-model="visible" :title="$t('notice.readUsersTitle', { title: noticeTitle })" width="760px" top="6vh" append-to-body @close="handleClose">
     <el-form ref="queryRef" :model="queryParams" size="small" :inline="true" style="margin-bottom: 4px;">
       <el-form-item prop="searchValue">
         <el-input
           v-model="queryParams.searchValue"
-          placeholder="登录名称 / 用户名称"
+          :placeholder="$t('notice.readUserPlaceholder')"
           clearable
           :prefix-icon="Search"
           style="width: 220px;"
@@ -18,17 +18,17 @@
       </el-form-item>
       <el-form-item style="float: right; margin-right: 0;">
         <span class="read-stat">
-          共 <strong>{{ total }}</strong> 人已读
+          {{ $t('notice.readCount', { n: total }) }}
         </span>
       </el-form-item>
     </el-form>
     <el-table v-loading="loading" :data="userList" size="small" stripe height="340px">
-      <el-table-column type="index" label="序号" width="55" align="center" />
+      <el-table-column type="index" :label="$t('common.index')" width="55" align="center" />
       <el-table-column :label="$t('online.userName')" prop="userName" align="center" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('user.userName')" prop="nickName" align="center" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('user.deptName')" prop="deptName" align="center" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('user.phonenumber')" prop="phonenumber" align="center" width="120" />
-      <el-table-column label="阅读时间" prop="readTime" align="center" width="160">
+      <el-table-column :label="$t('notice.readTime')" prop="readTime" align="center" width="160">
         <template #default="scope">
           <span>{{ parseTime(scope.row.readTime) }}</span>
         </template>

@@ -1,3 +1,5 @@
+import { translate } from '@/locales'
+
 export const formConf = {
   formRef: 'formRef',
   formModel: 'formData',
@@ -13,11 +15,11 @@ export const formConf = {
 
 export const inputComponents = [
   {
-    label: '单行文本',
+    label: translate('build.compSingleText'),
     tag: 'el-input',
     tagIcon: 'input',
     type: 'text',
-    placeholder: '请输入',
+    placeholder: translate('common.inputPlaceholder'),
     defaultValue: undefined,
     span: 24,
     labelWidth: null,
@@ -37,11 +39,11 @@ export const inputComponents = [
     document: 'https://element-plus.org/zh-CN/component/input',
   },
   {
-    label: '多行文本',
+    label: translate('build.compMultiText'),
     tag: 'el-input',
     tagIcon: 'textarea',
     type: 'textarea',
-    placeholder: '请输入',
+    placeholder: translate('common.inputPlaceholder'),
     defaultValue: undefined,
     span: 24,
     labelWidth: null,
@@ -60,11 +62,11 @@ export const inputComponents = [
     document: 'https://element-plus.org/zh-CN/component/input',
   },
   {
-    label: '密码',
+    label: translate('build.compPassword'),
     tag: 'el-input',
     tagIcon: 'password',
     type: 'password',
-    placeholder: '请输入',
+    placeholder: translate('common.inputPlaceholder'),
     defaultValue: undefined,
     span: 24,
     'show-password': true,
@@ -85,7 +87,7 @@ export const inputComponents = [
     document: 'https://element-plus.org/zh-CN/component/input',
   },
   {
-    label: '计数器',
+    label: translate('build.compCounter'),
     tag: 'el-input-number',
     tagIcon: 'number',
     placeholder: '',
@@ -108,10 +110,10 @@ export const inputComponents = [
 
 export const selectComponents = [
   {
-    label: '下拉选择',
+    label: translate('build.compSelect'),
     tag: 'el-select',
     tagIcon: 'select',
-    placeholder: '请选择',
+    placeholder: translate('common.selectPlaceholder'),
     defaultValue: undefined,
     span: 24,
     labelWidth: null,
@@ -123,11 +125,11 @@ export const selectComponents = [
     multiple: false,
     options: [
       {
-        label: '选项一',
+        label: translate('build.compOptionOne'),
         value: 1,
       },
       {
-        label: '选项二',
+        label: translate('build.compOptionTwo'),
         value: 2,
       },
     ],
@@ -136,10 +138,10 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/select',
   },
   {
-    label: '级联选择',
+    label: translate('build.compCascader'),
     tag: 'el-cascader',
     tagIcon: 'cascader',
-    placeholder: '请选择',
+    placeholder: translate('common.selectPlaceholder'),
     defaultValue: [],
     span: 24,
     labelWidth: null,
@@ -158,12 +160,12 @@ export const selectComponents = [
       {
         id: 1,
         value: 1,
-        label: '选项1',
+        label: translate('build.compOptionOne'),
         children: [
           {
             id: 2,
             value: 2,
-            label: '选项1-1',
+            label: translate('build.compOptionOneChild'),
           },
         ],
       },
@@ -178,7 +180,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/cascader',
   },
   {
-    label: '单选框组',
+    label: translate('build.compRadioGroup'),
     tag: 'el-radio-group',
     tagIcon: 'radio',
     defaultValue: 0,
@@ -192,11 +194,11 @@ export const selectComponents = [
     required: true,
     options: [
       {
-        label: '选项一',
+        label: translate('build.compOptionOne'),
         value: 1,
       },
       {
-        label: '选项二',
+        label: translate('build.compOptionTwo'),
         value: 2,
       },
     ],
@@ -205,7 +207,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/radio',
   },
   {
-    label: '多选框组',
+    label: translate('build.compCheckboxGroup'),
     tag: 'el-checkbox-group',
     tagIcon: 'checkbox',
     defaultValue: [],
@@ -219,11 +221,11 @@ export const selectComponents = [
     required: true,
     options: [
       {
-        label: '选项一',
+        label: translate('build.compOptionOne'),
         value: 1,
       },
       {
-        label: '选项二',
+        label: translate('build.compOptionTwo'),
         value: 2,
       },
     ],
@@ -232,7 +234,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/checkbox',
   },
   {
-    label: '开关',
+    label: translate('build.compSwitch'),
     tag: 'el-switch',
     tagIcon: 'switch',
     defaultValue: false,
@@ -252,7 +254,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/switch',
   },
   {
-    label: '滑块',
+    label: translate('build.compSlider'),
     tag: 'el-slider',
     tagIcon: 'slider',
     defaultValue: null,
@@ -270,10 +272,10 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/slider',
   },
   {
-    label: '时间选择',
+    label: translate('build.compTimePicker'),
     tag: 'el-time-picker',
     tagIcon: 'time',
-    placeholder: '请选择',
+    placeholder: translate('common.selectPlaceholder'),
     defaultValue: '',
     span: 24,
     labelWidth: null,
@@ -288,7 +290,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/time-picker',
   },
   {
-    label: '时间范围',
+    label: translate('build.compTimeRange'),
     tag: 'el-time-picker',
     tagIcon: 'time-range',
     defaultValue: null,
@@ -299,9 +301,9 @@ export const selectComponents = [
     clearable: true,
     required: true,
     'is-range': true,
-    'range-separator': '至',
-    'start-placeholder': '开始时间',
-    'end-placeholder': '结束时间',
+    'range-separator': translate('build.rangeSeparatorTo'),
+    'start-placeholder': translate('build.startTime'),
+    'end-placeholder': translate('build.endTime'),
     format: 'HH:mm:ss',
     'value-format': 'HH:mm:ss',
     regList: [],
@@ -309,10 +311,10 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/time-picker',
   },
   {
-    label: '日期选择',
+    label: translate('build.compDatePicker'),
     tag: 'el-date-picker',
     tagIcon: 'date',
-    placeholder: '请选择',
+    placeholder: translate('common.selectPlaceholder'),
     defaultValue: null,
     type: 'date',
     span: 24,
@@ -329,7 +331,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/date-picker',
   },
   {
-    label: '日期范围',
+    label: translate('build.compDateRange'),
     tag: 'el-date-picker',
     tagIcon: 'date-range',
     defaultValue: null,
@@ -337,9 +339,9 @@ export const selectComponents = [
     labelWidth: null,
     style: { width: '100%' },
     type: 'daterange',
-    'range-separator': '至',
-    'start-placeholder': '开始日期',
-    'end-placeholder': '结束日期',
+    'range-separator': translate('build.rangeSeparatorTo'),
+    'start-placeholder': translate('build.startDate'),
+    'end-placeholder': translate('build.endDate'),
     disabled: false,
     clearable: true,
     required: true,
@@ -351,7 +353,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/date-picker',
   },
   {
-    label: '评分',
+    label: translate('build.compRate'),
     tag: 'el-rate',
     tagIcon: 'rate',
     defaultValue: 0,
@@ -369,7 +371,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/rate',
   },
   {
-    label: '颜色选择',
+    label: translate('build.compColorPicker'),
     tag: 'el-color-picker',
     tagIcon: 'color',
     defaultValue: null,
@@ -384,7 +386,7 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/color-picker',
   },
   {
-    label: '上传',
+    label: translate('build.compUpload'),
     tag: 'el-upload',
     tagIcon: 'upload',
     action: 'https://jsonplaceholder.typicode.com/posts/',
@@ -396,7 +398,7 @@ export const selectComponents = [
     name: 'file',
     'auto-upload': true,
     showTip: false,
-    buttonText: '点击上传',
+    buttonText: translate('common.clickUpload'),
     fileSize: 2,
     sizeUnit: 'MB',
     'list-type': 'text',
@@ -404,7 +406,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/upload',
-    tip: '只能上传不超过 2MB 的文件',
+    tip: translate('build.uploadTip'),
     style: { width: '100%' },
   },
 ]
@@ -416,20 +418,20 @@ export const layoutComponents = [
     type: 'default',
     justify: 'start',
     align: 'top',
-    label: '行容器',
+    label: translate('build.compRowContainer'),
     layoutTree: true,
     children: [],
     document: 'https://element-plus.org/zh-CN/component/layout',
   },
   {
     layout: 'colFormItem',
-    label: '按钮',
+    label: translate('build.compButton'),
     changeTag: true,
     labelWidth: null,
     tag: 'el-button',
     tagIcon: 'button',
     span: 24,
-    default: '主要按钮',
+    default: translate('build.primaryButton'),
     type: 'primary',
     icon: 'Search',
     size: 'default',
