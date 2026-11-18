@@ -3,22 +3,22 @@
     <el-row>
       <el-col :span="12">
         <el-form-item prop="tplCategory">
-          <template #label>生成模板</template>
+          <template #label>{{ $t('gen.tplCategory') }}</template>
           <el-select v-model="info.tplCategory" @change="tplSelectChange">
-            <el-option label="单表（增删改查）" value="crud" />
-            <el-option label="树表（增删改查）" value="tree" />
-            <el-option label="主子表（增删改查）" value="sub" />
+            <el-option :label="$t('gen.tplCrud')" value="crud" />
+            <el-option :label="$t('gen.tplTree')" value="tree" />
+            <el-option :label="$t('gen.tplSub')" value="sub" />
           </el-select>
         </el-form-item>
       </el-col>
 
       <el-col :span="12">
         <el-form-item prop="tplWebType">
-          <template #label>前端类型</template>
+          <template #label>{{ $t('gen.frontType') }}</template>
           <el-select v-model="info.tplWebType">
-            <el-option label="Vue2 Element UI 模版" value="element-ui" />
-            <el-option label="Vue3 Element Plus 模版" value="element-plus" />
-            <el-option label="Vue3 Element Plus TypeScript 模版" value="element-plus-typescript" />
+            <el-option :label="$t('gen.tplElementUi')" value="element-ui" />
+            <el-option :label="$t('gen.tplElementPlus')" value="element-plus" />
+            <el-option :label="$t('gen.tplElementPlusTs')" value="element-plus-typescript" />
           </el-select>
         </el-form-item>
       </el-col>
@@ -26,8 +26,8 @@
       <el-col :span="12">
         <el-form-item prop="packageName">
           <template #label>
-            生成包路径
-            <el-tooltip content="生成在哪个java包下，例如 com.ruoyi.system" placement="top">
+            {{ $t('gen.packageName') }}
+            <el-tooltip :content="$t('gen.packageNameTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
@@ -38,8 +38,8 @@
       <el-col :span="12">
         <el-form-item prop="moduleName">
           <template #label>
-            生成模块名
-            <el-tooltip content="可理解为子系统名，例如 system" placement="top">
+            {{ $t('gen.moduleName') }}
+            <el-tooltip :content="$t('gen.moduleNameTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
@@ -50,8 +50,8 @@
       <el-col :span="12">
         <el-form-item prop="businessName">
           <template #label>
-            生成业务名
-            <el-tooltip content="可理解为功能英文名，例如 user" placement="top">
+            {{ $t('gen.businessName') }}
+            <el-tooltip :content="$t('gen.businessNameTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
@@ -62,8 +62,8 @@
       <el-col :span="12">
         <el-form-item prop="functionName">
           <template #label>
-            生成功能名
-            <el-tooltip content="用作类描述，例如 用户" placement="top">
+            {{ $t('gen.functionName') }}
+            <el-tooltip :content="$t('gen.functionNameTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
@@ -74,44 +74,44 @@
       <el-col :span="12">
         <el-form-item prop="formColNum">
           <template #label>
-            表单布局
-            <el-tooltip content="选择表单的栅格布局方式" placement="top">
+            {{ $t('gen.formLayout') }}
+            <el-tooltip :content="$t('gen.formLayoutTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
           <el-select v-model="info.formColNum">
-            <el-option label="单列" :value="1" />
-            <el-option label="双列" :value="2" />
-            <el-option label="三列" :value="3" />
+            <el-option :label="$t('gen.layoutOneCol')" :value="1" />
+            <el-option :label="$t('gen.layoutTwoCol')" :value="2" />
+            <el-option :label="$t('gen.layoutThreeCol')" :value="3" />
           </el-select>
         </el-form-item>
       </el-col>
 
       <el-col :span="12">
         <el-form-item prop="genView">
-          <template #label>扩展功能</template>
-          <el-checkbox v-model="info.view">生成详情页</el-checkbox>
+          <template #label>{{ $t('gen.extendFeature') }}</template>
+          <el-checkbox v-model="info.view">{{ $t('gen.genDetailPage') }}</el-checkbox>
         </el-form-item>
       </el-col>
 
       <el-col :span="12">
         <el-form-item prop="genType">
           <template #label>
-            生成代码方式
-            <el-tooltip content="默认为zip压缩包下载，也可以自定义生成路径" placement="top">
+            {{ $t('gen.genType') }}
+            <el-tooltip :content="$t('gen.genTypeTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
-          <el-radio v-model="info.genType" value="0">zip压缩包</el-radio>
-          <el-radio v-model="info.genType" value="1">自定义路径</el-radio>
+          <el-radio v-model="info.genType" value="0">{{ $t('gen.genTypeZip') }}</el-radio>
+          <el-radio v-model="info.genType" value="1">{{ $t('gen.genTypeCustomPath') }}</el-radio>
         </el-form-item>
       </el-col>
 
       <el-col :span="12">
         <el-form-item>
           <template #label>
-            上级菜单
-            <el-tooltip content="分配到指定菜单下，例如 系统管理" placement="top">
+            {{ $t('gen.parentMenu') }}
+            <el-tooltip :content="$t('gen.parentMenuTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
@@ -119,7 +119,7 @@
             v-model="info.parentMenuId"
             :data="menuOptions"
             :props="{ value: 'menuId', label: 'menuName', children: 'children' }"
-            placeholder="请选择系统菜单"
+            :placeholder="$t('gen.selectSystemMenu')"
             check-strictly
           />
         </el-form-item>
@@ -128,8 +128,8 @@
       <el-col :span="24" v-if="info.genType == '1'">
         <el-form-item prop="genPath">
           <template #label>
-            自定义路径
-            <el-tooltip content="填写磁盘绝对路径，若不填写，则生成到当前Web项目下" placement="top">
+            {{ $t('gen.customPath') }}
+            <el-tooltip :content="$t('gen.customPathTip')" placement="top">
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
@@ -137,12 +137,12 @@
             <template #append>
               <el-dropdown>
                 <el-button type="primary">
-                  最近路径快速选择
+                  {{ $t('gen.recentPath') }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click="info.genPath = '/'">恢复默认的生成基础路径</el-dropdown-item>
+                    <el-dropdown-item @click="info.genPath = '/'">{{ $t('gen.restoreDefaultPath') }}</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -153,17 +153,17 @@
     </el-row>
     
     <template v-if="info.tplCategory == 'tree'">
-      <h4 class="form-header">其他信息</h4>
+      <h4 class="form-header">{{ $t('gen.otherInfo') }}</h4>
       <el-row v-show="info.tplCategory == 'tree'">
         <el-col :span="12">
           <el-form-item>
             <template #label>
-              树编码字段
-              <el-tooltip content="树显示的编码字段名， 如：dept_id" placement="top">
+              {{ $t('gen.treeCodeField') }}
+              <el-tooltip :content="$t('gen.treeCodeFieldTip')" placement="top">
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.treeCode" placeholder="请选择">
+            <el-select v-model="info.treeCode" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in info.columns"
                 :key="index"
@@ -176,12 +176,12 @@
         <el-col :span="12">
           <el-form-item>
             <template #label>
-              树父编码字段
-              <el-tooltip content="树显示的父编码字段名， 如：parent_Id" placement="top">
+              {{ $t('gen.treeParentField') }}
+              <el-tooltip :content="$t('gen.treeParentFieldTip')" placement="top">
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.treeParentCode" placeholder="请选择">
+            <el-select v-model="info.treeParentCode" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in info.columns"
                 :key="index"
@@ -194,12 +194,12 @@
         <el-col :span="12">
           <el-form-item>
             <template #label>
-              树名称字段
-              <el-tooltip content="树节点的显示名称字段名， 如：dept_name" placement="top">
+              {{ $t('gen.treeNameField') }}
+              <el-tooltip :content="$t('gen.treeNameFieldTip')" placement="top">
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.treeName" placeholder="请选择">
+            <el-select v-model="info.treeName" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in info.columns"
                 :key="index"
@@ -213,17 +213,17 @@
     </template>
 
     <template v-if="info.tplCategory == 'sub'">
-      <h4 class="form-header">关联信息</h4>
+      <h4 class="form-header">{{ $t('gen.relationInfo') }}</h4>
       <el-row>
         <el-col :span="12">
           <el-form-item>
             <template #label>
-              关联子表的表名
-              <el-tooltip content="关联子表的表名， 如：sys_user" placement="top">
+              {{ $t('gen.subTableName') }}
+              <el-tooltip :content="$t('gen.subTableNameTip')" placement="top">
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.subTableName" placeholder="请选择" @change="subSelectChange">
+            <el-select v-model="info.subTableName" :placeholder="$t('common.select')" @change="subSelectChange">
               <el-option
                 v-for="(table, index) in tables"
                 :key="index"
@@ -236,12 +236,12 @@
         <el-col :span="12">
           <el-form-item>
             <template #label>
-              子表关联的外键名
-              <el-tooltip content="子表关联的外键名， 如：user_id" placement="top">
+              {{ $t('gen.subTableFkName') }}
+              <el-tooltip :content="$t('gen.subTableFkNameTip')" placement="top">
                 <el-icon><question-filled /></el-icon>
               </el-tooltip>
             </template>
-            <el-select v-model="info.subTableFkName" placeholder="请选择">
+            <el-select v-model="info.subTableFkName" :placeholder="$t('common.select')">
               <el-option
                 v-for="(column, index) in subColumns"
                 :key="index"
@@ -259,6 +259,7 @@
 
 <script setup lang="ts">
 import { listMenu } from "@/api/system/menu"
+import { translate } from '@/locales'
 
 const subColumns = ref([])
 const menuOptions = ref([])
@@ -277,11 +278,11 @@ const props = defineProps({
 
 // 表单校验
 const rules = ref({
-  tplCategory: [{ required: true, message: "请选择生成模板", trigger: "blur" }],
-  packageName: [{ required: true, message: "请输入生成包路径", trigger: "blur" }],
-  moduleName: [{ required: true, message: "请输入生成模块名", trigger: "blur" }],
-  businessName: [{ required: true, message: "请输入生成业务名", trigger: "blur" }],
-  functionName: [{ required: true, message: "请输入生成功能名", trigger: "blur" }]
+  tplCategory: [{ required: true, message: () => translate('gen.tplCategoryRequired'), trigger: "blur" }],
+  packageName: [{ required: true, message: () => translate('gen.packageNameRequired'), trigger: "blur" }],
+  moduleName: [{ required: true, message: () => translate('gen.moduleNameRequired'), trigger: "blur" }],
+  businessName: [{ required: true, message: () => translate('gen.businessNameRequired'), trigger: "blur" }],
+  functionName: [{ required: true, message: () => translate('gen.functionNameRequired'), trigger: "blur" }]
 })
 
 function subSelectChange(value: string): void {

@@ -1,22 +1,22 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
-         <el-form-item label="接口名称" prop="apiName">
+         <el-form-item :label="$t('commonApi.apiName')" prop="apiName">
             <el-input
                v-model="queryParams.apiName"
-               placeholder="请输入接口名称"
+               :placeholder="$t('commonApi.apiNamePlaceholder')"
                clearable
                style="width: 240px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
          </el-form-item>
          <el-form-item style="float:right;margin-left:0">
             <div class="link-list" v-if="showSearch">
-               <el-button type="primary" link @click="showSearch = false">展开筛选</el-button>
+               <el-button type="primary" link @click="showSearch = false">{{ $t('common.expandFilter') }}</el-button>
             </div>
          </el-form-item>
       </el-form>
@@ -29,7 +29,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:commonApi:add']"
-            >新建</el-button>
+            >{{ $t('common.new') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -39,27 +39,27 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['system:commonApi:remove']"
-            >批量删除</el-button>
+            >{{ $t('common.batchDelete') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table v-loading="loading" :data="commonApiList" @selection-change="handleSelectionChange" border>
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="序号" width="60" type="index" align="center" />
-         <el-table-column label="接口名称" align="center" prop="apiName" min-width="180" :show-overflow-tooltip="true" />
-         <el-table-column label="接口关键字" align="center" prop="apiKey" min-width="180" :show-overflow-tooltip="true" />
-         <el-table-column label="接口地址" align="center" prop="apiUrl" min-width="320" :show-overflow-tooltip="true" />
-         <el-table-column label="创建人" align="center" prop="createBy" width="100" />
-         <el-table-column label="创建时间" align="center" prop="createTime" width="160">
+         <el-table-column :label="$t('common.index')" width="60" type="index" align="center" />
+         <el-table-column :label="$t('commonApi.apiName')" align="center" prop="apiName" min-width="180" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('commonApi.apiKey')" align="center" prop="apiKey" min-width="180" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('commonApi.apiPath')" align="center" prop="apiUrl" min-width="320" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('common.createBy')" align="center" prop="createBy" width="100" />
+         <el-table-column :label="$t('common.createTime')" align="center" prop="createTime" width="160">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('common.action')" align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:commonApi:edit']">修改</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:commonApi:remove']">删除</el-button>
+               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:commonApi:edit']">{{ $t('common.edit') }}</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:commonApi:remove']">{{ $t('common.delete') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -77,57 +77,57 @@
          <el-form ref="commonApiRef" :model="form" :rules="rules" label-width="100px">
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="接口名称" prop="apiName">
-                     <el-input v-model="form.apiName" placeholder="请输入接口名称" />
+                  <el-form-item :label="$t('commonApi.apiName')" prop="apiName">
+                     <el-input v-model="form.apiName" :placeholder="$t('commonApi.apiNamePlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="接口关键字" prop="apiKey">
-                     <el-input v-model="form.apiKey" placeholder="请输入接口关键字（唯一标识）" />
+                  <el-form-item :label="$t('commonApi.apiKey')" prop="apiKey">
+                     <el-input v-model="form.apiKey" :placeholder="$t('commonApi.apiKeyPlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="接口地址" prop="apiUrl">
-                     <el-input v-model="form.apiUrl" placeholder="请输入接口URL地址" />
+                  <el-form-item :label="$t('commonApi.apiPath')" prop="apiUrl">
+                     <el-input v-model="form.apiUrl" :placeholder="$t('commonApi.apiPathPlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
                   <el-form-item label="Cookie" prop="cookie">
-                     <el-input v-model="form.cookie" type="textarea" :rows="2" placeholder="请输入请求Cookie（如 LtpaToken=xxx; JSESSIONID=xxx）" />
+                     <el-input v-model="form.cookie" type="textarea" :rows="2" :placeholder="$t('commonApi.cookiePlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="描述" prop="description">
-                     <el-input v-model="form.description" type="textarea" :rows="5" placeholder="请输入描述信息" />
+                  <el-form-item :label="$t('commonApi.description')" prop="description">
+                     <el-input v-model="form.description" type="textarea" :rows="5" :placeholder="$t('commonApi.descriptionPlaceholder')" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="创建人" prop="createBy">
+                  <el-form-item :label="$t('common.createBy')" prop="createBy">
                      <el-input v-model="form.createBy" disabled />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="修改人" prop="updateBy">
+                  <el-form-item :label="$t('common.updateBy')" prop="updateBy">
                      <el-input v-model="form.updateBy" disabled />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="创建时间" prop="createTime">
+                  <el-form-item :label="$t('common.createTime')" prop="createTime">
                      <el-input v-model="form.createTime" disabled />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="更新时间" prop="updateTime">
+                  <el-form-item :label="$t('common.updateTime')" prop="updateTime">
                      <el-input v-model="form.updateTime" disabled />
                   </el-form-item>
                </el-col>
@@ -135,8 +135,8 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+               <el-button @click="cancel">{{ $t('common.cancel') }}</el-button>
             </div>
          </template>
       </el-dialog>
@@ -168,9 +168,9 @@ const data = reactive({
     apiKey: undefined
   } as CommonApiQueryParams,
   rules: {
-    apiName: [{ required: true, message: "接口名称不能为空", trigger: "blur" }],
-    apiKey: [{ required: true, message: "接口关键字不能为空", trigger: "blur" }],
-    apiUrl: [{ required: true, message: "接口地址不能为空", trigger: "blur" }]
+    apiName: [{ required: true, message: () => proxy.$t('commonApi.nameRequired'), trigger: "blur" }],
+    apiKey: [{ required: true, message: () => proxy.$t('commonApi.keyRequired'), trigger: "blur" }],
+    apiUrl: [{ required: true, message: () => proxy.$t('commonApi.pathRequired'), trigger: "blur" }]
   }
 })
 
@@ -226,7 +226,7 @@ function handleSelectionChange(selection: SysCommonApi[]) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "通用接口"
+  title.value = proxy.$t('commonApi.title')
 }
 
 function handleUpdate(row: SysCommonApi) {
@@ -235,7 +235,7 @@ function handleUpdate(row: SysCommonApi) {
   getCommonApi(id).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "通用接口"
+    title.value = proxy.$t('commonApi.title')
   })
 }
 
@@ -244,13 +244,13 @@ function submitForm() {
     if (valid) {
       if (form.value.id != undefined) {
         updateCommonApi(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
           open.value = false
           getList()
         })
       } else {
         addCommonApi(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t('common.addSuccess'))
           open.value = false
           getList()
         })
@@ -261,12 +261,12 @@ function submitForm() {
 
 function handleDelete(row: SysCommonApi) {
   const apiIds = row.id || ids.value
-  const tips = Array.isArray(apiIds) ? apiIds.length + "条选中数据" : '"' + apiIds + '"'
-  proxy.$modal.confirm('是否确认删除通用接口编号为' + tips + '的数据项？').then(function () {
+  const tips = Array.isArray(apiIds) ? proxy.$t('common.selectedCount', { n: apiIds.length }) : '"' + apiIds + '"'
+  proxy.$modal.confirm(proxy.$t('commonApi.deleteConfirm', { tips })).then(function () {
     return delCommonApi(apiIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 

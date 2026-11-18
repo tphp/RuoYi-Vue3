@@ -11,7 +11,7 @@
         </el-icon>
         <p class="sso-text" :class="{ 'is-error': isError }">{{ message }}</p>
         <div v-if="errorMsg" class="sso-actions">
-          <el-button type="primary" @click="goLogin">返回登录</el-button>
+          <el-button type="primary" @click="goLogin">{{ $t('sso.backToLogin') }}</el-button>
         </div>
       </div>
     </div>
@@ -23,9 +23,12 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { ssoLogin } from '@/api/sso'
 import { setToken } from '@/utils/auth'
 import defaultSettings from '@/settings'
+
+const { t } = useI18n()
 
 const title = import.meta.env.VITE_APP_TITLE
 const footerContent = defaultSettings.footerContent
@@ -33,10 +36,12 @@ const route = useRoute()
 const router = useRouter()
 
 const loading = ref<boolean>(true)
-const message = ref<string>('正在验证身份，请稍候...')
 const statusIcon = ref<string>('CircleCheck')
 const errorMsg = ref<string>('')
+// 非错误状态下的提示文案（随语言切换实时更新）
+const infoMsg = ref<string>(t('sso.verifying'))
 
+const message = computed<string>(() => errorMsg.value || infoMsg.value)
 const isError = computed<boolean>(() => !!errorMsg.value)
 
 /**
@@ -46,7 +51,6 @@ function setErrorState(text: string): void {
   loading.value = false
   statusIcon.value = 'CircleCloseFilled'
   errorMsg.value = text
-  message.value = text
 }
 
 /**
@@ -55,7 +59,7 @@ function setErrorState(text: string): void {
 async function doSsoLogin(): Promise<void> {
   const token = (route.query?.token as string) || ''
   if (!token) {
-    setErrorState('登录凭证缺失，无法完成单点登录')
+    setErrorState(t('sso.credentialMissing'))
     return
   }
 
@@ -64,8 +68,8 @@ async function doSsoLogin(): Promise<void> {
     if (res && res.token) {
       setToken(res.token)
       statusIcon.value = 'CircleCheck'
-      message.value = '登录成功，正在跳转...'
       errorMsg.value = ''
+      infoMsg.value = t('sso.loginSuccessRedirect')
       // 跳转到指定 redirect 路径，未指定则进入首页（保留其它 query 参数）
       const query = { ...route.query }
       delete query.token
@@ -74,10 +78,10 @@ async function doSsoLogin(): Promise<void> {
       const target = isSafeRedirect(redirect) ? redirect : '/'
       router.replace({ path: target, query })
     } else {
-      setErrorState(res?.msg || '登录失败')
+      setErrorState(res?.msg || t('common.operationFail'))
     }
   } catch (err: any) {
-    const msg = (err && (err.msg || err.message)) || '单点登录失败，请重试'
+    const msg = (err && (err.msg || err.message)) || t('sso.loginFailedRetry')
     setErrorState(msg)
   }
 }

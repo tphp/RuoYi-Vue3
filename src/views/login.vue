@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
+      <language-select class="login-lang-select" />
       <h3 class="title">{{ title }}</h3>
       <el-form-item prop="username">
         <el-input
@@ -8,7 +9,7 @@
           type="text"
           size="large"
           auto-complete="off"
-          placeholder="账号"
+          :placeholder="$t('login.accountPlaceholder')"
         >
           <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
         </el-input>
@@ -19,7 +20,7 @@
           type="password"
           size="large"
           auto-complete="off"
-          placeholder="密码"
+          :placeholder="$t('login.passwordPlaceholder')"
           @keyup.enter="handleLogin"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -30,7 +31,7 @@
           v-model="loginForm.code"
           size="large"
           auto-complete="off"
-          placeholder="验证码"
+          :placeholder="$t('login.codePlaceholder')"
           style="width: 63%"
           @keyup.enter="handleLogin"
         >
@@ -40,7 +41,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{ $t('login.remember') }}</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -49,11 +50,11 @@
           style="width:100%;"
           @click.prevent="handleLogin"
         >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
+          <span v-if="!loading">{{ $t('login.loginBtn') }}</span>
+          <span v-else>{{ $t('login.loggingIn') }}</span>
         </el-button>
         <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
+          <router-link class="link-type" :to="'/register'">{{ $t('login.register') }}</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -70,9 +71,12 @@ import Cookies from "js-cookie"
 import { encrypt, decrypt } from "@/utils/jsencrypt"
 import useUserStore from '@/store/modules/user'
 import defaultSettings from '@/settings'
+import { useI18n } from 'vue-i18n'
 import type { CaptchaInfoResult } from '@/types/api/login'
 import type { LoginForm } from '@/types/api/login'
+import LanguageSelect from '@/components/LanguageSelect/index.vue'
 
+const { t } = useI18n()
 const title = import.meta.env.VITE_APP_TITLE
 const footerContent = defaultSettings.footerContent
 const userStore = useUserStore()
@@ -89,9 +93,9 @@ const loginForm = ref<LoginForm>({
 })
 
 const loginRules = {
-  username: [{ required: true, trigger: "blur", message: "请输入您的账号" }],
-  password: [{ required: true, trigger: "blur", message: "请输入您的密码" }],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  username: [{ required: true, trigger: "blur", message: () => t('login.accountRequired') }],
+  password: [{ required: true, trigger: "blur", message: () => t('login.passwordRequired') }],
+  code: [{ required: true, trigger: "change", message: () => t('login.captchaRequired') }]
 }
 
 const codeUrl = ref("")
@@ -188,6 +192,7 @@ getCookie()
   width: 400px;
   padding: 25px 25px 5px 25px;
   z-index: 1;
+  position: relative;
   .el-input {
     height: 40px;
     input {
@@ -198,6 +203,19 @@ getCookie()
     height: 39px;
     width: 14px;
     margin-left: 0px;
+  }
+}
+.login-lang-select {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  z-index: 2;
+  font-size: 18px;
+  color: #5a5e66;
+  cursor: pointer;
+
+  :deep(.el-dropdown) {
+    margin-left: 0;
   }
 }
 .login-tip {

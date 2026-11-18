@@ -58,6 +58,8 @@ export interface TreeSelect {
   id?: number
   /** 节点名称 */
   label?: string
+  /** 节点名称（英文），英文界面下优先使用 */
+  labelEn?: string
   /** 节点禁用 */
   disabled: boolean
   /** 子节点 */
@@ -68,6 +70,8 @@ export interface TreeSelect {
 export interface TableShowColumns {
   // 显示名称
   label: string
+  // 显示名称的多语言 key（存在时优先使用，切换语言即时生效）
+  labelKey?: string
   // 是否显示
   visible: boolean
 }

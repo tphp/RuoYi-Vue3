@@ -2,21 +2,21 @@
   <el-dialog :title="title" v-model="visible" :width="width" append-to-body @close="handleClose">
     <el-upload ref="uploadRef" :limit="1" accept=".xlsx, .xls" :headers="headers" :action="uploadUrl" :disabled="isUploading" :on-progress="handleProgress" :on-change="handleFileChange" :on-remove="handleFileRemove" :on-success="handleSuccess" :auto-upload="false" drag>
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      <div class="el-upload__text">{{ $t('common.dragFileHere') }}<em>{{ $t('common.clickUpload') }}</em></div>
       <template #tip>
         <div class="el-upload__tip text-center">
           <div class="el-upload__tip">
             <el-checkbox v-model="updateSupport"> {{ updateSupportLabel }} </el-checkbox>
           </div>
-          <span>仅允许导入xls、xlsx格式文件。</span>
-          <el-link v-if="templateUrl" type="primary" underline="never" style="font-size: 12px; vertical-align: baseline" @click="handleDownloadTemplate">下载模板</el-link>
+          <span>{{ $t('common.onlyXlsXlsx') }}</span>
+          <el-link v-if="templateUrl" type="primary" underline="never" style="font-size: 12px; vertical-align: baseline" @click="handleDownloadTemplate">{{ $t('common.download') }}</el-link>
         </div>
       </template>
     </el-upload>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="visible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</el-button>
+        <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
   </el-dialog>
@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import type {  AjaxResult } from '@/types/api/common'
 import { getToken } from '@/utils/auth'
+import { translate } from '@/locales'
 
 const { proxy } = getCurrentInstance()
 
@@ -32,7 +33,7 @@ const props = defineProps({
   // 对话框标题
   title: {
     type: String,
-    default: '数据导入'
+    default: () => translate('common.dataImport')
   },
   // 对话框宽度
   width: {
@@ -57,7 +58,7 @@ const props = defineProps({
   // 覆盖更新勾选框的说明文字
   updateSupportLabel: {
     type: String,
-    default: '是否更新已经存在的数据'
+    default: () => translate('common.updateExistingData')
   }
 })
 
@@ -120,7 +121,7 @@ function handleSuccess(response: AjaxResult) {
   isUploading.value = false
   selectedFile.value = null
   uploadRef.value?.clearFiles()
-  proxy.$alert("<div style='overflow:auto;overflow-x:hidden;max-height:70vh;padding:10px 20px 0;'>" + response.msg + '</div>', '导入结果', { dangerouslyUseHTMLString: true })
+  proxy.$alert("<div style='overflow:auto;overflow-x:hidden;max-height:70vh;padding:10px 20px 0;'>" + response.msg + '</div>', proxy.$t('common.importResult'), { dangerouslyUseHTMLString: true })
   emit('success')
 }
 
@@ -128,7 +129,7 @@ function handleSuccess(response: AjaxResult) {
 function handleSubmit() {
   const file = selectedFile.value
   if (!file || file.length === 0 || !file.name.toLowerCase().endsWith('.xls') && !file.name.toLowerCase().endsWith('.xlsx')) {
-    proxy.$modal.msgError("请选择后缀为 “xls”或“xlsx”的文件。")
+    proxy.$modal.msgError(proxy.$t('common.selectXlsXlsx'))
     return
   }
   uploadRef.value.submit()

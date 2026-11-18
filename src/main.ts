@@ -6,7 +6,9 @@ import ElementPlus from 'element-plus'
 import { ElDialog } from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
-import locale from 'element-plus/es/locale/lang/zh-cn'
+
+// i18n 国际化
+import i18n, { elementLocale } from '@/locales'
 
 import '@/assets/styles/index.scss' // global css
 
@@ -29,6 +31,7 @@ import './permission' // permission control
 import { useDict } from '@/utils/dict'
 import { getConfigKey } from "@/api/system/config"
 import { parseTime, resetForm, addDateRange, handleTree, selectDictLabel, selectDictLabels } from '@/utils/ruoyi'
+import { setupLocaleForm } from '@/utils/localeForm'
 
 // 分页组件
 import Pagination from '@/components/Pagination/index.vue'
@@ -72,19 +75,24 @@ app.component('Editor', Editor)
 
 app.use(router)
 app.use(store)
+app.use(i18n)
 app.use(plugins)
 app.use(elementIcons)
 app.component('svg-icon', SvgIcon)
 
 directive(app)
 
+// 语言切换后刷新表单校验提示
+setupLocaleForm(app)
+
 // 使用element-plus 并且设置全局的大小
+// locale 传入响应式对象，Element Plus 内置文案（分页、日期选择器等）可随语言实时切换
 // @ts-ignore
-app.use(ElementPlus, {
-  locale: locale,
+app.use(ElementPlus, reactive({
+  locale: elementLocale,
   // 支持 large、default、small
   size: Cookies.get('size') || 'small'
-})
+}))
 
 // 全局设置：是否可以通过点击 modal 关闭 Dialog
 ElDialog.props.closeOnClickModal.default = false

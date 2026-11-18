@@ -1,8 +1,12 @@
+/**
+ * 错误码对应的多语言 key
+ * 存 key 而非文案，翻译在消费时进行，保证切换语言后提示同步更新
+ */
 const errorCode: Record<string, string> = {
-  '401': '认证失败，无法访问系统资源',
-  '403': '当前操作没有权限',
-  '404': '访问资源不存在',
-  'default': '系统未知错误，请反馈给管理员'
+  '401': 'error.authFailed',
+  '403': 'error.noPermission',
+  '404': 'error.resourceNotFound',
+  'default': 'error.unknownError'
 }
 
 export default errorCode

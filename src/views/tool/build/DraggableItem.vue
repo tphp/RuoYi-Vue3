@@ -1,6 +1,6 @@
 <template>
   <el-col :span="element.span" :class="className" @click.stop="activeItem(element)">
-    <el-form-item :label="element.label" :label-width="element.labelWidth ? element.labelWidth + 'px' : null"
+    <el-form-item :label="element.labelKey ? $t(element.labelKey) : element.label" :label-width="element.labelWidth ? element.labelWidth + 'px' : null"
       :required="element.required" v-if="element.layout === 'colFormItem'">
       <render :key="element.tag" :conf="element" v-model="element.defaultValue" />
     </el-form-item>
@@ -16,10 +16,10 @@
         </template>
       </draggable>
     </el-row>
-    <span class="drawing-item-copy" title="复制" @click.stop="copyItem(element)">
+    <span class="drawing-item-copy" :title="$t('common.copy')" @click.stop="copyItem(element)">
       <el-icon><CopyDocument /></el-icon>
     </span>
-    <span class="drawing-item-delete" title="删除" @click.stop="deleteItem(index)">
+    <span class="drawing-item-delete" :title="$t('common.delete')" @click.stop="deleteItem(index)">
       <el-icon><Delete /></el-icon>
     </span>
   </el-col>

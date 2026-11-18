@@ -86,7 +86,7 @@ const componentSlot = {
       if (conf.showTip) {
         return () => h('div', {
           class: "el-upload__tip"
-        }, '只能上传不超过' + conf.fileSize + conf.sizeUnit + '的' + conf.accept + '文件')
+        }, translate('build.uploadTipWithSize', { size: conf.fileSize, unit: conf.sizeUnit, accept: conf.accept }))
       }
     },
   }

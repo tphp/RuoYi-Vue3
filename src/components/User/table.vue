@@ -8,9 +8,9 @@
       style="height: 50px;"
       v-if="emitList.length > 0 && emitMultiple"
     >
-      全选
+      {{ $t('common.selectAll') }}
     </el-checkbox>
-    <div v-else-if="emitList.length == 0" class="css_select_list" style="color: #999">没有找到数据</div>
+    <div v-else-if="emitList.length == 0" class="css_select_list" style="color: #999">{{ $t('common.noDataFound') }}</div>
     <div style="overflow-y: auto;" :style="{height: (emitHeight - 40) + 'px'}">
       <el-checkbox-group
         v-model="userCheckList"

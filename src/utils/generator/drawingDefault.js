@@ -1,3 +1,5 @@
+import { translate } from '@/locales'
+
 export const drawingDefaultValue = []
 
 export function initDrawingDefaultValue() {
@@ -5,11 +7,13 @@ export function initDrawingDefaultValue() {
     drawingDefaultValue.push({
       layout: 'colFormItem',
       tagIcon: 'input',
-      label: '手机号',
+      label: translate('build.defaultMobileLabel'),
+      labelKey: 'build.defaultMobileLabel',
       vModel: 'mobile',
       formId: 6,
       tag: 'el-input',
-      placeholder: '请输入手机号',
+      placeholder: translate('build.defaultMobilePlaceholder'),
+      placeholderKey: 'build.defaultMobilePlaceholder',
       defaultValue: '',
       span: 24,
       style: {width: '100%'},
@@ -26,7 +30,7 @@ export function initDrawingDefaultValue() {
       changeTag: true,
       regList: [{
         pattern: '/^1(3|4|5|7|8|9)\\d{9}$/',
-        message: '手机号格式错误'
+        message: translate('build.defaultMobileMessage')
       }]
     })
   }

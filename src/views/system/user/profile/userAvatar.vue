@@ -1,6 +1,6 @@
 <template>
   <div class="user-info-head" @click="editCropper()">
-    <img :src="options.img" title="点击上传头像" class="img-circle img-lg" />
+    <img :src="options.img" :title="$t('profile.clickUploadAvatar')" class="img-circle img-lg" />
     <el-dialog :title="title" v-model="open" width="800px" append-to-body @opened="modalOpened" @close="closeDialog">
       <el-row>
         <el-col :xs="24" :md="12" :style="{ height: '350px' }">
@@ -33,25 +33,25 @@
             :before-upload="beforeUpload"
           >
             <el-button>
-              选择
+              {{ $t('common.select') }}
               <el-icon class="el-icon--right"><Upload /></el-icon>
             </el-button>
           </el-upload>
         </el-col>
         <el-col :lg="{ span: 1, offset: 2 }" :md="2">
-          <el-button icon="Plus" @click="changeScale(1)"></el-button>
+          <el-button icon="Plus" @click="changeScale(1)"</el-button>
         </el-col>
         <el-col :lg="{ span: 1, offset: 1 }" :md="2">
-          <el-button icon="Minus" @click="changeScale(-1)"></el-button>
+          <el-button icon="Minus" @click="changeScale(-1)"</el-button>
         </el-col>
         <el-col :lg="{ span: 1, offset: 1 }" :md="2">
-          <el-button icon="RefreshLeft" @click="rotateLeft()"></el-button>
+          <el-button icon="RefreshLeft" @click="rotateLeft()"</el-button>
         </el-col>
         <el-col :lg="{ span: 1, offset: 1 }" :md="2">
-          <el-button icon="RefreshRight" @click="rotateRight()"></el-button>
+          <el-button icon="RefreshRight" @click="rotateRight()"</el-button>
         </el-col>
         <el-col :lg="{ span: 2, offset: 6 }" :md="2">
-          <el-button type="primary" @click="uploadImg()">提 交</el-button>
+          <el-button type="primary" @click="uploadImg()">{{ $t('common.submit') }}</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -69,7 +69,7 @@ const { proxy } = getCurrentInstance()
 
 const open = ref<boolean>(false)
 const visible = ref<boolean>(false)
-const title = ref<string>("修改头像")
+const title = computed<string>(() => proxy.$t('profile.updateAvatar'))
 
 //图片裁剪数据
 const options = reactive<any>({
@@ -115,7 +115,7 @@ function changeScale(num: number) {
 /** 上传预处理 */
 function beforeUpload(file: File) {
   if (file.type.indexOf("image/") == -1) {
-    proxy.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
+    proxy.$modal.msgError(proxy.$t('user.avatarFormatError'))
   } else {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -135,7 +135,7 @@ function uploadImg() {
       open.value = false
       options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl
       userStore.avatar = options.img
-      proxy.$modal.msgSuccess("修改成功")
+      proxy.$modal.msgSuccess(proxy.$t('common.editSuccess'))
       visible.value = false
     })
   })

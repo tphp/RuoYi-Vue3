@@ -1,4 +1,5 @@
 import { titleCase } from '@/utils/index'
+import { translate } from '@/locales'
 import { trigger } from './config'
 // 文件大小设置
 const units = {
@@ -80,9 +81,9 @@ function buildAttributes(
   if (el.action && el.tag === 'el-upload') {
     uploadVarList.push(
       `
-      // 上传请求路径
+      // ${translate('build.genUploadRequestPath')}
       const ${el.vModel}Action = ref('${el.action}')
-      // 上传文件列表
+      // ${translate('build.genUploadFileList')}
       const ${el.vModel}fileList =  ref([])`
     )
     methodList.push(buildBeforeUpload(el))
@@ -136,9 +137,9 @@ function buildRules(conf, ruleList) {
     if (conf.required) {
       const type = Array.isArray(conf.defaultValue) ? "type: 'array'," : ''
       let message = Array.isArray(conf.defaultValue)
-        ? `请至少选择一个${conf.vModel}`
+        ? translate('build.atLeastSelectOne', { name: conf.vModel })
         : conf.placeholder
-      if (message === undefined) message = `${conf.label}不能为空`
+      if (message === undefined) message = translate('build.cannotBeEmpty', { label: conf.label })
       rules.push(
         `{ required: true, ${type} message: '${message}', trigger: '${
           trigger[conf.tag]
@@ -184,7 +185,7 @@ function buildOptions(conf, optionsList) {
  */
 function buildOptionMethod(methodName, model, methodList) {
   const str = `function ${methodName}() {
-    // TODO 发起请求获取数据
+    // TODO ${translate('build.genFetchOptions')}
     ${model}.value
   }`
   methodList.push(str)
@@ -204,7 +205,7 @@ function buildProps(conf, propsList) {
       (conf.props.props.children = conf.childrenKey)
   }
   const str = `
-  // props设置
+  // ${translate('build.genPropsSetting')}
   const ${conf.vModel}Props = ref(${JSON.stringify(conf.props.props)})`
   propsList.push(str)
 }
@@ -222,21 +223,21 @@ function buildBeforeUpload(conf) {
   if (conf.fileSize) {
     rightSizeCode = `let isRightSize = file.size / ${unitNum} < ${conf.fileSize}
     if(!isRightSize){
-      proxy.$modal.msgError('文件大小超过 ${conf.fileSize}${conf.sizeUnit}')
+      proxy.$modal.msgError('${translate('build.fileSizeExceeded', { size: conf.fileSize, unit: conf.sizeUnit })}')
     }`
     returnList.push('isRightSize')
   }
   if (conf.accept) {
     acceptCode = `let isAccept = new RegExp('${conf.accept}').test(file.type)
     if(!isAccept){
-      proxy.$modal.msgError('应该选择${conf.accept}类型的文件')
+      proxy.$modal.msgError('${translate('build.acceptTypeTip', { accept: conf.accept })}')
     }`
     returnList.push('isAccept')
   }
   const str = `
   /**
-   * @name: 上传之前的文件判断
-   * @description: 上传之前的文件判断，判断文件大小文件类型等
+   * @name: ${translate('build.genBeforeUploadName')}
+   * @description: ${translate('build.genBeforeUploadDesc')}
    * @param {*} file
    * @return {*}
    */  
@@ -299,46 +300,46 @@ function buildexport(
   
   if(type === 'dialog') {
     str += `
-      // 弹窗设置
+      // ${translate('build.genDialogSetting')}
       const dialogVisible = defineModel()
-      // 弹窗确认回调
+      // ${translate('build.genDialogConfirm')}
       const emit = defineEmits(['confirm'])
       /**
-       * @name: 弹窗打开后执行
-       * @description: 弹窗打开后执行方法
+       * @name: ${translate('build.genDialogOpenName')}
+       * @description: ${translate('build.genDialogOpenDesc')}
        * @return {*}
        */
       function onOpen(){
 
       }
       /**
-       * @name: 弹窗关闭时执行
-       * @description: 弹窗关闭方法，重置表单
+       * @name: ${translate('build.genDialogCloseName')}
+       * @description: ${translate('build.genDialogCloseDesc')}
        * @return {*}
        */
       function onClose(){
         ${conf.formRef}.value.resetFields()
       }
       /**
-       * @name: 弹窗取消
-       * @description: 弹窗取消方法
+       * @name: ${translate('build.genDialogCancelName')}
+       * @description: ${translate('build.genDialogCancelDesc')}
        * @return {*}
        */
       function close(){
         dialogVisible.value = false
       }
       /**
-       * @name: 弹窗表单提交
-       * @description: 弹窗表单提交方法
+       * @name: ${translate('build.genDialogSubmitName')}
+       * @description: ${translate('build.genDialogSubmitDesc')}
        * @return {*}
        */
       function handelConfirm(){
         ${conf.formRef}.value.validate((valid) => {
           if (!valid) return
-          // TODO 提交表单
+          // TODO ${translate('build.genTodoSubmit')}
 
           close()
-          // 回调父级组件
+          // ${translate('build.genCallbackParent')}
           emit('confirm')
         })
       }
@@ -346,19 +347,19 @@ function buildexport(
   } else {
     str += `
     /**
-     * @name: 表单提交
-     * @description: 表单提交方法
+     * @name: ${translate('build.genFormSubmitName')}
+     * @description: ${translate('build.genFormSubmitDesc')}
      * @return {*}
      */
     function submitForm() {
       ${conf.formRef}.value.validate((valid) => {
         if (!valid) return
-        // TODO 提交表单
+        // TODO ${translate('build.genTodoSubmit')}
       })
     }
     /**
-     * @name: 表单重置
-     * @description: 表单重置方法
+     * @name: ${translate('build.genFormResetName')}
+     * @description: ${translate('build.genFormResetDesc')}
      * @return {*}
      */
     function resetForm() {

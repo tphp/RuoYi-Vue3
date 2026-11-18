@@ -17,7 +17,7 @@
         size="large"
         @input="querySearch"
         prefix-icon="Search"
-        placeholder="菜单搜索，支持标题、URL模糊查询"
+        :placeholder="$t('common.menuSearchPlaceholder')"
         clearable
         @keyup.enter="selectActiveResult"
         @keydown.up.prevent="navigateResult('up')"
@@ -26,7 +26,7 @@
       </el-input>
 
       <div class="result-count" v-if="search && options.length > 0">
-        找到 <strong>{{ options.length }}</strong> 个结果
+        {{ $t('common.searchResultCount', { count: options.length }) }}
       </div>
 
       <div class="result-wrap">
@@ -47,8 +47,8 @@
                 <svg-icon class="menu-icon" :icon-class="item.icon" />
               </div>
               <div class="search-info" @click="change(item)">
-                <div class="menu-title" v-html="highlightText(item.title.join(' / '))"></div>
-                <div class="menu-path" v-html="highlightText(item.path)"></div>
+                <div class="menu-title" v-html="highlightText(getSearchTitle(item))"</div>
+                <div class="menu-path" v-html="highlightText(item.path)"</div>
               </div>
               <svg-icon icon-class="enter" v-show="index === activeIndex" />
             </div>
@@ -56,8 +56,8 @@
 
           <div class="empty-state" v-else-if="search && options.length === 0">
             <el-icon class="empty-icon"><Search /></el-icon>
-            <p class="empty-text">未找到 "<strong>{{ search }}</strong>" 相关菜单</p>
-            <p class="empty-tip">试试其他关键词或路径</p>
+            <p class="empty-text">{{ $t('common.menuNotFound', { keyword: search }) }}</p>
+            <p class="empty-tip">{{ $t('common.tryOtherKeyword') }}</p>
           </div>
 
         </el-scrollbar>
@@ -65,13 +65,13 @@
 
       <div class="search-footer">
         <span class="shortcut-item">
-          <kbd>↑</kbd><kbd>↓</kbd> 切换
+          <kbd>↑</kbd><kbd>↓</kbd> {{ $t('common.switch') }}
         </span>
         <span class="shortcut-item">
-          <kbd>↵</kbd> 选择
+          <kbd>↵</kbd> {{ $t('common.select') }}
         </span>
         <span class="shortcut-item">
-          <kbd>Esc</kbd> 关闭
+          <kbd>Esc</kbd> {{ $t('common.close') }}
         </span>
       </div>
     </el-dialog>
@@ -82,12 +82,15 @@
 import Fuse from 'fuse.js'
 import { getNormalPath } from '@/utils/ruoyi'
 import { isHttp } from '@/utils/validate'
+import { currentLocale, translate } from '@/locales'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
 
 interface SearchItem {
   path: string
   title: string[]
+  titleKeys: (string | undefined)[]
+  titleEns: (string | undefined)[]
   icon: string
   query?: string
 }
@@ -154,7 +157,7 @@ function initFuse(list: SearchItem[]): void {
   })
 }
 
-function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = []): SearchItem[] {
+function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = [], prefixTitleKeys: (string | undefined)[] = [], prefixTitleEns: (string | undefined)[] = []): SearchItem[] {
   let res: SearchItem[] = []
   for (const r of routes) {
     if (r.hidden) { continue }
@@ -162,10 +165,14 @@ function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = []):
     const data: SearchItem = {
       path: !isHttp(r.path) ? getNormalPath(basePath + p) : r.path,
       title: [...prefixTitle],
+      titleKeys: [...prefixTitleKeys],
+      titleEns: [...prefixTitleEns],
       icon: ''
     }
-    if (r.meta && r.meta.title) {
+    if (r.meta && (r.meta.title || r.meta.titleKey)) {
       data.title = [...data.title, r.meta.title as string]
+      data.titleKeys = [...data.titleKeys, r.meta.titleKey as string | undefined]
+      data.titleEns = [...data.titleEns, r.meta.titleEn as string | undefined]
       data.icon = (r.meta.icon as string) || ''
       if (r.redirect !== "noRedirect") {
         res.push(data)
@@ -175,13 +182,23 @@ function generateRoutes(routes: any, basePath = '', prefixTitle: string[] = []):
       data.query = r.query
     }
     if (r.children) {
-      const tempRoutes = generateRoutes(r.children, data.path, data.title)
+      const tempRoutes = generateRoutes(r.children, data.path, data.title, data.titleKeys, data.titleEns)
       if (tempRoutes.length >= 1) {
         res = [...res, ...tempRoutes]
       }
     }
   }
   return res
+}
+
+/** 拼接搜索结果标题（有多语言 key 时实时翻译，英文界面优先用后端返回的英文名） */
+function getSearchTitle(item: SearchItem): string {
+  const parts = item.titleKeys.map((key, index) => {
+    if (key) return translate(key)
+    if (currentLocale.value === 'en' && item.titleEns[index]) return item.titleEns[index] as string
+    return item.title[index]
+  })
+  return parts.join(' / ')
 }
 
 function querySearch(query: string): void {

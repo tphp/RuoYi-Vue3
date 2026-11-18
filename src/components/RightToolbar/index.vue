@@ -1,13 +1,13 @@
 <template>
   <div class="top-right-btn" :style="style">
     <el-row>
-      <el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索' : '显示搜索'" placement="top" v-if="search">
+      <el-tooltip class="item" effect="dark" :content="showSearch ? $t('common.hideSearch') : $t('common.showSearch')" placement="top" v-if="search">
         <el-button circle icon="Search" @click="toggleSearch()" />
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="刷新" placement="top">
+      <el-tooltip class="item" effect="dark" :content="$t('common.refresh')" placement="top">
         <el-button circle icon="Refresh" @click="refresh()" />
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="Object.keys(columns).length > 0">
+      <el-tooltip class="item" effect="dark" :content="$t('common.toggleColumn')" placement="top" v-if="Object.keys(columns).length > 0">
         <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType == 'transfer'"/>
         <el-dropdown trigger="click" :hide-on-click="false" style="padding-left: 12px" v-if="showColumnsType == 'checkbox'">
           <el-button circle icon="Menu" />
@@ -15,12 +15,12 @@
             <el-dropdown-menu>
               <!-- 全选/反选 按钮 -->
               <el-dropdown-item>
-                <el-checkbox :indeterminate="isIndeterminate" v-model="isChecked" @change="toggleCheckAll"> 列展示 </el-checkbox>
+                <el-checkbox :indeterminate="isIndeterminate" v-model="isChecked" @change="toggleCheckAll"> {{ $t('common.columnDisplay') }} </el-checkbox>
               </el-dropdown-item>
-              <div class="check-line"></div>
+              <div class="check-line"</div>
               <template v-for="(item, key) in columns" :key="item.key">
                 <el-dropdown-item>
-                  <el-checkbox v-model="item.visible" @change="checkboxChange($event, key)" :label="item.label" />
+                  <el-checkbox v-model="item.visible" @change="checkboxChange($event, key)" :label="item.labelKey ? translate(item.labelKey) : item.label" />
                 </el-dropdown-item>
               </template>
             </el-dropdown-menu>
@@ -30,7 +30,7 @@
     </el-row>
     <el-dialog :title="title" v-model="open" append-to-body>
       <el-transfer
-        :titles="['显示', '隐藏']"
+        :titles="[$t('common.show'), $t('common.hide')]"
         v-model="value"
         :data="transferData"
         @change="dataChange"
@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import cache from '@/plugins/cache'
+import { translate } from '@/locales'
 import type { TableShowColumns } from '@/types/api/common'
 
 const props = defineProps({
@@ -81,7 +82,7 @@ const emits = defineEmits(['update:showSearch', 'queryTable'])
 // 显隐数据
 const value = ref<number[]>([])
 // 弹出层标题
-const title = ref("显示/隐藏")
+const title = computed(() => translate('common.showHide'))
 // 是否显示弹出层
 const open = ref(false)
 
@@ -99,7 +100,7 @@ const isChecked = computed({
   set: () => {}
 })
 const isIndeterminate = computed(() => Array.isArray(props.columns) ? props.columns.some((col: TableShowColumns) => col.visible) && !isChecked.value : Object.values(props.columns).some((col) => (col as TableShowColumns).visible) && !isChecked.value)
-const transferData = computed(() => Array.isArray(props.columns) ? props.columns.map((item: TableShowColumns, index: number) => ({ key: index, label: item.label })) : Object.keys(props.columns).map((key, index) => ({ key: index, label: props.columns[key].label })))
+const transferData = computed(() => Array.isArray(props.columns) ? props.columns.map((item: TableShowColumns, index: number) => ({ key: index, label: item.labelKey ? translate(item.labelKey) : item.label })) : Object.keys(props.columns).map((key, index) => ({ key: index, label: props.columns[key].labelKey ? translate(props.columns[key].labelKey) : props.columns[key].label })))
 
 // 搜索
 const { proxy } = getCurrentInstance()!

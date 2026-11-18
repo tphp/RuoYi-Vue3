@@ -26,14 +26,14 @@ interface SizeOption {
 const appStore = useAppStore()
 const size = computed(() => appStore.size)
 const { proxy } = getCurrentInstance()
-const sizeOptions = ref<SizeOption[]>([
-  { label: "较大", value: "large" },
-  { label: "默认", value: "default" },
-  { label: "稍小", value: "small" },
+const sizeOptions = computed<SizeOption[]>(() => [
+  { label: proxy.$t('common.sizeLarge'), value: "large" },
+  { label: proxy.$t('common.sizeDefault'), value: "default" },
+  { label: proxy.$t('common.sizeSmall'), value: "small" },
 ])
 
 function handleSetSize(size: 'large' | 'default' | 'small'): void {
-  proxy.$modal.loading("正在设置布局大小，请稍候...")
+  proxy.$modal.loading(proxy.$t('common.settingLayoutSize'))
   appStore.setSize(size)
   setTimeout(() => {
     window.location.reload()

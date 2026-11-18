@@ -6,6 +6,7 @@ import { tansParams, blobValidate } from '@/utils/ruoyi'
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
+import { currentLocale, translate } from '@/locales'
 
 let downloadLoadingInstance: ReturnType<typeof ElLoading.service>
 // 是否显示重新登录
@@ -31,6 +32,8 @@ service.interceptors.request.use((config: any) => {
   if (getToken() && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
+  // 携带当前语言，后端按此返回对应语言的资源与提示
+  config.headers['X-Lang'] = currentLocale.value
   // get请求映射params参数
   if (config.method === 'get' && config.params) {
     let url = config.url + '?' + tansParams(config.params)
@@ -47,7 +50,7 @@ service.interceptors.request.use((config: any) => {
     const requestSize = Object.keys(JSON.stringify(requestObj)).length // 请求数据大小
     const limitSize = 5 * 1024 * 1024 // 限制存放数据5M
     if (requestSize >= limitSize) {
-      console.warn(`[${config.url}]: ` + '请求数据大小超出允许的5M限制，无法进行防重复提交验证。')
+      console.warn(`[${config.url}]: ` + translate('common.requestTooLarge'))
       return config
     }
     const sessionObj = cache.session.getJSON('sessionObj')
@@ -58,7 +61,7 @@ service.interceptors.request.use((config: any) => {
       const s_data = sessionObj.data              // 请求数据
       const s_time = sessionObj.time              // 请求时间
       if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
-        const message = '数据正在处理，请勿重复提交'
+        const message = translate('common.duplicateSubmit')
         console.warn(`[${s_url}]: ` + message)
         return Promise.reject(new Error(message))
       } else {
@@ -77,7 +80,7 @@ service.interceptors.response.use((res: any) => {
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200
     // 获取错误信息
-    const msg = errorCode[code] || res.data.msg || errorCode['default']
+    const msg = errorCode[code] ? translate(errorCode[code]) : (res.data.msg || translate(errorCode['default']))
     // 二进制数据则直接返回
     if (res.request.responseType ===  'blob' || res.request.responseType ===  'arraybuffer') {
       return res.data
@@ -85,7 +88,7 @@ service.interceptors.response.use((res: any) => {
     if (code === 401) {
       if (!isRelogin.show) {
         isRelogin.show = true
-        ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', { confirmButtonText: '重新登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
+        ElMessageBox.confirm(translate('common.sessionExpired'), translate('common.systemTip'), { confirmButtonText: translate('common.relogin'), cancelButtonText: translate('common.cancel'), type: 'warning' }).then(() => {
           isRelogin.show = false
           useUserStore().logOut().then(() => {
             location.href = '/index'
@@ -94,7 +97,7 @@ service.interceptors.response.use((res: any) => {
         isRelogin.show = false
       })
     }
-      return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+      return Promise.reject(translate('common.invalidSession'))
     } else if (code === 500) {
       if (!res?.config?.noMsg) {
         ElMessage({ message: msg, type: 'error' })
@@ -114,11 +117,11 @@ service.interceptors.response.use((res: any) => {
     console.log('err' + error)
     let { message } = error
     if (message == "Network Error") {
-      message = "后端接口连接异常"
+      message = translate('common.backendConnectError')
     } else if (message.includes("timeout")) {
-      message = "系统接口请求超时"
+      message = translate('common.apiTimeout')
     } else if (message.includes("Request failed with status code")) {
-      message = "系统接口" + message.slice(-3) + "异常"
+      message = translate('common.apiError', { status: message.slice(-3) })
     }
     ElMessage({ message: message, type: 'error', duration: 5 * 1000 })
     return Promise.reject(error)
@@ -127,7 +130,7 @@ service.interceptors.response.use((res: any) => {
 
 // 通用下载方法
 export function download(url: string, params: any, filename: string, config?: any) {
-  downloadLoadingInstance = ElLoading.service({ text: "正在下载数据，请稍候", background: "rgba(0, 0, 0, 0.7)", })
+  downloadLoadingInstance = ElLoading.service({ text: translate('common.downloadingData'), background: "rgba(0, 0, 0, 0.7)", })
   return service.post(url, params, {
     transformRequest: [(params: any) => { return tansParams(params) }],
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -141,13 +144,13 @@ export function download(url: string, params: any, filename: string, config?: an
     } else {
       const resText = await data.text()
       const rspObj = JSON.parse(resText)
-      const errMsg = errorCode[rspObj.code] || rspObj.msg || errorCode['default']
+      const errMsg = errorCode[rspObj.code] ? translate(errorCode[rspObj.code]) : (rspObj.msg || translate(errorCode['default']))
       ElMessage.error(errMsg)
     }
     downloadLoadingInstance.close()
   }).catch((r: any) => {
     console.error(r)
-    ElMessage.error('下载文件出现错误，请联系管理员！')
+    ElMessage.error(translate('common.downloadError'))
     downloadLoadingInstance.close()
   })
 }

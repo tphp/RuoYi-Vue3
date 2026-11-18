@@ -16,6 +16,8 @@ export interface SysMenu extends BaseEntity {
   parentId?: number;
   /** 菜单名称 */
   menuName?: string;
+  /** 菜单名称（英文） */
+  menuNameEn?: string;
   /** 显示顺序 */
   orderNum?: number;
   /** 路由地址 */

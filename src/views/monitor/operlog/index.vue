@@ -1,37 +1,37 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-         <el-form-item label="操作地址" prop="operIp">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
+         <el-form-item :label="$t('operlog.operAddress')" prop="operIp">
             <el-input
                v-model="queryParams.operIp"
-               placeholder="请输入操作地址"
+               :placeholder="$t('operlog.operAddressPlaceholder')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="系统模块" prop="title">
+         <el-form-item :label="$t('operlog.title')" prop="title">
             <el-input
                v-model="queryParams.title"
-               placeholder="请输入系统模块"
+               :placeholder="$t('operlog.modulePlaceholder')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="操作人员" prop="operName">
+         <el-form-item :label="$t('operlog.operName')" prop="operName">
             <el-input
                v-model="queryParams.operName"
-               placeholder="请输入操作人员"
+               :placeholder="$t('operlog.operNamePlaceholder')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="类型" prop="businessType">
+         <el-form-item :label="$t('menu.menuType')" prop="businessType">
             <el-select
                v-model="queryParams.businessType"
-               placeholder="操作类型"
+               :placeholder="$t('operlog.businessTypePlaceholder')"
                clearable
                style="width: 240px"
             >
@@ -43,10 +43,10 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item :label="$t('common.status')" prop="status">
             <el-select
                v-model="queryParams.status"
-               placeholder="操作状态"
+               :placeholder="$t('operlog.statusPlaceholder')"
                clearable
                style="width: 240px"
             >
@@ -58,20 +58,20 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="操作时间" style="width: 308px">
+         <el-form-item :label="$t('operlog.operTime')" style="width: 308px">
             <el-date-picker
                v-model="dateRange"
                value-format="YYYY-MM-DD HH:mm:ss"
                type="daterange"
                range-separator="-"
-               start-placeholder="开始日期"
-               end-placeholder="结束日期"
+               start-:placeholder="$t('common.startDate')"
+               end-:placeholder="$t('common.endDate')"
                :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
             ></el-date-picker>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('common.search') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.reset') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -84,7 +84,7 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['monitor:operlog:remove']"
-            >删除</el-button>
+            >{{ $t('common.delete') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -93,7 +93,7 @@
                icon="Delete"
                @click="handleClean"
                v-hasPermi="['monitor:operlog:remove']"
-            >清空</el-button>
+            >{{ $t('common.clear') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -102,40 +102,40 @@
                icon="Download"
                @click="handleExport"
                v-hasPermi="['monitor:operlog:export']"
-            >导出</el-button>
+            >{{ $t('common.export') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table ref="operlogRef" v-loading="loading" :data="operlogList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
          <el-table-column type="selection" width="50" align="center" />
-         <el-table-column label="日志编号" align="center" prop="operId" />
-         <el-table-column label="系统模块" align="center" prop="title" :show-overflow-tooltip="true" />
-         <el-table-column label="操作类型" align="center" prop="businessType">
+         <el-table-column :label="$t('operlog.operId')" align="center" prop="operId" />
+         <el-table-column :label="$t('operlog.title')" align="center" prop="title" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('operlog.businessType')" align="center" prop="businessType">
             <template #default="scope">
                <dict-tag :options="sys_oper_type" :value="scope.row.businessType" />
             </template>
          </el-table-column>
-         <el-table-column label="操作人员" align="center" width="110" prop="operName" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
-         <el-table-column label="操作地址" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
-         <el-table-column label="操作状态" align="center" prop="status">
+         <el-table-column :label="$t('operlog.operName')" align="center" width="110" prop="operName" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
+         <el-table-column :label="$t('operlog.operAddress')" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('operlog.status')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="操作日期" align="center" prop="operTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
+         <el-table-column :label="$t('operlog.operDate')" align="center" prop="operTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
             <template #default="scope">
                <span>{{ parseTime(scope.row.operTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="消耗时间" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
+         <el-table-column :label="$t('operlog.costTime')" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
             <template #default="scope">
-               <span>{{ scope.row.costTime }}毫秒</span>
+               <span>{{ scope.row.costTime }} {{ $t('common.millisecond') }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('common.action')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="View" @click="handleDetail(scope.row, scope.index)" v-hasPermi="['monitor:operlog:query']">详细</el-button>
+               <el-button link type="primary" icon="View" @click="handleDetail(scope.row, scope.index)" v-hasPermi="['monitor:operlog:query']">{{ $t('common.detail') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -234,21 +234,21 @@ function handleDetail(row: SysOperLog) {
 /** 删除按钮操作 */
 function handleDelete(row?: SysOperLog) {
   const operIds = row?.operId || ids.value
-  proxy.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('operlog.deleteConfirm', { ids: operIds })).then(function () {
     return delOperlog(operIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t('common.deleteSuccess'))
   }).catch(() => {})
 }
 
 /** 清空按钮操作 */
 function handleClean() {
-  proxy.$modal.confirm("是否确认清空所有操作日志数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t('operlog.clearConfirm')).then(function () {
     return cleanOperlog()
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("清空成功")
+    proxy.$modal.msgSuccess(proxy.$t('common.clearSuccess'))
   }).catch(() => {})
 }
 

@@ -3,6 +3,7 @@
  * Copyright (c) 2019 ruoyi
  */
 import useUserStore from '@/store/modules/user'
+import { translate } from '@/locales'
 
 export default {
   mounted(el: HTMLElement, binding: DirectiveBinding, vnode: any) {
@@ -21,7 +22,7 @@ export default {
         el.parentNode && el.parentNode.removeChild(el)
       }
     } else {
-      throw new Error(`请设置角色权限标签值`)
+      throw new Error(translate('common.roleValueRequired'))
     }
   }
 }

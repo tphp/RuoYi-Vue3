@@ -24,6 +24,8 @@ export interface RouterVo {
 export interface MetaVo {
   /** 设置该路由在侧边栏和面包屑中展示的名字 */
   title?: string
+  /** 路由展示的名字（英文），英文界面下优先使用 */
+  titleEn?: string
   /** 设置该路由的图标，对应路径src/assets/icons/svg */
   icon?: string
   /** 设置为true，则不会被 <keep-alive>缓存 */

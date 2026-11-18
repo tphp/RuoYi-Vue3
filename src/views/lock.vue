@@ -14,10 +14,10 @@
         <div class="lock-icon">🔒</div>
       </div>
       <div class="lock-username">{{ userStore.nickName }}</div>
-      <div class="lock-hint">系统已锁定，请输入密码解锁</div>
+      <div class="lock-hint">{{ $t('lock.hint') }}</div>
 
       <div class="input-wrap" :class="{ shake: isShaking }">
-        <input ref="passwordInput" v-model="password" type="password" placeholder="请输入登录密码" class="lock-input" @keydown.enter="handleUnlock" autocomplete="off" />
+        <input ref="passwordInput" v-model="password" type="password" :placeholder="$t('lock.passwordPlaceholder')" class="lock-input" @keydown.enter="handleUnlock" autocomplete="off" />
         <button class="unlock-btn" @click="handleUnlock" :disabled="loading">
           <span v-if="!loading">→</span>
           <span v-else class="loading-dot">···</span>
@@ -27,7 +27,7 @@
       <div v-if="errorMsg" class="error-msg">{{ errorMsg }}</div>
 
       <div class="lock-footer">
-        <a href="javascript:;" @click="goLogin">退出重新登录</a>
+        <a href="javascript:;" @click="goLogin">{{ $t('lock.relogin') }}</a>
       </div>
     </div>
   </div>
@@ -38,8 +38,10 @@ import { useRouter } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import useLockStore from '@/store/modules/lock'
 import { unlockScreen } from '@/api/login'
+import { useI18n } from 'vue-i18n'
 import male from '@/assets/images/male.png'
 
+const { t, locale } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const lockStore = useLockStore()
@@ -66,8 +68,10 @@ const startClock = () => {
     const now = new Date()
     const pad = (n: number) => String(n).padStart(2, '0')
     currentTime.value = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
-    const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
-    currentDate.value = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 ${days[now.getDay()]}`
+    const dateStr = now.toLocaleDateString(locale.value, {
+      year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+    })
+    currentDate.value = dateStr
   }
   update()
   timer = setInterval(update, 1000)
@@ -75,7 +79,7 @@ const startClock = () => {
 
 const handleUnlock = async () => {
   if (!password.value) {
-    showError('请输入密码')
+    showError(t('lock.passwordRequired'))
     return
   }
   loading.value = true

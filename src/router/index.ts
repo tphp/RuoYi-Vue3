@@ -71,7 +71,7 @@ export const constantRoutes = [
         path: '/index',
         component: () => import('@/views/index.vue'),
         name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: { titleKey: 'dashboard.title', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -79,7 +79,7 @@ export const constantRoutes = [
     path: '/lock',
     component: () => import('@/views/lock.vue'),
     hidden: true,
-    meta: { title: '锁定屏幕' }
+    meta: { titleKey: 'common.lockScreen' }
   },
   {
     path: '/user',
@@ -91,7 +91,7 @@ export const constantRoutes = [
         path: 'profile/:activeTab?',
         component: () => import('@/views/system/user/profile/index.vue'),
         name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
+        meta: { titleKey: 'common.personalCenter', icon: 'user' }
       }
     ]
   }
@@ -109,7 +109,7 @@ export const dynamicRoutes = [
         path: 'role/:userId(\\d+)',
         component: () => import('@/views/system/user/authRole.vue'),
         name: 'AuthRole',
-        meta: { title: '分配角色', activeMenu: '/system/user' }
+        meta: { titleKey: 'role.assignRole', activeMenu: '/system/user' }
       }
     ]
   },
@@ -123,7 +123,7 @@ export const dynamicRoutes = [
         path: 'user/:roleId(\\d+)',
         component: () => import('@/views/system/role/authUser.vue'),
         name: 'AuthUser',
-        meta: { title: '分配用户', activeMenu: '/system/role' }
+        meta: { titleKey: 'role.assignUser', activeMenu: '/system/role' }
       }
     ]
   },
@@ -137,7 +137,7 @@ export const dynamicRoutes = [
         path: 'index/:dictId(\\d+)',
         component: () => import('@/views/system/dict/data.vue'),
         name: 'Data',
-        meta: { title: '字典数据', activeMenu: '/system/dict' }
+        meta: { titleKey: 'dict.dataTitle', activeMenu: '/system/dict' }
       }
     ]
   },
@@ -151,7 +151,7 @@ export const dynamicRoutes = [
         path: 'index/:jobId(\\d+)',
         component: () => import('@/views/monitor/job/log.vue'),
         name: 'JobLog',
-        meta: { title: '调度日志', activeMenu: '/monitor/job' }
+        meta: { titleKey: 'job.log', activeMenu: '/monitor/job' }
       }
     ]
   },
@@ -165,7 +165,7 @@ export const dynamicRoutes = [
         path: 'index/:tableId(\\d+)',
         component: () => import('@/views/tool/gen/editTable.vue'),
         name: 'GenEdit',
-        meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
+        meta: { titleKey: 'gen.editConfig', activeMenu: '/tool/gen' }
       }
     ]
   }

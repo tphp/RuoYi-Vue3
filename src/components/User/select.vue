@@ -8,7 +8,7 @@
   >
     <div class="css_dialog_user_select" :style="{height: boxHeight + 136 + 'px'}">
       <el-tabs v-model="tagName" type="border-card">
-        <el-tab-pane label="最近联系人" name="recently">
+        <el-tab-pane :label="$t('user.recentContacts')" name="recently">
           <div style="margin: -15px;">
             <div
               class="app-container tree-sidebar-manage-wrap"
@@ -22,9 +22,9 @@
                     style="position: absolute; left: 10px"
                     v-if="userRecentlyList.length > 0 && !collapsed"
                   >
-                    清空最近联系人
+                    {{ $t('user.clearRecentContacts') }}
                   </el-button>
-                  <el-input v-model="recentlyUserName" style="width: 200px;" placeholder="请输入用户名" clearable>
+                  <el-input v-model="recentlyUserName" style="width: 200px;" :placeholder="$t('logininfor.userNamePlaceholder')" clearable>
                   </el-input>
                 </div>
                 <user-table
@@ -42,7 +42,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="组织架构" name="organization">
+        <el-tab-pane :label="$t('dept.organization')" name="organization">
           <div style="margin: -15px;">
             <div
               class="app-container tree-sidebar-manage-wrap"
@@ -50,9 +50,9 @@
               :style="{height: collapsed ? '0px' : boxHeight + 'px'}"
             >
               <tree-panel
-                title="组织架构"
+                :title="$t('dept.organization')"
                 :tree-data="deptOptions"
-                search-placeholder="请输入部门名称"
+                search-:placeholder="$t('dept.deptNamePlaceholder')"
                 storage-key="dept-sidebar-width"
                 :defaultExpandAll="true"
                 @node-click="handleNodeClick"
@@ -62,7 +62,7 @@
               />
               <div class="tree-sidebar-content">
                 <div class="tree-header">
-                  <el-input v-model="userName" style="width: 200px;" placeholder="请输入用户名" clearable @keyup.enter="searchList">
+                  <el-input v-model="userName" style="width: 200px;" :placeholder="$t('logininfor.userNamePlaceholder')" clearable @keyup.enter="searchList">
                     <template #append>
                       <el-button @click="searchList" :icon="Search" />
                     </template>
@@ -85,7 +85,7 @@
       </el-tabs>
       <!-- 侧边栏展开/收起按钮 -->
       <div class="collapse-button-container">
-        <el-tooltip :content="collapsed ? '展开' : '收起'" placement="right">
+        <el-tooltip :content="collapsed ? $t('common.expand') : $t('common.collapse')" placement="right">
           <el-icon class="collapse-button" @click="collapsed = !collapsed">
             <DArrowRight v-if="collapsed" />
             <DArrowLeft v-else />
@@ -106,9 +106,9 @@
     </div>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="clearUserCheck" style="float: left;">清空</el-button>
+        <el-button @click="clearUserCheck" style="float: left;">{{ $t('common.clear') }}</el-button>
         <el-button type="primary" @click="confirmClick()" v-if="!(emitQuick && !emitMultiple)">
-          确定
+          {{ $t('common.confirm') }}
           <span
             v-if="Object.keys(userCheck).length > 0"
             style="margin-left: 5px"
@@ -116,7 +116,7 @@
             ( {{ Object.keys(userCheck).length }} )
           </span>
         </el-button>
-        <el-button @click="dialogUserShow = false">取消</el-button>
+        <el-button @click="dialogUserShow = false">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
   </el-dialog>
@@ -162,6 +162,7 @@ import type { TreeSelect } from '@/types/api/common'
 import type { SysUser, UserQueryParams } from '@/types/api/system/user'
 import male from "@/assets/images/male.png"
 import female from "@/assets/images/female.png"
+import { translate } from '@/locales'
 import dept from "@/assets/images/dept.png"
 import cache from "@/utils/cache"
 const collapsed = ref<boolean>(false)
@@ -172,7 +173,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: "请选择人员"
+    default: () => translate('user.selectPerson')
   },
   multiple: {
     type: Boolean,
