@@ -3,19 +3,35 @@
  * Copyright (c) 2019 ruoyi
  */
 
-import { translate } from '@/locales'
+import { currentLocale, translate } from '@/locales'
 
 /**
  * 获取路由/菜单标题
- * 优先使用多语言 key（meta.titleKey）翻译，保证切换语言后即时更新；
- * 后端下发的动态菜单没有 key，直接回退到原始文案。
+ * 1. 优先使用多语言 key（meta.titleKey）翻译，保证切换语言后即时更新；
+ * 2. 后端下发的动态菜单没有 key，英文界面下使用后端返回的英文名（meta.titleEn）；
+ * 3. 都没有时回退到原始文案（meta.title）。
  */
 export function getRouteTitle(meta?: any): string {
   if (!meta) return ''
   if (meta.titleKey) {
     return translate(meta.titleKey)
   }
+  if (currentLocale.value === 'en' && meta.titleEn) {
+    return meta.titleEn
+  }
   return meta.title || ''
+}
+
+/**
+ * 获取树结构节点名称
+ * 英文界面下优先使用后端返回的英文名（labelEn），没有则回退到原始文案（label）。
+ */
+export function getTreeLabel(node: any): string {
+  if (!node) return ''
+  if (currentLocale.value === 'en' && node.labelEn) {
+    return node.labelEn
+  }
+  return node.label || ''
 }
 
 // 日期格式化

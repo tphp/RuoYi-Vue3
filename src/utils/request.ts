@@ -6,7 +6,7 @@ import { tansParams, blobValidate } from '@/utils/ruoyi'
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
-import { translate } from '@/locales'
+import { currentLocale, translate } from '@/locales'
 
 let downloadLoadingInstance: ReturnType<typeof ElLoading.service>
 // 是否显示重新登录
@@ -32,6 +32,8 @@ service.interceptors.request.use((config: any) => {
   if (getToken() && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
+  // 携带当前语言，后端按此返回对应语言的资源与提示
+  config.headers['X-Lang'] = currentLocale.value
   // get请求映射params参数
   if (config.method === 'get' && config.params) {
     let url = config.url + '?' + tansParams(config.params)

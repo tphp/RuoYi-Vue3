@@ -181,7 +181,11 @@
                   :check-strictly="!form.menuCheckStrictly"
                   :empty-text="$t('common.loadingPleaseWait')"
                   :props="{ label: 'label', children: 'children' }"
-               ></el-tree>
+               >
+                  <template #default="{ data }">
+                     <span>{{ getTreeLabel(data) }}</span>
+                  </template>
+               </el-tree>
             </el-form-item>
             <el-form-item :label="$t('common.remark')">
                <el-input v-model="form.remark" type="textarea" :placeholder="$t('common.remarkPlaceholder')"></el-input>
@@ -244,6 +248,7 @@
 <script setup lang="ts" name="Role">
 import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole, deptTreeSelect } from "@/api/system/role"
 import { roleMenuTreeselect, treeselect as menuTreeselect } from "@/api/system/menu"
+import { getTreeLabel } from '@/utils/ruoyi'
 import type { SysRole, RoleQueryParams } from '@/types/api/system/role'
 import type { TreeSelect } from '@/types/api/common'
 import type { RoleDeptTreeResult } from '@/types/api/system/role'

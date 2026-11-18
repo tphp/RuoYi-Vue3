@@ -58,6 +58,8 @@ export interface TreeSelect {
   id?: number
   /** 节点名称 */
   label?: string
+  /** 节点名称（英文），英文界面下优先使用 */
+  labelEn?: string
   /** 节点禁用 */
   disabled: boolean
   /** 子节点 */

@@ -70,6 +70,11 @@
                <span class="ml5">{{ scope.row.menuName }}</span>
             </template>
          </el-table-column>
+         <el-table-column prop="menuNameEn" :label="$t('menu.menuNameEn')" :show-overflow-tooltip="true" width="220">
+            <template #default="scope">
+               <span class="ml5">{{ scope.row.menuNameEn }}</span>
+            </template>
+         </el-table-column>
          <el-table-column prop="menuName" :label="$t('menu.menuType')" :show-overflow-tooltip="true" width="100">
             <template #default="scope">
                <el-tag v-if="scope.row.menuType === 'M' && scope.row.isFrame === '0'" type="danger" size="small">{{ $t('menu.externalLink') }}</el-tag>
@@ -109,7 +114,7 @@
                      <el-tree-select
                         v-model="form.parentId"
                         :data="menuOptions"
-                        :props="{ value: 'menuId', label: 'menuName', children: 'children' }"
+                        :props="menuTreeProps"
                         value-key="menuId"
                         :placeholder="$t('menu.parentMenuPlaceholder')"
                         check-strictly
@@ -157,6 +162,11 @@
                <el-col :span="12">
                   <el-form-item :label="$t('menu.menuName')" prop="menuName">
                      <el-input v-model="form.menuName" :placeholder="$t('menu.menuNamePlaceholder')" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item :label="$t('menu.menuNameEn')" prop="menuNameEn">
+                     <el-input v-model="form.menuNameEn" :placeholder="$t('menu.menuNameEnPlaceholder')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12" v-if="form.menuType == 'C'">
@@ -309,6 +319,7 @@
 import { addMenu, delMenu, getMenu, listMenu, updateMenu, updateMenuSort, } from "@/api/system/menu"
 import SvgIcon from "@/components/SvgIcon/index.vue"
 import IconSelect from "@/components/IconSelect/index.vue"
+import { currentLocale } from '@/locales'
 import type { SysMenu, MenuQueryParams } from '@/types/api/system/menu'
 
 const { proxy } = getCurrentInstance()
@@ -340,6 +351,13 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data)
 
+/** 上级菜单下拉树的显示属性，英文界面下使用菜单英文名 */
+const menuTreeProps = computed(() => ({
+  value: 'menuId',
+  label: currentLocale.value === 'en' ? 'menuNameEn' : 'menuName',
+  children: 'children'
+}))
+
 /** 查询菜单列表 */
 function getList() {
   loading.value = true
@@ -354,7 +372,7 @@ function getList() {
 function getTreeselect() {
   menuOptions.value = []
   listMenu().then(response => {
-    const menu = { menuId: 0, menuName: proxy.$t('menu.mainCategory'), children: [] }
+    const menu = { menuId: 0, menuName: proxy.$t('menu.mainCategory'), menuNameEn: proxy.$t('menu.mainCategory'), children: [] }
     menu.children = proxy.handleTree(response.data, "menuId")
     menuOptions.value.push(menu)
   })
@@ -372,6 +390,7 @@ function reset() {
     menuId: undefined,
     parentId: 0,
     menuName: undefined,
+    menuNameEn: undefined,
     icon: undefined,
     menuType: "M",
     orderNum: undefined,
