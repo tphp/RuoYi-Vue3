@@ -490,6 +490,8 @@ export default {
     typeRequired: '字典类型不能为空',
     addTitle: '添加字典类型',
     editTitle: '修改字典类型',
+    dictLabelEn: '字典标签（英文）',
+    dictLabelEnPlaceholder: '请输入英文标签',
     deleteConfirm: '是否确认删除字典编号为"{ids}"的数据项？',
   },
   // 参数设置

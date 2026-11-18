@@ -45,6 +45,8 @@ export interface SysDictData extends BaseEntity {
   dictCode?: number;
   /** 字典标签 */
   dictLabel?: string;
+  /** 字典标签（英文） */
+  dictLabelEn?: string;
   /** 字典键值 */
   dictValue?: string;
   /** 字典类型 */
