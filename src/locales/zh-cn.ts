@@ -1,4 +1,9 @@
 export default {
+  // 系统全局信息
+  app: {
+    // 系统名称（登录页、侧边栏 Logo、浏览器标题）
+    title: '管理系统',
+  },
   common: {
     confirm: '确定',
     cancel: '取消',

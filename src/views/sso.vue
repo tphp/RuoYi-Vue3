@@ -30,7 +30,8 @@ import defaultSettings from '@/settings'
 
 const { t } = useI18n()
 
-const title = import.meta.env.VITE_APP_TITLE
+// 系统名称走多语言配置，切换语言即时更新
+const title = computed(() => t('app.title'))
 const footerContent = defaultSettings.footerContent
 const route = useRoute()
 const router = useRouter()

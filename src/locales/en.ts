@@ -1,4 +1,9 @@
 export default {
+  // Global system info
+  app: {
+    // System name (login page, sidebar logo, browser title)
+    title: 'Management System',
+  },
   common: {
     confirm: 'Confirm',
     cancel: 'Cancel',
