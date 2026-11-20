@@ -490,6 +490,8 @@ export default {
     addTitle: 'Add Dict Type',
     editTitle: 'Edit Dict Type',
     deleteConfirm: 'Are you sure to delete the dict with ID "{ids}"?',
+    dictLabelEn: 'Dict Label (English)',
+    dictLabelEnPlaceholder: 'Please enter the English label',
   },
   config: {
     title: 'Config Settings',

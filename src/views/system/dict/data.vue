@@ -95,6 +95,7 @@
                <el-tag v-else :type="scope.row.listClass == 'primary' ? '' : scope.row.listClass" :class="scope.row.cssClass">{{ scope.row.dictLabel }}</el-tag>
             </template>
          </el-table-column>
+         <el-table-column :label="$t('dict.dictLabelEn')" align="center" prop="dictLabelEn" :show-overflow-tooltip="true" />
          <el-table-column :label="$t('dict.dictValue')" align="center" prop="dictValue" />
          <el-table-column :label="$t('dict.dictSort')" align="center" prop="dictSort" />
          <el-table-column :label="$t('common.status')" align="center" prop="status">
@@ -126,12 +127,15 @@
 
       <!-- 添加或修改参数配置对话框 -->
       <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-         <el-form ref="dataRef" :model="form" :rules="rules" label-width="100px">
+         <el-form ref="dataRef" :model="form" :rules="rules" label-width="120px">
             <el-form-item :label="$t('dict.dictType')">
                <el-input v-model="form.dictType" :disabled="true" />
             </el-form-item>
             <el-form-item :label="$t('dict.dictLabel')" prop="dictLabel">
                <el-input v-model="form.dictLabel" :placeholder="$t('dict.dictLabelPlaceholder')" />
+            </el-form-item>
+            <el-form-item :label="$t('dict.dictLabelEn')" prop="dictLabelEn">
+               <el-input v-model="form.dictLabelEn" :placeholder="$t('dict.dictLabelEnPlaceholder')" />
             </el-form-item>
             <el-form-item :label="$t('dict.dictValue')" prop="dictValue">
                <el-input v-model="form.dictValue" :placeholder="$t('dict.dictValuePlaceholder')" />
@@ -266,6 +270,7 @@ function reset() {
   form.value = {
     dictCode: undefined,
     dictLabel: undefined,
+    dictLabelEn: undefined,
     dictValue: undefined,
     cssClass: undefined,
     listClass: "default",
