@@ -16,6 +16,7 @@
 import logo from '@/assets/logo/logo.png'
 import useSettingsStore from '@/store/modules/settings'
 import variables from '@/assets/styles/variables.module.scss'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   collapse: {
@@ -24,7 +25,9 @@ defineProps({
   }
 })
 
-const title = import.meta.env.VITE_APP_TITLE
+const { t } = useI18n()
+// 系统名称走多语言配置，切换语言即时更新
+const title = computed(() => t('app.title'))
 const settingsStore = useSettingsStore()
 const sideTheme = computed(() => settingsStore.sideTheme)
 
