@@ -51,8 +51,16 @@
               <a class="link-type" style="cursor:pointer" @click="handleViewData(scope.row)">{{ scope.row.userName }}</a>
             </template>
          </el-table-column>
-          <el-table-column :label="$t('user.nickName')" align="center" key="nickName" prop="nickName" v-if="columns.nickName.visible" :show-overflow-tooltip="true" />
-          <el-table-column :label="$t('user.deptName')" align="center" key="deptName" prop="dept.deptName" v-if="columns.deptName.visible" :show-overflow-tooltip="true" />
+          <el-table-column :label="$t('user.nickName')" align="center" key="nickName" prop="nickName" v-if="columns.nickName.visible" :show-overflow-tooltip="true">
+            <template #default="scope">
+              {{ getNickName(scope.row) }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('user.deptName')" align="center" key="deptName" prop="dept.deptName" v-if="columns.deptName.visible" :show-overflow-tooltip="true">
+            <template #default="scope">
+              {{ getDeptName(scope.row.dept) }}
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('user.phonenumber')" align="center" key="phonenumber" prop="phonenumber" v-if="columns.phonenumber.visible" width="120" />
           <el-table-column :label="$t('common.status')" align="center" key="status" v-if="columns.status.visible">
             <template #default="scope">
@@ -99,36 +107,45 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('user.deptName')" prop="deptId">
-              <el-tree-select v-model="form.deptId" :data="enabledDeptOptions" :props="{ value: 'id', label: 'label', children: 'children' }" value-key="id" :placeholder="$t('user.deptPlaceholder')" clearable check-strictly />
+            <el-form-item :label="$t('user.nickNameEn')" prop="nickNameEn">
+              <el-input v-model="form.nickNameEn" :placeholder="$t('user.nickNameEnPlaceholder')" maxlength="100" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="12">
+            <el-form-item :label="$t('user.deptName')" prop="deptId">
+              <el-tree-select v-model="form.deptId" :data="enabledDeptOptions" :props="{ value: 'id', label: 'label', children: 'children' }" value-key="id" :placeholder="$t('user.deptPlaceholder')" clearable check-strictly>
+                <template #default="{ data }">
+                  {{ getTreeLabel(data) }}
+                </template>
+              </el-tree-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('user.phonenumber')" prop="phonenumber">
               <el-input v-model="form.phonenumber" :placeholder="$t('user.phonenumberPlaceholder')" maxlength="11" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item :label="$t('user.email')" prop="email">
               <el-input v-model="form.email" :placeholder="$t('user.emailPlaceholder')" maxlength="50" />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item v-if="form.userId == undefined" :label="$t('user.userName')" prop="userName">
               <el-input v-model="form.userName" :placeholder="$t('user.userNamePlaceholder')" maxlength="30" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item v-if="form.userId == undefined" :label="$t('user.password')" prop="password" :rules="pwdValidator">
               <el-input v-model="form.password" :placeholder="$t('user.passwordPlaceholder')" type="password" maxlength="20" show-password />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item :label="$t('user.sex')">
               <el-select v-model="form.sex" :placeholder="$t('common.select')">
@@ -136,6 +153,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item :label="$t('common.status')">
               <el-radio-group v-model="form.status">
@@ -188,6 +207,7 @@ import TreePanel from "@/components/TreePanel/index.vue"
 import ExcelImportDialog from "@/components/ExcelImportDialog/index.vue"
 import UserViewDrawer from "./view.vue"
 import { usePasswordRule } from "@/utils/passwordRule"
+import { getDeptName, getNickName, getTreeLabel } from '@/utils/ruoyi'
 import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from "@/api/system/user"
 import type { SysUser, UserQueryParams, UserFormDataResult } from '@/types/api/system/user'
 import type { SysRole } from '@/types/api/system/role'
@@ -385,6 +405,7 @@ function reset() {
     deptId: undefined,
     userName: undefined,
     nickName: undefined,
+    nickNameEn: undefined,
     password: undefined,
     phonenumber: undefined,
     email: undefined,

@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="emitTitle"
+    :title="dialogTitle"
     v-model="dialogUserShow"
     width="1024px"
     append-to-body
@@ -100,7 +100,7 @@
             </el-icon>
           </div>
           <div><el-avatar :src="getAvatar(e)" /></div>
-          <div class="css_user">{{ e?.nickName && e?.nickName.length > 0 ? e?.nickName : e?.userName }}</div>
+          <div class="css_user">{{ getNickName(e) }}</div>
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@
     <el-option
       v-for="e in optionValue"
       :key="e?.userId"
-      :label="e?.nickName ?? e?.userName "
+      :label="getNickName(e)"
       :value="e?.userId"
     />
     <template #prefix>
@@ -162,7 +162,8 @@ import type { TreeSelect } from '@/types/api/common'
 import type { SysUser, UserQueryParams } from '@/types/api/system/user'
 import male from "@/assets/images/male.png"
 import female from "@/assets/images/female.png"
-import { translate } from '@/locales'
+import { translate, currentLocale } from '@/locales'
+import { getNickName } from '@/utils/ruoyi'
 import dept from "@/assets/images/dept.png"
 import cache from "@/utils/cache"
 const collapsed = ref<boolean>(false)
@@ -173,7 +174,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: () => translate('user.selectPerson')
+    default: ''
   },
   multiple: {
     type: Boolean,
@@ -208,6 +209,16 @@ const emitMultiple = emitRef(props, emit, "multiple")
 const emitQuick = emitRef(props, emit, "quick")
 const emitDepartment = emitRef(props, emit, "department")
 const emitMaxCollapseTags = emitRef(props, emit, "maxCollapseTags")
+
+/** 弹框标题：外部未指定时用多语言文案，随语言切换实时更新 */
+const dialogTitle = computed(() => {
+  // 显式读取 currentLocale 建立依赖，保证语言切换后标题即时刷新
+  currentLocale.value
+  if (emitTitle.value) {
+    return emitTitle.value
+  }
+  return translate(emitDepartment.value ? 'dept.selectDept' : 'user.selectPerson')
+})
 const updateValue = ref([] as any)
 const dialogUserShow = ref<boolean>(false)
 const tagName = ref('recently')
@@ -300,7 +311,8 @@ const remoteMethod = (query: string) => {
   if (query) {
     const list = Object.values(emitDepartment.value ? deptDict.value : userDict.value)
     optionValue.value = list.filter((item: any) => {
-      const listFor = ["userName", "nickName"]
+      // 中英文名均可检索
+      const listFor = ["userName", "nickName", "nickNameEn"]
       for (const i in listFor) {
         const v = item[listFor[i]]
         if (v && v.toLowerCase().includes(query)) {
@@ -316,7 +328,7 @@ const remoteMethod = (query: string) => {
 
 const getTagName = (value: any) => {
   const dict = emitDepartment.value ? deptDict.value : userDict.value
-  return dict[value]?.nickName ?? dict[value]?.userName
+  return getNickName(dict[value])
 }
 
 const clickOpen = () => {
@@ -382,7 +394,10 @@ const setUserDict = (rows: any, isDept = false) => {
       userId: e?.userId,
       userName: e?.userName,
       nickName: e?.nickName,
+      nickNameEn: e?.nickNameEn,
       deptName: e?.dept?.deptName,
+      deptNameEn: e?.dept?.deptNameEn,
+      dept: e?.dept,
       avatar: e?.avatar,
       sex: e?.sex,
     }
@@ -432,6 +447,9 @@ function setListDeptTree(allList: any, tree: any, parentId = 0) {
     allList.push({
       userId: iv?.id,
       userName: iv?.label,
+      // 部门模式下 nickName 承载部门名称，nickNameEn 承载部门英文名
+      nickName: iv?.label,
+      nickNameEn: iv?.labelEn,
       parentId: parentId
     })
     if (iv?.children) {
@@ -614,6 +632,12 @@ watch(recentlyUserName, () => {
     }
     const nn = iv?.nickName
     if (typeof nn == "string" && nn.includes(uName)) {
+      userRecentlyList.value.push(iv)
+      continue
+    }
+    // 英文名同样支持检索
+    const ne = iv?.nickNameEn
+    if (typeof ne == "string" && ne.toLowerCase().includes(uName.toLowerCase())) {
       userRecentlyList.value.push(iv)
       continue
     }

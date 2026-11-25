@@ -34,6 +34,30 @@ export function getTreeLabel(node: any): string {
   return node.label || ''
 }
 
+/**
+ * 获取部门名称
+ * 英文界面下优先使用后端返回的英文名（deptNameEn），没有则回退到中文名（deptName）。
+ */
+export function getDeptName(dept?: any): string {
+  if (!dept) return ''
+  if (currentLocale.value === 'en' && dept.deptNameEn) {
+    return dept.deptNameEn
+  }
+  return dept.deptName || ''
+}
+
+/**
+ * 获取用户昵称
+ * 英文界面下优先使用后端返回的英文名（nickNameEn），没有则回退到中文昵称（nickName）。
+ */
+export function getNickName(user?: any): string {
+  if (!user) return ''
+  if (currentLocale.value === 'en' && user.nickNameEn) {
+    return user.nickNameEn
+  }
+  return user.nickName || user.userName || ''
+}
+
 // 日期格式化
 export function parseTime(time: any, pattern?: string): string | null {
   if (arguments.length === 0 || !time) {

@@ -21,8 +21,8 @@
           <el-checkbox :key="e.userId" :label="e.userId" :value="e.userId" class="css_select_list" :class="getClass(index)">
             <div class="css_div">
               <el-avatar :src="getAvatar(e)" />
-              <span class="css_user">{{ e?.nickName && e.nickName.length > 0 ? e.nickName :e.userName }}</span>
-              <span class="css_dept">{{ e?.dept?.deptName }}</span>
+              <span class="css_user">{{ getNickName(e) }}</span>
+              <span class="css_dept">{{ getDeptName(e?.dept) }}</span>
             </div>
           </el-checkbox>
         </div>
@@ -32,8 +32,8 @@
           <el-radio :key="e.userId" :label="e.userId" :value="e.userId" class="css_select_list" :class="getClass(index)">
             <div class="css_div">
               <el-avatar :src="getAvatar(e)" />
-              <span class="css_user">{{ e?.nickName && e.nickName.length > 0 ? e.nickName :e.userName }}</span>
-              <span class="css_dept">{{ e?.dept?.deptName }}</span>
+              <span class="css_user">{{ getNickName(e) }}</span>
+              <span class="css_dept">{{ getDeptName(e?.dept) }}</span>
             </div>
           </el-radio>
         </div>
@@ -44,6 +44,7 @@
 
 <script setup lang="ts">
 import emitRef from "@/utils/emit_ref"
+import { getDeptName, getNickName } from '@/utils/ruoyi'
 import male from "@/assets/images/male.png"
 import female from "@/assets/images/female.png"
 import dept from "@/assets/images/dept.png"

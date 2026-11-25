@@ -24,6 +24,8 @@ export interface SysDept extends BaseEntity {
   ancestors?: string;
   /** 部门名称 */
   deptName?: string;
+  /** 部门名称（英文） */
+  deptNameEn?: string;
   /** 显示顺序 */
   orderNum?: number;
   /** 负责人 */

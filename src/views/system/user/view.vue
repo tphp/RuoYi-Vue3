@@ -7,13 +7,13 @@
         <el-col :span="12">
           <div class="info-item">
             <label class="info-label">{{ $t('user.userName') }}：</label>
-            <span class="info-value plaintext">{{ info.nickName }}</span>
+            <span class="info-value plaintext">{{ getNickName(info) }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
             <label class="info-label">{{ $t('user.deptName') }}：</label>
-            <span class="info-value plaintext">{{ (info.dept && info.dept.deptName) }}</span>
+            <span class="info-value plaintext">{{ getDeptName(info.dept) }}</span>
           </div>
         </el-col>
       </el-row>
@@ -131,6 +131,7 @@ import type { SysUser } from '@/types/api/system/user'
 import type { SysRole } from '@/types/api/system/role'
 import type { SysPost } from '@/types/api/system/post'
 import { translate } from '@/locales'
+import { getDeptName, getNickName } from '@/utils/ruoyi'
 
 const visible = ref<boolean>(false)
 const loading = ref<boolean>(false)

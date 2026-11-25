@@ -62,7 +62,7 @@
                 <Folder v-if="data.children && data.children.length" />
                 <Document v-else />
               </el-icon>
-              <span class="node-label" :title="node.label">{{ node.label }}</span>
+              <span class="node-label" :title="getNodeLabel(node, data)">{{ getNodeLabel(node, data) }}</span>
             </span>
           </slot>
         </template>
@@ -74,6 +74,7 @@
 <script setup lang="ts">
 import useUserStore from '@/store/modules/user'
 import { translate } from '@/locales'
+import { getTreeLabel } from '@/utils/ruoyi'
 
 const props = defineProps({
   // 树形数据
@@ -227,6 +228,19 @@ const filterNodeMethod = (value: string, data: any): boolean => {
   }
   if (!value) return true
   return data.label && data.label.indexOf(value) !== -1
+}
+
+/**
+ * 获取节点显示文案
+ * el-tree 的 node.label 是初始化时的快照，切换语言后不会更新，
+ * 因此优先用原始 data 取英文名（labelEn），无英文名时回退到 node.label。
+ */
+const getNodeLabel = (node: any, data: any): string => {
+  const label = getTreeLabel(data)
+  if (label) {
+    return label
+  }
+  return node?.label || ''
 }
 
 // 监听折叠状态

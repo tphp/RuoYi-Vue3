@@ -36,6 +36,8 @@ export interface SysUser extends BaseEntity {
   userName?: string;
   /** 用户昵称 */
   nickName?: string;
+  /** 用户昵称（英文） */
+  nickNameEn?: string;
   /** 用户邮箱 */
   email?: string;
   /** 手机号码 */

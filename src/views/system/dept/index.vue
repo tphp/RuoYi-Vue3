@@ -64,7 +64,16 @@
          :default-expand-all="isExpandAll"
          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
-         <el-table-column prop="deptName" :label="$t('dept.deptName')" width="260"></el-table-column>
+         <el-table-column prop="deptName" :label="$t('dept.deptName')" width="260">
+            <template #default="scope">
+               {{ getDeptName(scope.row) }}
+            </template>
+         </el-table-column>
+         <el-table-column prop="deptNameEn" :label="$t('dept.deptNameEn')" width="260" :show-overflow-tooltip="true">
+            <template #default="scope">
+               {{ scope.row.deptNameEn }}
+            </template>
+         </el-table-column>
          <el-table-column prop="orderNum" :label="$t('common.sort')" width="200">
             <template #default="scope">
                <el-input-number v-model="scope.row.orderNum" controls-position="right" :min="0" style="width: 88px" />
@@ -108,6 +117,11 @@
                <el-col :span="12">
                   <el-form-item :label="$t('dept.deptName')" prop="deptName">
                      <el-input v-model="form.deptName" :placeholder="$t('dept.deptNamePlaceholder')" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item :label="$t('dept.deptNameEn')" prop="deptNameEn">
+                     <el-input v-model="form.deptNameEn" :placeholder="$t('dept.deptNameEnPlaceholder')" maxlength="100" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -155,6 +169,7 @@
 
 <script setup lang="ts" name="Dept">
 import { listDept, getDept, delDept, addDept, updateDept, updateDeptSort, listDeptExcludeChild } from "@/api/system/dept"
+import { getDeptName } from '@/utils/ruoyi'
 import type { SysDept, DeptQueryParams } from '@/types/api/system/dept'
 import type { TreeSelect } from '@/types/api/common'
 
@@ -210,6 +225,7 @@ function reset() {
     deptId: undefined,
     parentId: undefined,
     deptName: undefined,
+    deptNameEn: undefined,
     orderNum: 0,
     leader: undefined,
     phone: undefined,
